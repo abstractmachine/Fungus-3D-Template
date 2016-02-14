@@ -7,6 +7,9 @@ Fungus
 This is a fork of the Fungus project:
 https://github.com/fungusgames/fungus/
 
+Author
+======
+This template was created by Douglas Edric Stanley (http://www.abstractmachine.net) for a workshop at the Atelier Hypermédia of the Aix-en-Provence School of Art (cf. http://www.ecole-art-aix.fr) and for the Media Design Master of The Geneva University of Art & Design, –HEAD Genève (cf. http://head.hesge.ch). It is notably used in the project A Crossing Industry, a collaboration with Cédric Parizot, IREMAM (CNRS-AMU)/IMÉRA (cf. https://github.com/abstractmachine/ACrossingIndustry)
 
 CMU Graphics Lab Motion Capture Database 
 ========================================

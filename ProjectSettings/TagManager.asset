@@ -9,6 +9,7 @@ TagManager:
   - Obstacle
   - TouchRipple
   - TouchTarget
+  - Camera
   layers:
   - Default
   - TransparentFX
@@ -19,11 +20,11 @@ TagManager:
   - 
   - 
   - Dialogs
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Camera
+  - Ground
+  - Objects
+  - Personae
+  - Player
   - 
   - 
   - 

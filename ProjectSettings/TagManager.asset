@@ -4,8 +4,11 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - TouchPoint
-  - xSpot
+  - Persona
+  - Ground
+  - Obstacle
+  - TouchRipple
+  - TouchTarget
   layers:
   - Default
   - TransparentFX
@@ -15,7 +18,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Dialogs
   - 
   - 
   - 

@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Fungus;
 
+// code adapted from: https://github.com/nbzeman/Ragdoll
+
 namespace Fungus3D
 {
-
-    // code adapted from: https://github.com/nbzeman/Ragdoll
 
     public class Ragdoll : MonoBehaviour
     {
@@ -57,6 +57,23 @@ namespace Fungus3D
         #endregion
 
 
+
+        #region Event Listeners
+
+        void OnEnable()
+        {
+            Player.PlayerDied += PlayerDied;
+        }
+
+
+        void OnDisable()
+        {
+            Player.PlayerDied -= PlayerDied;
+        }
+
+        #endregion
+
+
         #region Get/Set
 
         public bool IsARagdoll { get { return state != RagdollState.animated; } }
@@ -93,15 +110,41 @@ namespace Fungus3D
 
         #region Change State
 
+        void PlayerDied(GameObject player) {
+            
+            // activate the ragdoll on this model
+            StartRagdoll();
+        }
+
         public void StartRagdoll()
-        {   // if we're not in an animation state
+        {   
+            // if we're not in an animation state
             if (state != RagdollState.animated)
             {   // no need to transition to ragdoll
                 return;
             }
             //Transition from animated to ragdolled
             setKinematic(false); //allow the ragdoll RigidBodies to react to the environment
+
             animator.enabled = false; //disable animation
+
+            // turn off NavMeshAgent if it exists
+            if (GetComponent<NavMeshAgent>() != null) {
+                GetComponent<NavMeshAgent>().enabled = false; // disable navigation agent
+            }
+
+            // turn off CapsuleCollider if it exists
+            if (GetComponent<CapsuleCollider>() != null && GetComponent<CapsuleCollider>().enabled)
+            {
+                GetComponent<CapsuleCollider>().enabled = false;
+            }
+
+            // turn off CapsuleCollider if it exists
+            if (GetComponent<Rigidbody>() != null)
+            {
+                GetComponent<Rigidbody>().isKinematic = true;
+            }
+
             state = RagdollState.ragdolled;
 
         }
@@ -215,6 +258,7 @@ namespace Fungus3D
         //game object that this script is attached to
         void setKinematic(bool newValue)
         {
+            
             //Get an array of components that are of type Rigidbody
             Component[] components = GetComponentsInChildren(typeof(Rigidbody));
 

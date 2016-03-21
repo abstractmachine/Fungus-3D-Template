@@ -51,6 +51,9 @@ namespace Fungus3D {
         public delegate void PlayerMovedDelegate(float distance);
         public static event PlayerMovedDelegate PlayerMoved;
 
+        public delegate void PlayerDiedDelegate(GameObject player);
+        public static event PlayerDiedDelegate PlayerDied;
+
         public delegate void TurnTowardsDelegate(GameObject target);
         public static event TurnTowardsDelegate TurnTowards;
 
@@ -94,8 +97,6 @@ namespace Fungus3D {
 
         void Start() {
 
-            PauseRagdoll();
-
             navMeshAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
 
@@ -113,6 +114,11 @@ namespace Fungus3D {
         #region Animation
 
         void Update() {
+
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                Die();
+            }
 
             if (!Dead)
             {
@@ -474,100 +480,30 @@ namespace Fungus3D {
 
         }
 
-        public void Die() {
+        #endregion
+
+
+        #region Die
+
+        void Die(Rigidbody hitBodypart, Vector3 hitVector) {
+
+            // first, convert into a ragdoll
+            Die();
+            // TODO: add force to the bodypart that we hit
+            // ...
+
+        }
+
+
+        void Die() {
 
             alive = false;
 
-            // set the ragdoll posture to the current posture
-            StartCoroutine(DuplicatePosture());
-
-        }
-
-
-        void PauseRagdoll() {
-
-            // get the ragdoll transform
-            GameObject ragdoll = FindRagdoll();
-            // if we found the ragdoll
-            if (ragdoll != null)
-            {
-                // get all the rigidbodies in this transform
-                Rigidbody[] rigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
-                // go through each rigidbody
-                foreach (Rigidbody body in rigidbodies)
-                {
-                    body.isKinematic = true;
-                }
+            // if there are any listeners
+            if (PlayerDied != null)
+            {   // convert into a rigidbody
+                PlayerDied(this.gameObject);
             }
-
-        }
-
-
-        void ResumeRagdoll() {
-
-            // get the ragdoll transform
-            GameObject ragdoll = FindRagdoll();
-            // if we found the ragdoll
-            if (ragdoll != null)
-            {
-                // get all the rigidbodies in this transform
-                Rigidbody[] rigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
-                // go through each rigidbody
-                foreach (Rigidbody body in rigidbodies)
-                {
-                    body.isKinematic = false;
-                }
-            }
-
-        }
-
-
-        IEnumerator DuplicatePosture() {
-
-            // get rid of the rigidbody
-            Destroy(GetComponent<Rigidbody>());
-
-            // get rid of the animator
-            GetComponent<Animator>().enabled = false;
-
-            // get rid of the animator
-            GetComponent<NavMeshAgent>().enabled = false;
-
-            // get the ragdoll transform
-            GameObject ragdoll = FindRagdoll();
-            GameObject model = FindModel();
-
-            // if we found the ragdoll
-            if (ragdoll != null)
-            {
-//                // get the root path of the ragdoll
-//                string rootPath = GetPath(ragdoll);
-//                // get all the rigidbodies in this transform
-//                Rigidbody[] rigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
-//                // go through each rigidbody
-//                foreach (Rigidbody body in rigidbodies)
-//                {   // extract the path of this rigidbody's gameObject
-//                    string bodyPath = GetPath(body.gameObject);
-//                    // remove root header
-//                    string bodySubPath = bodyPath.Replace(rootPath + "/","");
-//                    // get the transform attached to this rigidbody
-//                    Transform ragdollSubTransform = body.transform;
-//                    // get the equivalent in the model
-//                    Transform modelSubTransform = model.transform.FindChild(bodySubPath);
-//                    // copy the values from the model to the ragdoll
-//                    ragdollSubTransform.localPosition = modelSubTransform.localPosition;
-//                    ragdollSubTransform.localRotation = modelSubTransform.localRotation;
-//                    ragdollSubTransform.localScale = modelSubTransform.localScale;
-//                }
-                // kill the model
-                Destroy(model);
-                // turn on the ragdoll
-                ragdoll.SetActive(true);
-                //
-                ResumeRagdoll();
-            }
-
-            yield return null;
 
         }
 

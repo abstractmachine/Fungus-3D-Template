@@ -172,7 +172,7 @@ ModelImporter:
     13700010: Shoes
     13700012: Tops
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 2
     materialSearch: 1
   animations:
@@ -212,9 +212,9 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 0
-    normalImportMode: 1
-    tangentImportMode: 3
-  importAnimation: 1
+    normalImportMode: 2
+    tangentImportMode: 2
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     human:

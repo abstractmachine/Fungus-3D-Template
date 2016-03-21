@@ -10,6 +10,8 @@ TagManager:
   - TouchRipple
   - TouchTarget
   - Camera
+  - Ragdoll
+  - Model
   layers:
   - Default
   - TransparentFX

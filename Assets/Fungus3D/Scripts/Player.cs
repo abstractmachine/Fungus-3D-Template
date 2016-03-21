@@ -18,6 +18,8 @@ namespace Fungus3D {
 
         #region Variables
 
+        bool alive = true;
+
         Flowchart currentFlowchart = null;
         GameObject currentPersona = null;
 
@@ -37,7 +39,8 @@ namespace Fungus3D {
 
         #region Get/Set
 
-        bool IsWalking { get { return navMeshAgent.velocity.sqrMagnitude > 0.01f; } }
+        bool Walking { get { return navMeshAgent.velocity.sqrMagnitude > 0.01f; } }
+        bool Dead { get { return !alive; } }
 
         #endregion
 
@@ -91,11 +94,15 @@ namespace Fungus3D {
 
         void Start() {
 
+            PauseRagdoll();
+
             navMeshAgent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
 
         	// Don’t update position automatically
             navMeshAgent.updatePosition = false;
+
+//            Invoke("Die", 5f);
 
         }
 
@@ -107,7 +114,10 @@ namespace Fungus3D {
 
         void Update() {
 
-        	UpdatePosition();
+            if (!Dead)
+            {
+                UpdatePosition();
+            }
 
         }
 
@@ -153,6 +163,11 @@ namespace Fungus3D {
 
         void OnAnimatorMove() {
 
+            if (Dead)
+            {
+                return;
+            }
+
         	// Update position to agent position
             //transform.position = navMeshAgent.nextPosition;
 
@@ -161,7 +176,7 @@ namespace Fungus3D {
             position.y = navMeshAgent.nextPosition.y;
             transform.position = position;
 
-            if (IsWalking)
+            if (Walking)
             {
                 Vector3 deltaPosition = position - goal;
                 BroadcastDistance(deltaPosition.sqrMagnitude);
@@ -186,11 +201,16 @@ namespace Fungus3D {
         }
 
         public void OnClick(GameObject clickedObject) {
+
+            if (Dead)
+            {
+                return;
+            }
           
         	// if we're not talking to anyone
         	if (currentFlowchart == null || currentPersona == null) {      
         		// are we walking?
-        		if (IsWalking) {
+        		if (Walking) {
         			StopWalking();            
         		}         
         		return;
@@ -255,6 +275,11 @@ namespace Fungus3D {
 
         void OnTriggerEnter(Collider other) {
 
+            if (Dead)
+            {
+                return;
+            }
+
             // if we're interacting with a persona
             if (other.gameObject.tag == "Persona" && other.gameObject == targetObject) {
 
@@ -280,8 +305,13 @@ namespace Fungus3D {
 
         void OnTriggerStay(Collider other) {
 
+            if (Dead)
+            {
+                return;
+            }
+
         	// if we're interacting with another character
-        	if (IsWalking && other.gameObject.tag == "Persona" && other.gameObject == targetObject) {
+        	if (Walking && other.gameObject.tag == "Persona" && other.gameObject == targetObject) {
         		// get our distance to that character
         		float distance = CalculateDistanceToObject(other.gameObject);
         		// if too close
@@ -303,6 +333,11 @@ namespace Fungus3D {
 
 
         void OnTriggerExit(Collider other) {
+
+            if (Dead)
+            {
+                return;
+            }
 
             // ignore anyone who is not a Persona
             if (other.gameObject.tag != "Persona") {
@@ -329,6 +364,11 @@ namespace Fungus3D {
 
         public void GoToPosition(Vector3 position) {
 
+            if (Dead)
+            {
+                return;
+            }
+
         	targetObject = null;
         	goal = position;
             goalSet = true;
@@ -338,6 +378,11 @@ namespace Fungus3D {
 
 
         public void GoToPersona(GameObject other) {
+
+            if (Dead)
+            {
+                return;
+            }
 
         	targetObject = other;
 
@@ -350,6 +395,11 @@ namespace Fungus3D {
         }
 
         void StopWalking() {
+
+            if (Dead)
+            {
+                return;
+            }
 
         	// go to where we already are
         	targetObject = null;
@@ -421,6 +471,103 @@ namespace Fungus3D {
             {   // tell them all the objects we've stopped discussing with
                 PlayerStoppedDialogueWith(this.gameObject, personae);
             }
+
+        }
+
+        public void Die() {
+
+            alive = false;
+
+            // set the ragdoll posture to the current posture
+            StartCoroutine(DuplicatePosture());
+
+        }
+
+
+        void PauseRagdoll() {
+
+            // get the ragdoll transform
+            GameObject ragdoll = FindRagdoll();
+            // if we found the ragdoll
+            if (ragdoll != null)
+            {
+                // get all the rigidbodies in this transform
+                Rigidbody[] rigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
+                // go through each rigidbody
+                foreach (Rigidbody body in rigidbodies)
+                {
+                    body.isKinematic = true;
+                }
+            }
+
+        }
+
+
+        void ResumeRagdoll() {
+
+            // get the ragdoll transform
+            GameObject ragdoll = FindRagdoll();
+            // if we found the ragdoll
+            if (ragdoll != null)
+            {
+                // get all the rigidbodies in this transform
+                Rigidbody[] rigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
+                // go through each rigidbody
+                foreach (Rigidbody body in rigidbodies)
+                {
+                    body.isKinematic = false;
+                }
+            }
+
+        }
+
+
+        IEnumerator DuplicatePosture() {
+
+            // get rid of the rigidbody
+            Destroy(GetComponent<Rigidbody>());
+
+            // get rid of the animator
+            GetComponent<Animator>().enabled = false;
+
+            // get rid of the animator
+            GetComponent<NavMeshAgent>().enabled = false;
+
+            // get the ragdoll transform
+            GameObject ragdoll = FindRagdoll();
+            GameObject model = FindModel();
+
+            // if we found the ragdoll
+            if (ragdoll != null)
+            {
+//                // get the root path of the ragdoll
+//                string rootPath = GetPath(ragdoll);
+//                // get all the rigidbodies in this transform
+//                Rigidbody[] rigidbodies = ragdoll.GetComponentsInChildren<Rigidbody>();
+//                // go through each rigidbody
+//                foreach (Rigidbody body in rigidbodies)
+//                {   // extract the path of this rigidbody's gameObject
+//                    string bodyPath = GetPath(body.gameObject);
+//                    // remove root header
+//                    string bodySubPath = bodyPath.Replace(rootPath + "/","");
+//                    // get the transform attached to this rigidbody
+//                    Transform ragdollSubTransform = body.transform;
+//                    // get the equivalent in the model
+//                    Transform modelSubTransform = model.transform.FindChild(bodySubPath);
+//                    // copy the values from the model to the ragdoll
+//                    ragdollSubTransform.localPosition = modelSubTransform.localPosition;
+//                    ragdollSubTransform.localRotation = modelSubTransform.localRotation;
+//                    ragdollSubTransform.localScale = modelSubTransform.localScale;
+//                }
+                // kill the model
+                Destroy(model);
+                // turn on the ragdoll
+                ragdoll.SetActive(true);
+                //
+                ResumeRagdoll();
+            }
+
+            yield return null;
 
         }
 
@@ -664,9 +811,50 @@ namespace Fungus3D {
         /// <param name="current">The Transform we want to know the path to.</param>
 
         public static string GetPath(Transform current) {
-        	if (current.parent == null)
-        		return "/" + current.name;
+            if (current.parent == null)
+            {
+                return "/" + current.name;
+            }
         	return GetPath(current.parent) + "/" + current.name;
+        }
+
+
+        /// <summary>
+        /// For Debugging purposes. Creates a string containing the transform heirarchy to a specific GameObject component.
+        /// </summary>
+        /// <returns>The complete Transform path to this specific GameObject.</returns>
+        /// <param name="current">The GameObject we want to know the path to.</param>
+        /// 
+        public static string GetPath(GameObject obj) {
+            return GetPath(obj.transform);
+        }
+
+
+        GameObject FindRagdoll() {
+
+            foreach (Transform t in this.transform)
+            {   // if this is the ragdoll
+                if (t.gameObject.tag == "Ragdoll")
+                {   // remember it
+                    return t.gameObject;
+                }
+            }
+            // couldn't find it
+            return null;
+        }
+
+
+        GameObject FindModel() {
+
+            foreach (Transform t in this.transform)
+            {   // if this is the ragdoll
+                if (t.gameObject.tag == "Model")
+                {   // remember it
+                    return t.gameObject;
+                }
+            }
+            // couldn't find it
+            return null;
         }
 
         #endregion

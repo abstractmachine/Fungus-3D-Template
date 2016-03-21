@@ -1,9 +1,33 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Fungus3D {
 
     public class CameraFollow : MonoBehaviour {
+
+
+
+        #region Variables
+
+    	public GameObject target;
+
+        float zoomLevel = 7.4f;
+        float zoomInSpeed = 0.5f;
+        float zoomOutSpeed = 0.25f;
+        float zoomDialogSpeed = 0.75f;
+
+        float zoomMax = 15.0f;
+        float zoomMin = 7.0f;
+        float zoomDialog = 4.0f;
+
+        float cameraDistance = 30;  // this x/y/z distance of the camera to our persona
+
+        bool dialogOn = false;
+
+        #endregion
+
+
 
         #region Event Delegates
 
@@ -19,30 +43,18 @@ namespace Fungus3D {
         void OnEnable()
         {
             Player.PlayerMoved += PlayerMoved;
+            Player.PlayerStartedDialogueWith += PlayerStartedDialogueWith;
+            Player.PlayerStoppedDialogueWith += PlayerStoppedDialogueWith;
+           
         }
 
 
         void OnDisable()
         {
             Player.PlayerMoved -= PlayerMoved;
+            Player.PlayerStartedDialogueWith -= PlayerStartedDialogueWith;
+            Player.PlayerStoppedDialogueWith -= PlayerStoppedDialogueWith;
         }
-
-        #endregion
-
-
-
-        #region Variables
-
-    	public GameObject target;
-
-        float zoomLevel = 7.4f;
-        float zoomInSpeed = 0.5f;
-        float zoomOutSpeed = 0.25f;
-
-        float zoomMax = 10.0f;
-        float zoomMin = 5.0f;
-
-        float cameraDistance = 30;  // this x/y/z distance of the camera to our persona
 
         #endregion
 
@@ -77,7 +89,17 @@ namespace Fungus3D {
 
         void UpdateZoom() {
 
-            float thisZoomSpeed = (Camera.main.orthographicSize < zoomLevel) ? zoomOutSpeed : zoomInSpeed;
+            float thisZoomSpeed = zoomInSpeed;
+
+            // if we're talking, or we're talking and are still zoomed in
+            if (dialogOn || zoomLevel < zoomMin)
+            {
+                thisZoomSpeed = zoomDialogSpeed;
+            }
+            else if (Camera.main.orthographicSize < zoomLevel)
+            {
+                thisZoomSpeed = zoomOutSpeed;
+            }
 
             float orthographicSize = Mathf.Lerp(Camera.main.orthographicSize, zoomLevel, Time.deltaTime * thisZoomSpeed);
 
@@ -106,16 +128,39 @@ namespace Fungus3D {
 
         }
 
-        void SetZoom(float newZoom) {
+        void PlayerStartedDialogueWith(GameObject player, List<GameObject> personae) {
 
-            zoomLevel = Mathf.Min(zoomMax,Mathf.Max(zoomMin,newZoom));
-            //zoomLevel += (newZoom - zoomLevel) * 0.025f;
-            //zoomLevel = distance;
+            dialogOn = true;
+
+            ResetZoom();
+
+        }
+
+        void PlayerStoppedDialogueWith(GameObject player, List<GameObject> personae) {
+
+            dialogOn = false;
+
+            ResetZoom();
+
+        }
+
+
+        void ResetZoom() {
+
+            SetZoom(zoomLevel);
+
         }
 
         void ZoomOut() {
 
             SetZoom(zoomMax);
+        }
+
+        void SetZoom(float newZoom) {
+
+            zoomLevel = Mathf.Min(zoomMax,Mathf.Max((dialogOn) ? zoomDialog : zoomMin, newZoom));
+            //zoomLevel += (newZoom - zoomLevel) * 0.025f;
+            //zoomLevel = distance;
         }
 
         #endregion

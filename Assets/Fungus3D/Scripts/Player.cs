@@ -113,11 +113,6 @@ namespace Fungus3D {
 
         void Update() {
 
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                Die();
-            }
-
             if (!Dead)
             {
                 UpdatePosition();
@@ -375,8 +370,10 @@ namespace Fungus3D {
             {
                 // get the first contact point
                 ContactPoint contact = collision.contacts[0];
+                // get the rigidbody
+                Rigidbody contactBody = contact.thisCollider.attachedRigidbody;
                 // we hit a specific rigidbody and we'll use the impact normal for calculating force
-                Die(contact.thisCollider.attachedRigidbody, contact.normal);
+                Die(contactBody, contact.normal);
                 // destroy bullet
                 Destroy(collision.gameObject);
             }
@@ -523,7 +520,9 @@ namespace Fungus3D {
             // first, convert into a ragdoll
             Die();
             // apply the force
-            StartCoroutine(DeathForce(hitBodypart, hitVector * 2.0f));
+            StartCoroutine(DeathForce(hitBodypart, hitVector));
+            // announce our death
+            StartCoroutine(DeathAnnouncement());
 
         }
 
@@ -531,11 +530,27 @@ namespace Fungus3D {
 
         IEnumerator DeathForce(Rigidbody hitBodypart, Vector3 hitVector, float duration = 0.25f)
         {
+            // if this rigidbody is kinematic
+            if (hitBodypart.isKinematic)
+            {   // try to find a dynamic part
+                Rigidbody[] bodyparts = hitBodypart.gameObject.GetComponentsInChildren<Rigidbody>();
+                // go through each child rigidbody
+                foreach (Rigidbody childBodyPart in bodyparts)
+                {   // if this is one of the ragdoll bodyparts
+                    if (!childBodyPart.isKinematic)
+                    {   // this is our new target
+                        hitBodypart = childBodyPart;
+                        // all done
+                        break;
+                    }
+                }
+            }
             float startTime = Time.time;
+            Vector3 hitForce = hitVector.normalized * 2.0f;
 
             while (Time.time - startTime < duration)
             {
-                hitBodypart.AddForce(hitVector, ForceMode.VelocityChange);
+                hitBodypart.AddForce(hitForce, ForceMode.VelocityChange);
                 yield return new WaitForFixedUpdate();
             }
         }
@@ -550,6 +565,16 @@ namespace Fungus3D {
             {   // convert into a rigidbody
                 PlayerDied(this.gameObject);
             }
+
+        }
+
+        IEnumerator DeathAnnouncement() {
+
+            yield return new WaitForSeconds(5.0f);
+
+            Fungus.Flowchart.BroadcastFungusMessage ("GameOver");
+
+            yield return null;
 
         }
 

@@ -171,8 +171,23 @@ namespace Fungus3D {
 
         IEnumerator TurnTowards(Vector3 target) {
 
+            float rotationSpeed = 15.0f;
+
             yield return new WaitForEndOfFrame();
-            transform.LookAt(target);
+            //transform.LookAt(target);
+
+            for (float countdown = 1.0f; countdown >= 0.0f; countdown -= Time.deltaTime)
+            {
+                //calculate the rotation needed 
+                Quaternion neededRotation = Quaternion.LookRotation(target - transform.position);
+
+                //use spherical interpollation over time
+                Quaternion interpolatedRotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
+
+                transform.rotation = interpolatedRotation;
+
+                yield return new WaitForEndOfFrame();
+            }
 
             yield return null;
 
@@ -188,7 +203,7 @@ namespace Fungus3D {
             bullet.transform.SetParent(GameObject.Find("Objects").transform);
             bullet.name = "Bullet";
             // move up to the gun level
-            bullet.transform.position = this.transform.position + new Vector3(0f, 1f, 0f);
+            bullet.transform.position = this.transform.position + new Vector3(0f, 1.45f, 0f);
             // aim towards the heart
             Vector3 target = player.transform.position + new Vector3(0f, 1f, 0f);
             // turn towards our target

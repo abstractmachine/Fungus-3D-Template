@@ -12,6 +12,7 @@ TagManager:
   - Camera
   - Ragdoll
   - Model
+  - Bullet
   layers:
   - Default
   - TransparentFX

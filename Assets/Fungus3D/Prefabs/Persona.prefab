@@ -2741,6 +2741,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6405b5530f35b4e5fb9f59a2c562048f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 176482, guid: b2e150dc9ed464d59b5a304c3a9aa121, type: 2}
 --- !u!114 &11424632
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4101,6 +4102,10 @@ Prefab:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: bulletPrefab
+      value: 
+      objectReference: {fileID: 176482, guid: b2e150dc9ed464d59b5a304c3a9aa121, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 141504}

@@ -15,6 +15,8 @@ namespace Fungus3D {
 
         #region Variables
 
+        public GameObject bulletPrefab;
+
         GameObject currentPlayer = null;
 
         Animator animator;
@@ -150,6 +152,51 @@ namespace Fungus3D {
             }
 
     	}
+
+        #endregion
+
+
+        #region Actions
+
+        public void Aim() {
+
+            // get the player
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            // aim towards the heart
+            Vector3 target = player.transform.position + new Vector3(0f, 1f, 0f);
+            // start turning
+            StartCoroutine(TurnTowards(target));
+
+        }
+
+        IEnumerator TurnTowards(Vector3 target) {
+
+            yield return new WaitForEndOfFrame();
+            transform.LookAt(target);
+
+            yield return null;
+
+        }
+
+        public void Shoot() {
+            
+            // get the player
+            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            // creat the bullet
+            GameObject bullet = (GameObject)Instantiate(bulletPrefab);
+            // put this bullet into the objects parent
+            bullet.transform.SetParent(GameObject.Find("Objects").transform);
+            bullet.name = "Bullet";
+            // move up to the gun level
+            bullet.transform.position = this.transform.position + new Vector3(0f, 1f, 0f);
+            // aim towards the heart
+            Vector3 target = player.transform.position + new Vector3(0f, 1f, 0f);
+            // turn towards our target
+            bullet.transform.LookAt(target);
+            // move out to the edge of the gun shaft
+            //bullet.transform.Translate(new Vector3(0f, 0f, 1f));
+
+        }
 
         #endregion
 

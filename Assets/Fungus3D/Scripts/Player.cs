@@ -27,11 +27,11 @@ namespace Fungus3D {
         Vector3 goal;
         bool goalSet = false;
 
-        Vector2 smoothDeltaPosition = Vector2.zero;
-        Vector2 velocity = Vector2.zero;
-
         Animator animator;
         NavMeshAgent navMeshAgent;
+
+        Vector2 smoothDeltaPosition = Vector2.zero;
+        Vector2 velocity = Vector2.zero;
 
         #endregion
 
@@ -103,8 +103,6 @@ namespace Fungus3D {
         	// Don’t update position automatically
             navMeshAgent.updatePosition = false;
 
-//            Invoke("Die", 5f);
-
         }
 
         #endregion
@@ -137,7 +135,8 @@ namespace Fungus3D {
             Vector2 deltaPosition = new Vector2 (dx, dy);
 
             // Low-pass filter the deltaMove
-            float smooth = Mathf.Min(1.0f, Time.deltaTime/0.15f);
+                        float smooth = Mathf.Min(1.0f, Time.deltaTime/0.15f);
+
             smoothDeltaPosition = Vector2.Lerp (smoothDeltaPosition, deltaPosition, smooth);
 
             // Update velocity if time advances
@@ -150,11 +149,11 @@ namespace Fungus3D {
 
             if (shouldMove)
             {
-                animator.SetFloat("Velocity", 1.0f);
+                animator.SetFloat("Forward", 1.0f);
             }
             else
             {
-                animator.SetFloat("Velocity", 0.0f);
+                animator.SetFloat("Forward", 0.0f);
             }
 
         	// move head      
@@ -365,6 +364,40 @@ namespace Fungus3D {
         #endregion
 
 
+        #region Collision
+
+        // TODO: Collisions don't fire (!?)
+
+        void OnCollisionEnter(Collision collision) {
+
+            // if this is the bullet
+            if (collision.gameObject.tag == "Bullet")
+            {
+                // get the first contact point
+                ContactPoint contact = collision.contacts[0];
+                // we hit a specific rigidbody and we'll use the impact normal for calculating force
+                Die(contact.thisCollider.attachedRigidbody, contact.normal);
+                // destroy bullet
+                Destroy(collision.gameObject);
+            }
+
+        }
+
+        void OnCollisionStay(Collision impact) {
+
+//            print("OnCollisionStay " + impact.gameObject.name);
+
+        }
+
+        void OnCollisionExit(Collision impact) {
+
+//            print("OnCollisionStay " + impact.gameObject.name);
+
+        }
+
+        #endregion
+
+
 
         #region NavMesh
 
@@ -489,9 +522,22 @@ namespace Fungus3D {
 
             // first, convert into a ragdoll
             Die();
-            // TODO: add force to the bodypart that we hit
-            // ...
+            // apply the force
+            StartCoroutine(DeathForce(hitBodypart, hitVector * 2.0f));
 
+        }
+
+
+
+        IEnumerator DeathForce(Rigidbody hitBodypart, Vector3 hitVector, float duration = 0.25f)
+        {
+            float startTime = Time.time;
+
+            while (Time.time - startTime < duration)
+            {
+                hitBodypart.AddForce(hitVector, ForceMode.VelocityChange);
+                yield return new WaitForFixedUpdate();
+            }
         }
 
 

@@ -10,7 +10,7 @@ namespace Fungus3D {
 
         public GameObject playerGameObject;
         public GameObject touchRipplePrefab;
-        public GameObject touchSpotPrefab;
+        public GameObject touchTargetPrefab;
 
         #endregion
 
@@ -105,6 +105,7 @@ namespace Fungus3D {
 
         /// <summary>
         /// The Player Touched the ground.
+        /// This requires activating a PhysicsRaycaster on one of the cameras
         /// </summary>
         /// <param name="position">Position.</param>
 
@@ -201,9 +202,9 @@ namespace Fungus3D {
         void ShowTouch(Vector3 position) {
 
             // show TouchTarget
-            GameObject touchSpot = Instantiate(touchSpotPrefab, position, Quaternion.Euler(90, 0, 0)) as GameObject;
-            touchSpot.name = "TouchTarget";
-            touchSpot.transform.parent = GameObject.Find("Ground").transform;
+            GameObject touchTarget = Instantiate(touchTargetPrefab, position, Quaternion.Euler(90, 0, 0)) as GameObject;
+            touchTarget.name = "TouchTarget";
+            touchTarget.transform.parent = GameObject.Find("Ground").transform;
 
             // show Ripple where we clicked
             GameObject touchRipple = Instantiate(touchRipplePrefab, position, Quaternion.Euler(90, 0, 0)) as GameObject;

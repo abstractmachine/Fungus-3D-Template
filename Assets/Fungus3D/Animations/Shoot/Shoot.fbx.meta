@@ -145,13 +145,14 @@ ModelImporter:
       - time: 0.49845204
         functionName: Shoot
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 176482, guid: b2e150dc9ed464d59b5a304c3a9aa121,
+          type: 2}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.024767809
-        functionName: Aim
-        data: 
+        functionName: AimAt
+        data: Player
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

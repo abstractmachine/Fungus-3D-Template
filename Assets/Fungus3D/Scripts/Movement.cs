@@ -10,7 +10,7 @@ namespace Fungus3D
 
     public class Movement : MonoBehaviour
     {
-
+        /*
 
         #region Enum
 
@@ -402,7 +402,8 @@ namespace Fungus3D
         }
 
         #endregion
+*/
 
-    }
+    } // class Movement
 
-}
+} // namespace Fungus3D

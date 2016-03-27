@@ -12,7 +12,8 @@ TagManager:
   - Camera
   - Ragdoll
   - Model
-  - Bullet
+  - Mortal
+  - Collider
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Camera
   - Ground
   - Objects
-  - Personae
+  - Persona
   - Player
   - 
   - 

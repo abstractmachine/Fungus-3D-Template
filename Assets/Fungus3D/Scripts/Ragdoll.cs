@@ -62,13 +62,13 @@ namespace Fungus3D
 
         void OnEnable()
         {
-            Player.PlayerDied += PlayerDied;
+            Persona.PersonaDied += PlayerDied;
         }
 
 
         void OnDisable()
         {
-            Player.PlayerDied -= PlayerDied;
+            Persona.PersonaDied -= PlayerDied;
         }
 
         #endregion
@@ -96,6 +96,9 @@ namespace Fungus3D
             //For each of the transforms, create a BodyPart instance and store the transform 
             foreach (Component c in components)
             {
+                // ignore our colliders
+                if (c.tag == "Collider") continue;
+                // add the body part
                 BodyPart bodyPart = new BodyPart();
                 bodyPart.transform = c as Transform;
                 bodyParts.Add(bodyPart);
@@ -271,6 +274,6 @@ namespace Fungus3D
 
         #endregion
 	
-    }
+    } // class Ragdoll
 
-}
+} // namespace Fungus3D

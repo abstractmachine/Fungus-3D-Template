@@ -2,9 +2,11 @@
 using UnityEngine.EventSystems;
 using System.Collections;
 
-namespace Fungus3D {
+namespace Fungus3D
+{
     
-    public class Ground : MonoBehaviour, IPointerClickHandler {
+    public class Ground : MonoBehaviour, IPointerClickHandler
+    {
 
         #region Variables
 
@@ -19,7 +21,8 @@ namespace Fungus3D {
         #region Event Delegates
 
         public delegate void GoToPositionDelegate(Vector3 position);
-        public static event GoToPositionDelegate GoToPosition;
+
+        public static event GoToPositionDelegate GoToPositionListener;
 
         #endregion
 
@@ -29,18 +32,19 @@ namespace Fungus3D {
 
         void OnEnable()
         {
-            Player.PlayerReachedTarget += PlayerReachedTarget;
-            Persona.GoToPersona += GoToPersona; 
+            Player.ReachedTargetListener += PlayerReachedTarget;
+            Persona.GoToPersonaListener += GoToPersona; 
         }
 
 
         void OnDisable()
         {
-            Player.PlayerReachedTarget -= PlayerReachedTarget;
-            Persona.GoToPersona -= GoToPersona;
+            Player.ReachedTargetListener -= PlayerReachedTarget;
+            Persona.GoToPersonaListener -= GoToPersona;
         }
 
-        void PlayerReachedTarget() {
+        void PlayerReachedTarget()
+        {
 
             RemovePreviousTouches();
         }
@@ -56,9 +60,10 @@ namespace Fungus3D {
         /// </summary>
         /// <param name="eventData">Event data.</param>
 
-    	public void OnPointerClick(PointerEventData eventData) {
+        public void OnPointerClick(PointerEventData eventData)
+        {
 
-    		checkHit(eventData.position);
+            checkHit(eventData.position);
 
         }
 
@@ -68,39 +73,44 @@ namespace Fungus3D {
         /// </summary>
         /// <param name="loc">Location.</param>
 
-    	void checkHit(Vector2 loc) {
+        void checkHit(Vector2 loc)
+        {
 
-    		// cast ray down into the world from the screen touch point
-    		Ray ray = Camera.main.ScreenPointToRay(loc);
-    		// show in debugger
-    		//Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
+            // cast ray down into the world from the screen touch point
+            Ray ray = Camera.main.ScreenPointToRay(loc);
+            // show in debugger
+            //Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
             
-    		// detect collisions with that point
-    		RaycastHit[] hits = Physics.RaycastAll(ray);
+            // detect collisions with that point
+            RaycastHit[] hits = Physics.RaycastAll(ray);
 
-    		// we should have hit at least something, like the ground
-    		if (hits.Length == 0) {
-    			Debug.LogWarning("No hit detection");
-    			return;
-    		}
+            // we should have hit at least something, like the ground
+            if (hits.Length == 0)
+            {
+                Debug.LogWarning("No hit detection");
+                return;
+            }
 
-    		bool didHitGround = false;
-    		Vector3 groundHitPoint = Vector3.zero;
+            bool didHitGround = false;
+            Vector3 groundHitPoint = Vector3.zero;
 
-    		foreach (RaycastHit hit in hits) {      
-    			// make sure it's a ground click/touch
-    			if (hit.transform.name == "Ground") {
-    				didHitGround = true;
-    				groundHitPoint = hit.point;
-    			}
-    		}
+            foreach (RaycastHit hit in hits)
+            {      
+                // make sure it's a ground click/touch
+                if (hit.transform.name == "Ground")
+                {
+                    didHitGround = true;
+                    groundHitPoint = hit.point;
+                }
+            }
 
-    		if (didHitGround) {
-    			// get the point on the plane where we clicked and go there
-    			TouchedGround(groundHitPoint);
-    		}
+            if (didHitGround)
+            {
+                // get the point on the plane where we clicked and go there
+                TouchedGround(groundHitPoint);
+            }
 
-    	}
+        }
 
 
         /// <summary>
@@ -109,15 +119,16 @@ namespace Fungus3D {
         /// </summary>
         /// <param name="position">Position.</param>
 
-    	void TouchedGround(Vector3 position) {
+        void TouchedGround(Vector3 position)
+        {
 
-    		// reposition to ground
-    		position.y = 0.01f;
+            // reposition to ground
+            position.y = 0.01f;
 
             // if someone's listening
-            if (GoToPosition != null)
+            if (GoToPositionListener != null)
             {
-                GoToPosition(position);
+                GoToPositionListener(position);
             }
 
             // if we were already showing a click exploder
@@ -133,7 +144,8 @@ namespace Fungus3D {
         /// </summary>
         /// <param name="persona">The Persona GameObject.</param>
 
-        void GoToPersona(GameObject persona) {
+        void GoToPersona(GameObject persona)
+        {
 
             Vector3 position = persona.transform.position;
             position.y = 0.01f;
@@ -155,7 +167,8 @@ namespace Fungus3D {
         /// Removes the previous touch targets and ripples.
         /// </summary>
 
-        void RemovePreviousTouches() {
+        void RemovePreviousTouches()
+        {
             
             RemoveRipples();
             RemoveTouchTarget();
@@ -166,13 +179,15 @@ namespace Fungus3D {
         /// Removes any ripples.
         /// </summary>
 
-        void RemoveRipples() {
+        void RemoveRipples()
+        {
 
             // kill all other clicks
             GameObject[] otherClicks;
             // remove ripples
             otherClicks = GameObject.FindGameObjectsWithTag("TouchRipple");
-            foreach (GameObject obj in otherClicks) {
+            foreach (GameObject obj in otherClicks)
+            {
                 Destroy(obj);
             }
 
@@ -182,12 +197,14 @@ namespace Fungus3D {
         /// Removes any touch targets.
         /// </summary>
 
-        public void RemoveTouchTarget() {
+        public void RemoveTouchTarget()
+        {
 
             GameObject[] otherClicks;
             // remove touch targets ("X")
             otherClicks = GameObject.FindGameObjectsWithTag("TouchTarget");
-            foreach (GameObject obj in otherClicks) {
+            foreach (GameObject obj in otherClicks)
+            {
                 Destroy(obj);
             }
 
@@ -199,7 +216,8 @@ namespace Fungus3D {
         /// </summary>
         /// <param name="position">Position.</param>
 
-        void ShowTouch(Vector3 position) {
+        void ShowTouch(Vector3 position)
+        {
 
             // show TouchTarget
             GameObject touchTarget = Instantiate(touchTargetPrefab, position, Quaternion.Euler(90, 0, 0)) as GameObject;
@@ -221,7 +239,8 @@ namespace Fungus3D {
         /// </summary>
         /// <param name="touchPoint">The location of the ripple.</param>
 
-        IEnumerator ExpandRipple(GameObject touchPoint) {
+        IEnumerator ExpandRipple(GameObject touchPoint)
+        {
 
             //      // match background color for the sprite color
             //      float timeSaturation = Camera.main.GetComponent<Daylight>().TimeSaturation;
@@ -231,7 +250,8 @@ namespace Fungus3D {
 
             float explosionSpeed = 0.025f;
 
-            while (touchPoint != null && touchPoint.transform.localScale.x < 0.5f) {      
+            while (touchPoint != null && touchPoint.transform.localScale.x < 0.5f)
+            {      
                 touchPoint.transform.localScale = touchPoint.transform.localScale + new Vector3(explosionSpeed, explosionSpeed, explosionSpeed);
                 yield return new WaitForEndOfFrame();
             }
@@ -242,6 +262,6 @@ namespace Fungus3D {
 
         #endregion
 
-    }
+    } // class Ground
 
-}
+} // namespace Fungus3D

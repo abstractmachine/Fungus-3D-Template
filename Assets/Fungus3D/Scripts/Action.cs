@@ -7,7 +7,7 @@ namespace Fungus3D
     public class Action : MonoBehaviour
     {
 
-        #region Actions
+        #region Aim
 
         public void AimAt(string targetName)
         {
@@ -21,11 +21,19 @@ namespace Fungus3D
             }
             // aim towards the heart
             Vector3 target = player.transform.position + new Vector3(0f, 1f, 0f);
+            // start turning
+            TurnTowards(target);
+        }
+
+
+        void TurnTowards(Vector3 target)
+        {
             // stop any previously running Turn co-routines
             StopCoroutine("Turn");
             // start turning
             StartCoroutine(Turn(target));
         }
+
 
         IEnumerator Turn(Vector3 target)
         {
@@ -50,6 +58,11 @@ namespace Fungus3D
             yield return null;
 
         }
+
+        #endregion
+
+
+        #region Shoot
 
         public void Shoot(GameObject bulletPrefab)
         {

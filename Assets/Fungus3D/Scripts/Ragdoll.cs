@@ -62,13 +62,13 @@ namespace Fungus3D
 
         void OnEnable()
         {
-            Persona.PersonaDied += PlayerDied;
+            Persona.PersonaDiedListener += PersonaDied;
         }
 
 
         void OnDisable()
         {
-            Persona.PersonaDied -= PlayerDied;
+            Persona.PersonaDiedListener -= PersonaDied;
         }
 
         #endregion
@@ -113,7 +113,7 @@ namespace Fungus3D
 
         #region Change State
 
-        void PlayerDied(GameObject player) {
+        void PersonaDied(GameObject player) {
             
             // activate the ragdoll on this model
             StartRagdoll();

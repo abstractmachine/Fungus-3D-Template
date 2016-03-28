@@ -42,18 +42,18 @@ namespace Fungus3D {
 
         void OnEnable()
         {
-            Player.PlayerMoved += PlayerMoved;
-            Player.PlayerStartedDialogueWith += PlayerStartedDialogueWith;
-            Player.PlayerStoppedDialogueWith += PlayerStoppedDialogueWith;
+            Player.MovedListener += PlayerMoved;
+            Player.StartedDialogueWithListener += PlayerStartedDialogueWith;
+            Player.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
            
         }
 
 
         void OnDisable()
         {
-            Player.PlayerMoved -= PlayerMoved;
-            Player.PlayerStartedDialogueWith -= PlayerStartedDialogueWith;
-            Player.PlayerStoppedDialogueWith -= PlayerStoppedDialogueWith;
+            Player.MovedListener -= PlayerMoved;
+            Player.StartedDialogueWithListener -= PlayerStartedDialogueWith;
+            Player.StoppedDialogueWithListener -= PlayerStoppedDialogueWith;
         }
 
         #endregion

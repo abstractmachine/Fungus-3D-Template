@@ -182,6 +182,7 @@ namespace Fungus3D
             // if we're currently interacting with the player
             if (currentInterlocutor != null)
             {
+                print(this.gameObject);
                 // force the dialog to pick up where it was (or to start over)
                 playerScript.OnClickDialog(this.gameObject);
                 return;
@@ -628,6 +629,37 @@ namespace Fungus3D
 
             return flowchart;
 
+        }
+
+
+        protected GameObject ExtractRootParentFrom(Flowchart flowchart)
+        {
+            return ExtractRootParentFrom(flowchart.gameObject);
+        }
+
+
+        protected GameObject ExtractRootParentFrom(GameObject theObject)
+        {
+            // try to get the player GameObject from this flowchart
+            Player playerScript = theObject.GetComponentInParent<Player>();
+            // if the playerScript is there
+            if (playerScript != null)
+            {   // add the player to our list
+                return playerScript.gameObject;
+            }
+            else
+            {
+                // get the Persona GameObject
+                Persona personaScript = theObject.GetComponentInParent<Persona>();
+                // if the Persona script is there
+                if (personaScript != null)
+                {
+                    return personaScript.gameObject;
+                }
+            }
+            // couldn't find it (this is an error
+            Debug.LogError("Couldn't find root parent object");
+            return null;
         }
 
         #endregion

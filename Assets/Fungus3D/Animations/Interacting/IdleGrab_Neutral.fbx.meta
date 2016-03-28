@@ -162,6 +162,10 @@ ModelImporter:
     400154: TongueBack
     400156: TongueTip
     7400000: Grab
+    7400002: ReachRightForward
+    7400004: ReachRightBack
+    7400006: ReachLeftForward
+    7400008: ReachLeftBack
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -172,26 +176,44 @@ ModelImporter:
     bakeSimulation: 0
     resampleRotations: 1
     optimizeGameObjects: 1
-    motionNodeName: 
+    motionNodeName: Reference/Pivot/Root/Hips/Spine
     animationImportErrors: 
     animationImportWarnings: "\nClip '_121_a_U1_M_P_idleGrab_Neutral__Fb_p0_No_0_PJ_1'
       has import animation warnings that might lower retargeting quality:\nNote: Activate
       translation DOF on avatar to improve retargeting quality.\n\t'Hips' has translation
       animation that will be discarded.\n\t'Hips' is inbetween humanoid transforms
       and has rotation animation that will be discarded.\n"
-    animationRetargetingWarnings: 
-    animationDoRetargetingWarnings: 0
+    animationRetargetingWarnings: "\nRetargeting quality report for clip '_121_a_U1_M_P_idleGrab_Neutral__Fb_p0_No_0_PJ_1':\n\tLeftLowerLeg
+      average position error 47.5 mm and maximum position error 145.5 mm at time 35:
+      0 (57.8%) Frame 1050\n\tLeftFoot average position error 47.1 mm and maximum
+      position error 131.0 mm at time 35: 0 (57.9%) Frame 1050\n\tRightLowerLeg average
+      position error 47.2 mm and maximum position error 114.3 mm at time 35: 2 (58.0%)
+      Frame 1052\n\tRightFoot average position error 46.2 mm and maximum position
+      error 126.3 mm at time 35: 1 (57.9%) Frame 1051\n\tLeftUpperArm average position
+      error 46.0 mm and maximum position error 135.1 mm at time 35: 1 (57.9%) Frame
+      1051\n\tLeftLowerArm average position error 46.5 mm and maximum position error
+      133.5 mm at time 35: 1 (57.9%) Frame 1051\n\tLeftHand average position error
+      46.6 mm and maximum position error 130.7 mm at time 35: 1 (57.9%) Frame 1051\n\tRightUpperArm
+      average position error 46.0 mm and maximum position error 135.1 mm at time 35:
+      1 (57.9%) Frame 1051\n\tRightLowerArm average position error 46.6 mm and maximum
+      position error 133.4 mm at time 35: 1 (57.9%) Frame 1051\n\tRightHand average
+      position error 47.4 mm and maximum position error 131.8 mm at time 35: 1 (57.9%)
+      Frame 1051\n\tHead average position error 46.0 mm and maximum position error
+      135.1 mm at time 35: 1 (57.9%) Frame 1051\n"
+    animationDoRetargetingWarnings: 1
     animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
     animationWrapMode: 0
-    extraExposedTransformPaths: []
+    extraExposedTransformPaths:
+    - Reference/Pivot/Root/Hips/Spine/Chest/RightShoulder/RightArm/RightForeArm/RightHand
+    - Reference/Pivot/Root/Hips/Spine/Chest/LeftShoulder/LeftArm/LeftForeArm/LeftHand
     clipAnimations:
     - serializedVersion: 16
       name: Grab
       takeName: _121_a_U1_M_P_idleGrab_Neutral__Fb_p0_No_0_PJ_1
-      firstFrame: 272
+      firstFrame: 300
       lastFrame: 418
       wrapMode: 0
       orientationOffsetY: 0
@@ -209,13 +231,69 @@ ModelImporter:
       keepOriginalPositionXZ: 0
       heightFromFeet: 0
       mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      bodyMask: 00000000010000000000000000000000000000000000000001000000000000000100000000000000000000000000000001000000
       curves: []
       events: []
       transformMask: []
-      maskType: 0
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
+      maskType: 1
+      maskSource: {fileID: 101100000, guid: 45f3702e6eb9349f38b2c10b4d1ddcc6, type: 2}
+      additiveReferencePoseFrame: 56
+    - serializedVersion: 16
+      name: ReachRightForward
+      takeName: _121_a_U1_M_P_idleGrab_Neutral__Fb_p0_No_0_PJ_1
+      firstFrame: 300
+      lastFrame: 355
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 00000000010000000000000000000000000000000000000001000000000000000100000000000000000000000000000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 1
+      maskSource: {fileID: 101100000, guid: 45f3702e6eb9349f38b2c10b4d1ddcc6, type: 2}
+      additiveReferencePoseFrame: 300
+    - serializedVersion: 16
+      name: ReachRightBack
+      takeName: _121_a_U1_M_P_idleGrab_Neutral__Fb_p0_No_0_PJ_1
+      firstFrame: 355
+      lastFrame: 418
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 00000000010000000000000000000000000000000000000001000000000000000100000000000000000000000000000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 1
+      maskSource: {fileID: 101100000, guid: 45f3702e6eb9349f38b2c10b4d1ddcc6, type: 2}
+      additiveReferencePoseFrame: 300
     isReadable: 1
   meshes:
     lODScreenPercentages: []

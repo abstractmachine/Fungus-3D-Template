@@ -228,7 +228,7 @@ namespace Fungus3D
             // if the clicked object isn't even in the current dialog
             if (clickedObject != null && !charactersInFlowchart.Contains(clickedObject))
             {
-                Debug.LogWarning("Character " + GetPath(this.gameObject.transform) + " isn't in flowchart " + currentFlowchart.name);
+                Debug.LogWarning("Character " + GetPath(clickedObject.transform) + " isn't in flowchart " + currentFlowchart.name);
                 return;
             }
 
@@ -663,6 +663,11 @@ namespace Fungus3D
             // FIXME: This doesn't work when there is no executing block
             // if we have a currently executing block
             List<Block> blocks = flowchart.GetExecutingBlocks();
+
+            // FIXME: For some reason we now have to add ourselves to the list
+            GameObject flowChartRootParent = ExtractRootParentFrom(flowchart);
+            if (flowChartRootParent) possiblePersonaObjects.Add(flowChartRootParent);
+
             // go through each executing block
             foreach (Block block in blocks)
             {
@@ -674,17 +679,19 @@ namespace Fungus3D
                     // if this is a say command
                     if (command.GetType().ToString() == "Fungus.Say")
                     {
-                        // force type to say
+                        // force type to Say
                         Say sayCommand = (Say)command;
                         // get the gameobject attached to this character
-                        GameObject persona = sayCommand.character.gameObject.transform.parent.gameObject;
-                        // make sure this one isn't already in the list
-                        if (possiblePersonaObjects.Contains(persona))
+//                        GameObject persona = sayCommand.character.gameObject.transform.parent.gameObject;
+                        GameObject persona = ExtractRootParentFrom(sayCommand.character.gameObject);
+
+                        // if this one isn't already in the list
+                        if (!possiblePersonaObjects.Contains(persona))
                         {
-                            continue;
+                            // add it to the list of possible people we're talking to
+                            possiblePersonaObjects.Add(persona);
                         }
-                        // ok, add it to the list of possible people we're talking to
-                        possiblePersonaObjects.Add(persona);
+
                     } // if type
                 } // foreach Command
             } // foreach(Block

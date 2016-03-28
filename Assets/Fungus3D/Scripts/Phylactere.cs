@@ -3,9 +3,11 @@ using UnityEngine.UI;
 using System.Collections;
 using Fungus;
 
-namespace Fungus3D {
+namespace Fungus3D
+{
 
-    public class Phylactere : MonoBehaviour, IWriterListener {
+    public class Phylactere : MonoBehaviour, IWriterListener
+    {
 
 
 
@@ -13,8 +15,27 @@ namespace Fungus3D {
 
         bool visible = false;
         Text storyText;
+
+        // TODO: this is value is arbitrary and should be calculated dynamically
+        float lineHeight = 59.0f;
+//        float characterWidth = 20.0f;
+
+        Vector2 panelMargins = new Vector2(150.0f, 75.0f);
+
         RectTransform panelRectTransform;
-        public float lineHeight = 59.0f;
+        RectTransform storyRectTransform;
+
+        Vector2 storyOffsetMin;
+        Vector2 storyOffsetMax;
+        Vector2 storyAnchorMin;
+        Vector2 storyAnchorMax;
+        Vector2 storyPivot;
+
+        Vector2 panelOffsetMin;
+        Vector2 panelOffsetMax;
+        Vector2 panelAnchorMin;
+        Vector2 panelAnchorMax;
+        Vector2 panelPivot;
 
         #endregion
 
@@ -45,7 +66,8 @@ namespace Fungus3D {
         /// Turn this phylactere towards the camera(s) whenver it/they move
         /// </summary>
 
-        void CameraMoved() {
+        void CameraMoved()
+        {
 
             // transform.rotation = Quaternion.Lerp(transform.rotation, Camera.main.transform.rotation, 0.5f);
             transform.rotation = Quaternion.Lerp(transform.rotation, Camera.main.transform.rotation, 1.0f);
@@ -56,14 +78,42 @@ namespace Fungus3D {
 
 
 
-    	#region Interfaces
+        #region Interfaces
 
         /// <summary>
         /// Called when a user input event (e.g. a click) has been handled by the Writer
         /// </summary>
 
-    	public void OnInput() {
-    	}
+        public void OnInput()
+        {
+        }
+
+
+        void Awake()
+        {
+
+            // get the script that controls the storyText
+            storyText = GetComponent<SayDialog>().storyText.GetComponent<Text>();
+
+            // get the default text width
+            storyRectTransform = storyText.gameObject.GetComponent<RectTransform>();
+
+            storyOffsetMin = storyRectTransform.offsetMin;
+            storyOffsetMax = storyRectTransform.offsetMax;
+            storyAnchorMin = storyRectTransform.anchorMin;
+            storyAnchorMax = storyRectTransform.anchorMax;
+            storyPivot = storyRectTransform.pivot;
+
+            // get the default panel width
+            panelRectTransform = transform.FindChild("Panel").GetComponent<RectTransform>();
+
+            panelOffsetMin = panelRectTransform.offsetMin;
+            panelOffsetMax = panelRectTransform.offsetMax;
+            panelAnchorMin = panelRectTransform.anchorMin;
+            panelAnchorMax = panelRectTransform.anchorMax;
+            panelPivot = panelRectTransform.pivot;
+
+        }
 
     	
         /// <summary>
@@ -71,89 +121,124 @@ namespace Fungus3D {
         /// </summary>
         /// <param name="audioClip">The AudioClip that is currently playing</param>
 
-    	public void OnStart(AudioClip audioClip) {
-    		visible = true;
-    		CalculateLineHeight();
-    	}
+        public void OnStart(AudioClip audioClip)
+        {
+
+            visible = true;
+            CalculateLineHeight();
+    	
+        }
 
 
-    	/// <summary>
+        /// <summary>
         /// Called when the Writer has paused writing text (e.g. on a {wi} tag).
         /// </summary>
 
-    	public void OnPause() {
-    	}
+        public void OnPause()
+        {
+        }
 
 
         /// <summary>
         /// Called when the Writer has resumed writing text.
         /// </summary>
 
-    	public void OnResume() {
-    	}
+        public void OnResume()
+        {
+        }
 
 
         /// <summary>
         /// Called when the Writer has finshed writing text
         /// </summary>
 
-    	public void OnEnd() {
-    		visible = false;
-    	}
+        public void OnEnd()
+        {
+            visible = false;
+        }
 
 
-    	/// <summary>
+        /// <summary>
         /// Called every time the Writer writes a new character glyph.
         /// </summary>
 
-    	public void OnGlyph() {
-    		CalculateLineHeight();
-    	}
+        public void OnGlyph()
+        {
+            CalculateLineHeight();
+        }
 
-    	#endregion
+        #endregion
 
 
 
-    	#region Treatment
+        #region Treatment
 
         /// <summary>
         /// Calculate the line height based on number of lines in the dialog text
         /// </summary>
 
-    	void CalculateLineHeight() {
+        void CalculateLineHeight()
+        {
 
-    		// make sure that we have a dialog object
-    		if (storyText == null) {
-    			// get the script that controls the storyText
-    			storyText = GetComponent<SayDialog>().storyText.GetComponent<Text>();
-    		}
+            if (storyText != null)
+            {
+                // we first need to force update the canvas text rendering
+                Canvas.ForceUpdateCanvases();
+                // so that we can read the line count
+                int lineCount = storyText.cachedTextGenerator.lineCount;
+                // force to minimum text line count
+                lineCount = Mathf.Max(1, lineCount);
 
-    		if (storyText != null) {
-    			// we first need to force update the canvas text rendering
-    			Canvas.ForceUpdateCanvases();
-    			// so that we can read the line count
-    			int lineCount = storyText.cachedTextGenerator.lineCount;
-    			// force to minimum text line count
-    			lineCount = Mathf.Max(1, lineCount);
+                // HACK: Fungus resizes text panel whenever there is a character image. This hack deactivates it
 
-    			float panelMargins = 75.0f;
+//                storyRectTransform.anchorMin = new Vector2(0f, 0f);
+//                storyRectTransform.anchorMax = new Vector2(1f, 1f);
+//                storyRectTransform.pivot = new Vector2(0.5f, 0.5f);
 
-    			if (panelRectTransform == null) {
-    				// get the panel that controls the size
-    				panelRectTransform = transform.FindChild("Panel").GetComponent<RectTransform>();
-    			}
+                storyRectTransform.offsetMin = storyOffsetMin;
+                storyRectTransform.offsetMax = storyOffsetMax;
+                storyRectTransform.anchorMin = storyAnchorMin;
+                storyRectTransform.anchorMax = storyAnchorMax;
+                storyRectTransform.pivot = storyPivot;
 
-    			if (panelRectTransform != null) {
-    				Vector2 sizeDelta = panelRectTransform.sizeDelta;
-    				sizeDelta.y = panelMargins + (lineCount * lineHeight);
-    				panelRectTransform.sizeDelta = sizeDelta;
-    			}
+//                panelRectTransform.anchorMin = new Vector2(0.5f, 0f);
+//                panelRectTransform.anchorMax = new Vector2(0.5f, 0f);
+//                panelRectTransform.pivot = new Vector2(0.5f, 0f);
 
-    		}
+                panelRectTransform.offsetMin = panelOffsetMin;
+                panelRectTransform.offsetMax = panelOffsetMax;
+                panelRectTransform.anchorMin = panelAnchorMin;
+                panelRectTransform.anchorMax = panelAnchorMax;
+                panelRectTransform.pivot = panelPivot;
 
-    	}
+                // recalculate the size of the text panel
+                Vector2 sizeDelta = panelRectTransform.sizeDelta;
 
-    	#endregion
+//                // if we have only one line
+//                if (storyText.text.Length < 15)
+//                {   // how many characters on that line?
+//                    int characterCount = Mathf.Max(5,storyText.text.Length);
+//                    // calculate character width
+//                    sizeDelta.x = panelMargins.x + (characterCount * characterWidth);
+//                    print(panelMargins.x + "\t" + characterCount + "\t" + characterWidth + "\t" + sizeDelta.x);
+//                }
+//                else
+//                {
+//                    sizeDelta.x = storyWidth;
+//                }
+
+//                sizeDelta.x = storyWidth;
+
+                // configure the height
+                sizeDelta.y = panelMargins.y + (lineCount * lineHeight);
+                // apply changes
+                panelRectTransform.sizeDelta = sizeDelta;
+
+            }
+
+        }
+
+        #endregion
 
     }
 

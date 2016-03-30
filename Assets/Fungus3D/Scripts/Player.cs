@@ -10,7 +10,7 @@ namespace Fungus3D
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(Animator))]
 
-    // TODO: Subclass Player from Persona, moving NavMesh goal over to Persona
+    // TODO: move NavMesh goal over to Persona
     // i.e. give Personae the power to walk. Yes, we have a Messiah complex ;-)
 
     public class Player : Fungus3D.Persona
@@ -42,7 +42,6 @@ namespace Fungus3D
 
         void OnEnable()
         {
-//            Persona.ClickedOnPersonaListener += ClickedOnPersona;
             Persona.GoToPersonaListener += GoToPersona;
             Ground.GoToPositionListener += GoToPosition;
         }
@@ -50,7 +49,6 @@ namespace Fungus3D
 
         void OnDisable()
         {
-//            Persona.ClickedOnPersonaListener -= ClickedOnPersona;
             Persona.GoToPersonaListener -= GoToPersona;
             Ground.GoToPositionListener -= GoToPosition;
         }
@@ -74,7 +72,7 @@ namespace Fungus3D
 
             // Don’t update position automatically
             navMeshAgent.updatePosition = false;
-//            navMeshAgent.updateRotation = false;
+            navMeshAgent.updateRotation = false;
         }
 
         #endregion
@@ -83,74 +81,90 @@ namespace Fungus3D
 
         #region Animation
 
-        void Update()
+        void FixedUpdate()
         {
+//            if (!Dead && targetGoalIsSet)
             if (!Dead)
             {
-                UpdatePosition();
+                Walk();
+                //UpdatePosition();
             }
         }
 
-        void UpdatePosition()
+
+        void Walk()
         {
-            Vector2 smoothDeltaPosition = Vector2.zero;
+            // TODO: calculate walk speed using navMeshAgent values
+            float maxWalkSpeed = 0.45f;
             Vector2 velocity = Vector2.zero;
 
             Vector3 worldDeltaPosition = navMeshAgent.nextPosition - transform.position;
+            float magnitude = worldDeltaPosition.magnitude;
 
-            // Map 'worldDeltaPosition' to local space
-            float dx = Vector3.Dot(transform.right, worldDeltaPosition);
-            float dy = Vector3.Dot(transform.forward, worldDeltaPosition);
-            Vector2 deltaPosition = new Vector2(dx, dy);
+            float angleDelta = CalculateAngleDelta(this.gameObject, navMeshAgent.nextPosition) * 0.05f;
+            float currentAngle = animator.GetFloat("Turn");
+
+            float currentSpeed = animator.GetFloat("Speed");
 
             // Low-pass filter the deltaMove
-            float smooth = Mathf.Min(1.0f, Time.deltaTime / 0.15f);
+            float walkSmoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.15f);
+//            float turnSmoothFactor = Mathf.Min(1.0f, Time.deltaTime * 5.0f);
+            float turnSmoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.1f);
 
-            smoothDeltaPosition = Vector2.Lerp(smoothDeltaPosition, deltaPosition, smooth);
+            float targetAngle = Mathf.Lerp(currentAngle, angleDelta, turnSmoothFactor);
+            float targetSpeed = Mathf.Clamp(magnitude, 0.0f, maxWalkSpeed);
 
-            // Update velocity if time advances
-            if (Time.deltaTime > 1e-5f)
+            // make sure there's enough distance for walking
+            if (navMeshAgent.remainingDistance > navMeshAgent.radius)
             {
-                velocity = smoothDeltaPosition / Time.deltaTime;
-            }
-
-            bool shouldMove = velocity.magnitude > 0.5f && navMeshAgent.remainingDistance > navMeshAgent.radius;
-
-            if (shouldMove)
-            {
-                animator.SetFloat("Forward", 1.0f);
+                velocity.x = targetAngle;
+                velocity.y = Mathf.Lerp(currentSpeed, targetSpeed, walkSmoothFactor);
             }
             else
             {
-                animator.SetFloat("Forward", 0.0f);
+                velocity.x = Mathf.Lerp(currentAngle, 0.0f, turnSmoothFactor);
+                velocity.y = Mathf.Lerp(currentSpeed, 0.0f, walkSmoothFactor);
             }
 
-            // move head      
-            //GetComponent<LookAt>().lookAtTargetPosition = navMeshAgent.steeringTarget + transform.forward;
+            // Update animation parameters
+            animator.SetFloat("Turn", velocity.x);
+            animator.SetFloat("Speed", velocity.y);
 
-            // Pull agent towards character
-            if (worldDeltaPosition.magnitude > navMeshAgent.radius)
-            {
-                navMeshAgent.nextPosition = transform.position + 0.9f * worldDeltaPosition;
-            }
+            GetComponent<LookAt>().lookAtTargetPosition = navMeshAgent.steeringTarget + transform.forward;
+
+            SnapAgentToPosition(0.9f);
+
         }
 
         void OnAnimatorMove()
         {
             if (Dead) return;
 
-            // Update position to agent position
-            //transform.position = navMeshAgent.nextPosition;
+            // get animator rotation
+            Quaternion targetRotation = animator.rootRotation;
+            // smooth the rotation transition a little
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 50.0f);
 
-            // Update position based on animation movement using navigation surface height
+            // get animator position
             Vector3 position = animator.rootPosition;
             position.y = navMeshAgent.nextPosition.y;
             transform.position = position;
 
             if (Walking)
-            {
-                Vector3 deltaPosition = position - targetGoal;
+            {   // broadcast our postition
+                Vector3 deltaPosition = transform.position - targetGoal;
                 BroadcastDistance(deltaPosition.sqrMagnitude);
+            }
+        }
+
+
+        void SnapAgentToPosition(float easing = 1.0f)
+        {
+            Vector3 worldDeltaPosition = navMeshAgent.nextPosition - transform.position;
+            // Pull agent towards character
+            if (worldDeltaPosition.magnitude > navMeshAgent.radius)
+            {
+                navMeshAgent.nextPosition = transform.position + (easing * worldDeltaPosition);
             }
         }
 
@@ -165,7 +179,8 @@ namespace Fungus3D
         /// Note: This requires a physics Raycaster on a camera
         /// </summary>
 
-        public override void OnClick() {
+        public override void OnClick()
+        {
 
             OnClickPlayer(null);
 
@@ -263,6 +278,23 @@ namespace Fungus3D
         #region Triggers
 
 
+        void ReachedTarget()
+        {
+            // stop current movement
+            StopWalking();
+
+            // better annul any inevitable touch targets
+            // make sure there are listeners
+            if (ReachedTargetListener != null)
+            {   // broadcast that we've reached the target
+                ReachedTargetListener();
+            }
+            // 
+            BroadcastDistance(0.0f);
+
+        }
+
+
         public override void OnInteractionEnter(GameObject other)
         {
             // if the logging level is at least informational
@@ -273,6 +305,8 @@ namespace Fungus3D
 
             // if we're dead, ingore the rest
             if (Dead) return;
+
+            print("OnInteractionEnter");
 
             // if we're the player interacting with a persona
             if (IsPlayer && other.tag == "Persona" && other == targetObject)
@@ -297,32 +331,12 @@ namespace Fungus3D
             if (IsPlayer && other.tag == "TouchTarget")
             {
                 // get rid of the TouchTarget
-                //Destroy(other);
+                Destroy(other);
                 // Broadcast that we're reached the target
                 ReachedTarget();
 
                 return;
             }
-
-        }
-
-
-        void ReachedTarget()
-        {
-            // if we're still walking
-            if (Walking)
-            {   // stop current movement
-                StopWalking();
-            }
-
-            // better annul any inevitable touch targets
-            // make sure there are listeners
-            if (ReachedTargetListener != null)
-            {   // broadcast that we've reached the target
-                ReachedTargetListener();
-            }
-            // 
-            BroadcastDistance(0.0f);
 
         }
 
@@ -358,6 +372,8 @@ namespace Fungus3D
 
             // if we're dead, ignore the rest
             if (Dead) return;
+
+            print("OnInteractionExit");
 
             // ignore anyone who is not a Persona
             if (IsPlayer && other.tag != "Persona")
@@ -418,13 +434,36 @@ namespace Fungus3D
             targetObject = null;
             // remember that this is the new target
             targetGoal = transform.position;
+            // stop the animation controller
             navMeshAgent.ResetPath();
             // broadcast that we're at the new target
             BroadcastDistance(0.0f);
             // we no longer have a targetGoal
             targetGoalIsSet = false;
 
+            SnapAgentToPosition();
+
+            StartCoroutine("SlowToStop");
+
         }
+
+
+        IEnumerator SlowToStop()
+        {
+
+            float speed = animator.GetFloat("Speed");
+            while (speed > 0.05f)
+            {
+                speed = Mathf.Lerp(speed, 0.0f, 0.5f);
+                animator.SetFloat("Speed", speed);
+                yield return new WaitForEndOfFrame();
+            }
+            animator.SetFloat("Speed", 0.0f);
+            animator.SetFloat("Turn", 0.0f);
+
+            SnapAgentToPosition();
+        }
+
 
         bool IsAtDestination()
         {
@@ -682,6 +721,11 @@ namespace Fungus3D
                         // force type to Say
                         Say sayCommand = (Say)command;
                         // get the gameobject attached to this character
+                        if (sayCommand == null)
+                        {
+                            Debug.LogError("sayCommand == null");
+                            continue;
+                        }
 //                        GameObject persona = sayCommand.character.gameObject.transform.parent.gameObject;
                         GameObject persona = ExtractRootParentFrom(sayCommand.character.gameObject);
 

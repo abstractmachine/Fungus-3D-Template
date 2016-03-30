@@ -62,9 +62,7 @@ namespace Fungus3D
 
         public void OnPointerClick(PointerEventData eventData)
         {
-
             checkHit(eventData.position);
-
         }
 
 

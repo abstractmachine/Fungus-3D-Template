@@ -61,7 +61,7 @@ namespace Fungus3D
         /// Gets a value indicating whether this <see cref="Fungus3D.Persona"/> is walking.
         /// </summary>
         /// <value><c>true</c> if walking; otherwise, <c>false</c>.</value>
-        public bool Walking { get { return navMeshAgent.velocity.sqrMagnitude > 0.01f; } }
+        public bool Walking { get { return animator.GetFloat("Speed") > 0.1f; } }
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="Fungus3D.Persona"/> is dead.
@@ -477,73 +477,62 @@ namespace Fungus3D
 
         IEnumerator Turn(GameObject turnTarget)
         {
+            // set the walk speed to 0
+            animator.SetFloat("Speed", 0.0f);
 
             // which way do we have to turn?
             float angleDelta = CalculateAngleDelta(this.gameObject, turnTarget);
+            // get current angle
+            float currentAngle = animator.GetFloat("Turn");
 
-            // if we need to turn to the left
-            if (angleDelta < -10)
+            while (Mathf.Abs(angleDelta) > 10.0f)
             {
-                // start turning left
-                animator.SetBool("TurnLeft", true);
-                // wait for us to get close enough
-                while (angleDelta < -15)
-                {
-                    // update angle delta
-                    angleDelta = CalculateAngleDelta(this.gameObject, turnTarget);
-                    // calculate speed
-                    float speed = 1.0f + Mathf.Abs(angleDelta * 0.005f);
-                    // speed up the faster we are from the target angle
-                    animator.speed = speed;
-                    // wait for the next frame
-                    yield return new WaitForEndOfFrame();
+                // Create the Low-pass filter for the delta
+                float smoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.1f);
+                // change scale of movement
+                angleDelta *= 0.1f;
+                // get the current angle
+                currentAngle = animator.GetFloat("Turn");
+                // smooth the angle
+                currentAngle = Mathf.Lerp(currentAngle, angleDelta, smoothFactor);
+                // if we're close enough
+                if (Mathf.Abs(currentAngle) < 0.5f)
+                {   // stop rotation
+                    currentAngle = Mathf.Lerp(currentAngle, 0.0f, 0.5f);
                 }
-                // stop turning left
-                animator.SetBool("TurnLeft", false);
-                // set speed back to normal (1)
-                animator.speed = 1.0f;
+                // if too small
+                if (Mathf.Abs(currentAngle) < 0.05) currentAngle = 0.0f;
+                // turn in this direction
+                animator.SetFloat("Turn", currentAngle);
+                // wait a bit
+                yield return new WaitForFixedUpdate();
+                // calculate how we did
+                angleDelta = CalculateAngleDelta(this.gameObject, turnTarget);
             }
-            // if we need to turn to the right
-            else if (angleDelta > 10)
+
+            // stop whatever rotations are taking place
+            while (Mathf.Abs(currentAngle) > 0.05f)
             {
-                // start turning right
-                animator.SetBool("TurnRight", true);
-                // wait for us to get close enough
-                while (angleDelta > 15)
-                {
-                    // update angle delta
-                    angleDelta = CalculateAngleDelta(this.gameObject, turnTarget);
-                    // calculate speed
-                    float speed = 1.0f + Mathf.Abs(angleDelta * 0.005f);
-                    // speed up the faster we are from the target angle
-                    animator.speed = speed;
-                    // wait for the next frame
-                    yield return new WaitForEndOfFrame();
-                }
-                // stop turning right
-                animator.SetBool("TurnRight", false);
-                // set speed back to normal (1)
-                animator.speed = 1.0f;
+                currentAngle *= 0.75f;
+                animator.SetFloat("Turn", currentAngle);
+                // wait for next frame
+                yield return new WaitForFixedUpdate();
             }
 
-            // now force a final turn directly towards that gameObject
-            float rotationSpeed = 15.0f;
+//            angleDelta = CalculateAngleDelta(this.gameObject, turnTarget);
+//            while (Mathf.Abs(angleDelta) > 1.0f)
+//            {
+//                //calculate the rotation needed 
+//                Quaternion neededRotation = Quaternion.LookRotation(turnTarget.transform.position - transform.position);
+//                //use spherical interpollation over time
+//                Quaternion interpolatedRotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
+//                // apply rotation
+//                transform.rotation = interpolatedRotation;
+//                // wait a frame
+//                yield return new WaitForEndOfFrame();
+//            }
 
-            for (float countdown = 1.0f; countdown >= 0.0f; countdown -= Time.deltaTime)
-            {
-                //calculate the rotation needed 
-                Quaternion neededRotation = Quaternion.LookRotation(turnTarget.transform.position - transform.position);
-
-                //use spherical interpollation over time
-                Quaternion interpolatedRotation = Quaternion.Slerp(transform.rotation, neededRotation, Time.deltaTime * rotationSpeed);
-
-                transform.rotation = interpolatedRotation;
-
-                yield return new WaitForEndOfFrame();
-            }
-
-            yield return null;
-
+            animator.SetFloat("Turn", 0.0f);
 
         }
 
@@ -668,19 +657,35 @@ namespace Fungus3D
         #region Tools
 
         /// <summary>
-        /// Calculates the direction object A needs to turn delta to point towards object B.
+        /// Calculates the (signed) angle object A needs to turn delta to point towards object B.
         /// Code by Ben Pitt.
         /// http://answers.unity3d.com/answers/26791/view.html
         /// </summary>
-        /// <returns>The angle delta as a signed float (-180° to 180°).</returns>
-        /// <param name="objectA">Object A.</param>
-        /// <param name="objectB">Object B.</param>
+        /// <returns>The angle delta.</returns>
+        /// <param name="objectA">The object that needs to turn.</param>
+        /// <param name="objectB">The object it needs to turn toward.</param>
 
         protected float CalculateAngleDelta(GameObject objectA, GameObject objectB)
         {
+            return CalculateAngleDelta(objectA, objectB.transform.position);
+        }
 
+
+        /// <summary>
+        /// Calculates the (signed) angle object A needs to turn delta to point towards the target position.
+        /// Code by Ben Pitt.
+        /// http://answers.unity3d.com/answers/26791/view.html
+        /// </summary>
+        /// <returns>The angle delta.</returns>
+        /// <param name="objectA">The object that needs to turn.</param>
+        /// <param name="target">The target position.</param>
+
+        protected float CalculateAngleDelta(GameObject objectA, Vector3 target)
+        {
             // get the delta of these two positions
-            Vector3 deltaVector = (objectB.transform.position - objectA.transform.position).normalized;
+            Vector3 deltaVector = (target - objectA.transform.position).normalized;
+            // no zero divisions
+            if (Vector3.zero == deltaVector) return 0.0f;
             // create a rotation looking in that direction
             Quaternion lookRotation = Quaternion.LookRotation(deltaVector);
             // get a "forward vector" for each rotation
@@ -731,39 +736,3 @@ namespace Fungus3D
 
 }
 // namespace Fungus3D
-
-
-
-
-
-
-
-
-//        GameObject FindRagdoll()
-//        {
-//
-//            foreach (Transform t in this.transform)
-//            {   // if this is the ragdoll
-//                if (t.gameObject.tag == "Ragdoll")
-//                {   // remember it
-//                    return t.gameObject;
-//                }
-//            }
-//            // couldn't find it
-//            return null;
-//        }
-//
-//
-//        GameObject FindModel()
-//        {
-//
-//            foreach (Transform t in this.transform)
-//            {   // if this is the ragdoll
-//                if (t.gameObject.tag == "Model")
-//                {   // remember it
-//                    return t.gameObject;
-//                }
-//            }
-//            // couldn't find it
-//            return null;
-//        }

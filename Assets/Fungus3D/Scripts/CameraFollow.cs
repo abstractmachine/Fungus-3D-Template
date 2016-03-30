@@ -10,6 +10,9 @@ namespace Fungus3D {
 
         #region Variables
 
+        [SerializeField]
+        int targetFrameRate = 60;
+
     	public GameObject target;
 
         float zoomLevel = 7.4f;
@@ -58,6 +61,16 @@ namespace Fungus3D {
 
         #endregion
 
+
+        #region Init
+
+        void Start()
+        {   
+            // set game speed to 60
+            Application.targetFrameRate = targetFrameRate;
+        }
+
+        #endregion
 
 
         #region Loop

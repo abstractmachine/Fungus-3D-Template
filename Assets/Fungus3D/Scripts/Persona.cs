@@ -33,6 +33,9 @@ namespace Fungus3D
         // has the ragdoll been configured?
         bool containsRagdoll = false;
 
+        // movement
+        protected Vector2 walkVelocity = Vector2.zero;
+
         // targetting
         protected GameObject targetObject;
         protected Vector3 targetGoal;
@@ -421,10 +424,10 @@ namespace Fungus3D
                 // get the rigidbody
                 Rigidbody contactBody = contact.thisCollider.attachedRigidbody;
                 // get the direction of the bullet
-                //Vector3 velocity = contact.normal;
-                Vector3 velocity = impact.gameObject.transform.forward.normalized;
+                //Vector3 impactVelocity = contact.normal;
+                Vector3 impactVelocity = impact.gameObject.transform.forward.normalized;
                 // we hit a specific rigidbody and we'll use the impact normal for calculating force
-                Die(contactBody, velocity); //contact.normal);
+                Die(contactBody, impactVelocity); //contact.normal);
                 // destroy bullet
                 Destroy(impact.gameObject);
             }

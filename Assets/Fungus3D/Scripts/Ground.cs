@@ -210,13 +210,12 @@ namespace Fungus3D
 
 
         /// <summary>
-        /// Draw a target and started a ripple effect at the position where we clicked
+        /// Draw a target and start a ripple effect at the position where we clicked
         /// </summary>
         /// <param name="position">Position.</param>
 
         void ShowTouch(Vector3 position)
         {
-
             // show TouchTarget
             GameObject touchTarget = Instantiate(touchTargetPrefab, position, Quaternion.Euler(90, 0, 0)) as GameObject;
             touchTarget.name = "TouchTarget";
@@ -228,7 +227,6 @@ namespace Fungus3D
             touchRipple.transform.parent = GameObject.Find("Ground").transform;
             // blow up in a co-routine
             StartCoroutine(ExpandRipple(touchRipple));
-
         }
 
 
@@ -239,7 +237,6 @@ namespace Fungus3D
 
         IEnumerator ExpandRipple(GameObject touchPoint)
         {
-
             //      // match background color for the sprite color
             //      float timeSaturation = Camera.main.GetComponent<Daylight>().TimeSaturation;
             //      timeSaturation = Mathf.Min(1.0f, 1.3f - timeSaturation);
@@ -255,7 +252,6 @@ namespace Fungus3D
             }
 
             Destroy(touchPoint);
-
         }
 
         #endregion

@@ -81,9 +81,8 @@ namespace Fungus3D
 
         #region Animation
 
-        void FixedUpdate()
+        void Update()
         {
-//            if (!Dead && targetGoalIsSet)
             if (!Dead)
             {
                 Walk();
@@ -96,7 +95,6 @@ namespace Fungus3D
         {
             // TODO: calculate walk speed using navMeshAgent values
             float maxWalkSpeed = 0.45f;
-            Vector2 velocity = Vector2.zero;
 
             Vector3 worldDeltaPosition = navMeshAgent.nextPosition - transform.position;
             float magnitude = worldDeltaPosition.magnitude;
@@ -114,6 +112,8 @@ namespace Fungus3D
             float targetAngle = Mathf.Lerp(currentAngle, angleDelta, turnSmoothFactor);
             float targetSpeed = Mathf.Clamp(magnitude, 0.0f, maxWalkSpeed);
 
+            Vector2 velocity = Vector2.zero;
+
             // make sure there's enough distance for walking
             if (navMeshAgent.remainingDistance > navMeshAgent.radius)
             {
@@ -126,9 +126,17 @@ namespace Fungus3D
                 velocity.y = Mathf.Lerp(currentSpeed, 0.0f, walkSmoothFactor);
             }
 
+            // Update velocity if delta time is safe
+            if (Time.deltaTime > 1e-5f)
+            {
+                walkVelocity = velocity;
+//                walkVelocity = velocity;
+            }
+//                velocity = turnSmoothFactor / Time.deltaTime;
+
             // Update animation parameters
-            animator.SetFloat("Turn", velocity.x);
-            animator.SetFloat("Speed", velocity.y);
+            animator.SetFloat("Turn", walkVelocity.x);
+            animator.SetFloat("Speed", walkVelocity.y);
 
             GetComponent<LookAt>().lookAtTargetPosition = navMeshAgent.steeringTarget + transform.forward;
 
@@ -306,8 +314,6 @@ namespace Fungus3D
             // if we're dead, ingore the rest
             if (Dead) return;
 
-            print("OnInteractionEnter");
-
             // if we're the player interacting with a persona
             if (IsPlayer && other.tag == "Persona" && other == targetObject)
             {
@@ -321,7 +327,7 @@ namespace Fungus3D
                 StartFlowchart(other);
 
                 // Broadcast that we're reached the target
-                ReachedTarget();
+//                ReachedTarget();
 
                 return;
 
@@ -352,12 +358,12 @@ namespace Fungus3D
             // if we're dead, ingore the rest
             if (Dead) return;
 
-//            // if we're interacting with another character
-//            if (IsPlayer && Walking && other.tag == "Persona" && other == targetObject)
-//            {
-//                    // stop current movement
-//                    StopWalking();
-//            }
+            // if we're interacting with another character
+            if (IsPlayer && Walking && other.tag == "Persona" && other == targetObject)
+            {
+                // stop current movement
+                ReachedTarget();
+            }
 
         }
 
@@ -372,8 +378,6 @@ namespace Fungus3D
 
             // if we're dead, ignore the rest
             if (Dead) return;
-
-            print("OnInteractionExit");
 
             // ignore anyone who is not a Persona
             if (IsPlayer && other.tag != "Persona")

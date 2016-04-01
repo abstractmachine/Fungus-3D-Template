@@ -130,9 +130,7 @@ namespace Fungus3D
             if (Time.deltaTime > 1e-5f)
             {
                 walkVelocity = velocity;
-//                walkVelocity = velocity;
             }
-//                velocity = turnSmoothFactor / Time.deltaTime;
 
             // Update animation parameters
             animator.SetFloat("Turn", walkVelocity.x);

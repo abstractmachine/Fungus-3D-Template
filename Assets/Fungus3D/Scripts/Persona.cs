@@ -253,6 +253,9 @@ namespace Fungus3D
             // only register intersections with the player
             if (this.tag != "Player") return;
 
+            // tell the Persona to turn towards us, the Player
+            other.GetComponent<Persona>().TurnTowards(this.gameObject);
+
             // find this flowchart in this character
             Flowchart flowchart = GetFlowchart(other); 
 

@@ -126,11 +126,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 13535728, guid: 4ee15722dad93486e87a5b8a6c56e7b5, type: 2}
       propertyPath: m_Radius
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 13611194, guid: 4ee15722dad93486e87a5b8a6c56e7b5, type: 2}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 13535728, guid: 4ee15722dad93486e87a5b8a6c56e7b5, type: 2}
       propertyPath: m_Center.y
@@ -154,7 +154,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 19565246, guid: 4ee15722dad93486e87a5b8a6c56e7b5, type: 2}
       propertyPath: m_StoppingDistance
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4ee15722dad93486e87a5b8a6c56e7b5, type: 2}
@@ -302,6 +302,18 @@ MonoBehaviour:
   errorMessage: 
   indentLevel: 0
   duration: 3
+--- !u!114 &323784644 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11479806, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
+    type: 2}
+  m_PrefabInternal: {fileID: 584864568}
+  m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
+--- !u!114 &323784661 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11447288, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
+    type: 2}
+  m_PrefabInternal: {fileID: 584864568}
+  m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
 --- !u!114 &323784664
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -618,6 +630,10 @@ Prefab:
       propertyPath: commandList.Array.size
       value: 19
       objectReference: {fileID: 0}
+    - target: {fileID: 11455096, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: commandList.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: selectedCommands.Array.size
       value: 1
@@ -700,12 +716,12 @@ Prefab:
       objectReference: {fileID: 1929742712}
     - target: {fileID: 13533176, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: m_Radius
-      value: 1.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: selectedBlock
       value: 
-      objectReference: {fileID: 323784574}
+      objectReference: {fileID: 323784644}
     - target: {fileID: 11454220, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: commandList.Array.data[18]
       value: 
@@ -713,7 +729,7 @@ Prefab:
     - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: selectedCommands.Array.data[0]
       value: 
-      objectReference: {fileID: 323784577}
+      objectReference: {fileID: 323784661}
     - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: selectedCommands.Array.data[1]
       value: 
@@ -726,8 +742,21 @@ Prefab:
       propertyPath: duration
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 11455096, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: commandList.Array.data[2]
+      value: 
+      objectReference: {fileID: 323784661}
+    - target: {fileID: 11455096, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: commandList.Array.data[3]
+      value: 
+      objectReference: {fileID: 323784661}
+    - target: {fileID: 11457606, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: duration
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11452816, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+    - {fileID: 11499124, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
   m_IsPrefabParent: 0
 --- !u!114 &629798223 stripped

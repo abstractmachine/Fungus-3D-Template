@@ -94,11 +94,9 @@ namespace Fungus3D
         void Walk()
         {
             // TODO: calculate walk speed using navMeshAgent values
-            float maxWalkSpeed = 1.0f;
+            float maxWalkSpeed = 1.1f;
 
             Vector3 worldDeltaPosition = navMeshAgent.nextPosition - transform.position;
-
-            print(worldDeltaPosition + "\t" + worldDeltaPosition.magnitude);
             float magnitude = worldDeltaPosition.magnitude * 2.0f;
 
             float angleDelta = CalculateAngleDelta(this.gameObject, navMeshAgent.nextPosition) * 0.05f;
@@ -106,16 +104,14 @@ namespace Fungus3D
 
             float currentSpeed = animator.GetFloat("Speed");
 
-            // Low-pass filter the deltaMove
-            //float walkSmoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.15f);
-            //float turnSmoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.1f);
+            // calculate smooth factors
             float turnSmoothFactor = Time.deltaTime * 5.0f;
-            float walkSmoothFactor = Time.deltaTime * 1.0f;
+            float walkSmoothFactor = Time.deltaTime * 4.0f;
 
             float targetAngle = Mathf.Lerp(currentAngle, angleDelta, turnSmoothFactor);
-            targetAngle = Mathf.Clamp(targetAngle, -1.0f, 1.0f);
+            targetAngle = Mathf.Clamp(targetAngle, -1.5f, 1.5f);
 
-            float targetSpeed = Mathf.Clamp(magnitude, 0.0f, maxWalkSpeed);
+            float targetSpeed = Mathf.Clamp(magnitude, 0.5f, maxWalkSpeed);
 
             Vector2 velocity = Vector2.zero;
 
@@ -234,6 +230,13 @@ namespace Fungus3D
                 return;
             }
 
+            // error catching
+            if (currentFlowchart == null)
+            {
+                Debug.LogError("currentFlowchart == null. IsPlayer=" + IsPlayer);
+                return;
+            }
+
             // ok, we do NOT have a menuDialog active
 
             // if there is no current dialogue
@@ -330,7 +333,7 @@ namespace Fungus3D
                 StartFlowchart(other);
 
                 // Broadcast that we're reached the target
-//                ReachedTarget();
+                ReachedTarget();
 
                 return;
 
@@ -364,6 +367,9 @@ namespace Fungus3D
             // if we're interacting with another character
             if (IsPlayer && Walking && other.tag == "Persona" && other == targetObject)
             {
+
+                // start talking
+                StartFlowchart(other);
                 // stop current movement
                 ReachedTarget();
             }

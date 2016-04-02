@@ -13,7 +13,10 @@ namespace Fungus3D {
         [SerializeField]
         int targetFrameRate = 60;
 
-    	public GameObject target;
+        public GameObject target;
+
+        float smoothTime = 0.3f;
+        private Vector3 velocity = Vector3.zero;
 
         float zoomLevel = 7.4f;
         float zoomInSpeed = 0.5f;
@@ -85,8 +88,12 @@ namespace Fungus3D {
         void FollowTarget() {
 
             // the camera constantly follows the persona
-            float t = 0.5f * Time.deltaTime;
-            transform.position = Vector3.Lerp(transform.position, target.transform.position + new Vector3(-cameraDistance, cameraDistance*1.5f, -cameraDistance), t);
+//            float smoothTime = 0.5f * Time.deltaTime;
+
+            Vector3 cameraTarget = target.transform.position + new Vector3(-cameraDistance, cameraDistance * 1.5f, -cameraDistance);
+
+            transform.position = Vector3.SmoothDamp(transform.position, cameraTarget, ref velocity, smoothTime);
+            //            transform.position = Vector3.Lerp(transform.position, target.transform.position + new Vector3(-cameraDistance, cameraDistance*1.5f, -cameraDistance), smoothTime);
             // all the cameras look at the target
             foreach (Camera camera in Camera.allCameras)
             {

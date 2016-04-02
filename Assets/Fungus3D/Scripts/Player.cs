@@ -94,10 +94,12 @@ namespace Fungus3D
         void Walk()
         {
             // TODO: calculate walk speed using navMeshAgent values
-            float maxWalkSpeed = 0.45f;
+            float maxWalkSpeed = 1.0f;
 
             Vector3 worldDeltaPosition = navMeshAgent.nextPosition - transform.position;
-            float magnitude = worldDeltaPosition.magnitude;
+
+            print(worldDeltaPosition + "\t" + worldDeltaPosition.magnitude);
+            float magnitude = worldDeltaPosition.magnitude * 2.0f;
 
             float angleDelta = CalculateAngleDelta(this.gameObject, navMeshAgent.nextPosition) * 0.05f;
             float currentAngle = animator.GetFloat("Turn");
@@ -105,11 +107,14 @@ namespace Fungus3D
             float currentSpeed = animator.GetFloat("Speed");
 
             // Low-pass filter the deltaMove
-            float walkSmoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.15f);
-//            float turnSmoothFactor = Mathf.Min(1.0f, Time.deltaTime * 5.0f);
-            float turnSmoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.1f);
+            //float walkSmoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.15f);
+            //float turnSmoothFactor = Mathf.Min(1.0f, Time.deltaTime / 0.1f);
+            float turnSmoothFactor = Time.deltaTime * 5.0f;
+            float walkSmoothFactor = Time.deltaTime * 1.0f;
 
             float targetAngle = Mathf.Lerp(currentAngle, angleDelta, turnSmoothFactor);
+            targetAngle = Mathf.Clamp(targetAngle, -1.0f, 1.0f);
+
             float targetSpeed = Mathf.Clamp(magnitude, 0.0f, maxWalkSpeed);
 
             Vector2 velocity = Vector2.zero;

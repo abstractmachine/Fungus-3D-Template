@@ -5,16 +5,15 @@ using Fungus;
 
 namespace Fungus3D
 {
-
     public class Phylactere : MonoBehaviour, IWriterListener
     {
-
-
-
+        
         #region Variables
 
         bool visible = false;
         Text storyText;
+
+        float scaleFactor = 0.0004f;
 
         // TODO: this is value is arbitrary and should be calculated dynamically
         float lineHeight = 59.0f;
@@ -68,10 +67,8 @@ namespace Fungus3D
 
         void CameraMoved()
         {
-
             // transform.rotation = Quaternion.Lerp(transform.rotation, Camera.main.transform.rotation, 0.5f);
             transform.rotation = Quaternion.Lerp(transform.rotation, Camera.main.transform.rotation, 1.0f);
-
         }
 
         #endregion
@@ -123,10 +120,24 @@ namespace Fungus3D
 
         public void OnStart(AudioClip audioClip)
         {
+            // set the size of the phylactère in relation to the camera angle
+            SetSize();
 
             visible = true;
             CalculateLineHeight();
-    	
+        }
+
+
+        void SetSize() 
+        {
+            // set the scale in relation to the camera distance
+            float targetScale = Camera.main.orthographicSize * scaleFactor;
+            // get current scale
+            float currentScale = transform.localScale.x;
+            // lerp to final scale
+            float finalScale = Mathf.Lerp(currentScale, targetScale, 0.25f);
+            // set that as the scale
+            transform.localScale = new Vector3(finalScale, finalScale, finalScale);
         }
 
 
@@ -240,6 +251,7 @@ namespace Fungus3D
 
         #endregion
 
-    }
+    } // class Phylactere
 
 }
+// namespace Fungus3D

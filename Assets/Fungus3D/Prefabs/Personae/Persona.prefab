@@ -402,6 +402,7 @@ GameObject:
   - 114: {fileID: 11487456}
   - 114: {fileID: 11472008}
   - 114: {fileID: 11492738}
+  - 114: {fileID: 11465514}
   m_Layer: 2
   m_Name: Persona_Flowchart
   m_TagString: Persona
@@ -1249,7 +1250,7 @@ MonoBehaviour:
     y: -353.08325
     width: 1615.9144
     height: 1099.0001
-  selectedBlock: {fileID: 11490596}
+  selectedBlock: {fileID: 11441340}
   selectedCommands: []
   variables:
   - {fileID: 11454504}
@@ -1510,7 +1511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 640.9144
+    x: 646.9144
     y: 173.91684
     width: 182
     height: 40
@@ -1933,8 +1934,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 642.9144
-    y: 243.91684
+    x: 649.9144
+    y: 242.91684
     width: 174
     height: 40
   itemId: 174
@@ -1974,12 +1975,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 709.1583
-    y: 91.02416
+    x: 131.15833
+    y: 76.02416
     width: 120
     height: 40
   itemId: 28
-  blockName: Soldier
+  blockName: Persona
   description: 
   eventHandler: {fileID: 11471106}
   commandList: []
@@ -2490,6 +2491,25 @@ MonoBehaviour:
   indentLevel: 0
   animator: {fileID: 9528012}
   parameterName: ReachRight
+  value:
+    booleanRef: {fileID: 0}
+    booleanVal: 0
+--- !u!114 &11465514
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee63e642958494f1ebed8116ae4b1103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 194
+  errorMessage: 
+  indentLevel: 0
+  animator: {fileID: 9528012}
+  parameterName: Calling
   value:
     booleanRef: {fileID: 0}
     booleanVal: 0
@@ -3123,8 +3143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 465.2107
-    y: 77.98792
+    x: 452.2107
+    y: 76.98792
     width: 181
     height: 40
   itemId: 25
@@ -3134,6 +3154,7 @@ MonoBehaviour:
   commandList:
   - {fileID: 11445982}
   - {fileID: 11464906}
+  - {fileID: 11465514}
   - {fileID: 11437834}
   - {fileID: 11433934}
   - {fileID: 11478142}
@@ -3931,7 +3952,7 @@ RectTransform:
   m_GameObject: {fileID: 180468}
   m_LocalRotation: {x: 0.14140284, y: 0.85849607, z: -0.35560074, w: 0.34137663}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.004, y: 0.004, z: 1}
+  m_LocalScale: {x: 0.0035, y: 0.0035, z: 1}
   m_Children:
   - {fileID: 22476154}
   m_Father: {fileID: 417198}

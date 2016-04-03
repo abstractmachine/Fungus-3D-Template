@@ -256,15 +256,22 @@ namespace Fungus3D
             // tell the Persona to turn towards us, the Player
             other.GetComponent<Persona>().TurnTowards(this.gameObject);
 
-            // find this flowchart in this character
+            // find the flowchart in this character
             Flowchart flowchart = GetFlowchart(other); 
 
             // if we found this persona's flowchart
             if (flowchart != null)
-            {   // tell this flowchart we've entered into its space
-                flowchart.SendFungusMessage("ProximityEnter");
-            }
-        }
+            {   
+                // check to see if there's a ProximityEnter event waiting for us
+                ProximityEnter proximityEnterEvent = flowchart.GetComponent<ProximityEnter>();
+                // did we find it?
+                if (proximityEnterEvent != null)
+                {
+                    proximityEnterEvent.ExecuteBlock();
+                }
+            } // if (flowchart)
+
+        } // OnProximityEnter
 
 
         /// <summary>
@@ -306,10 +313,17 @@ namespace Fungus3D
 
             // if we found this persona's flowchart
             if (flowchart != null)
-            {   // tell this flowchart we've entered into its space
-                flowchart.SendFungusMessage("ProximityExit");
-            }
-        }
+            {   
+                // check to see if there's a ProximityEnter event waiting for us
+                ProximityExit proximityExitEvent = flowchart.GetComponent<ProximityExit>();
+                // did we find it?
+                if (proximityExitEvent != null)
+                {
+                    proximityExitEvent.ExecuteBlock();
+                }
+            } // if (flowchart
+
+        } // OnProximityExit
 
 
         /// <summary>

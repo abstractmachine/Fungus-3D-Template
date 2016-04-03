@@ -520,7 +520,7 @@ namespace Fungus3D
 
 
 
-        #region Gestures
+        #region Dialogs
 
         void StartedDialogue(Flowchart flowchart)
         {
@@ -569,8 +569,15 @@ namespace Fungus3D
                 currentInterlocutor = other;
                 // remember which flowchart we're interacting with
                 currentFlowchart = flowchart;
-                // start this specific flowchart
-                flowchart.SendFungusMessage("DialogEnter");
+//                // start this specific flowchart
+//                flowchart.SendFungusMessage("DialogEnter");
+                // check to see if there's an InteractionEnter event waiting for us
+                InteractionEnter interactionEnterEvent = currentFlowchart.GetComponent<InteractionEnter>();
+                // did we find it?
+                if (interactionEnterEvent != null)
+                {
+                    interactionEnterEvent.ExecuteBlock();
+                }
                 // Started a dialog using this flowchart
                 StartedDialogue(flowchart);
             }
@@ -593,7 +600,14 @@ namespace Fungus3D
                 currentFlowchart.GetComponent<Flowchart>().StopAllBlocks();
                 currentFlowchart.GetComponent<Flowchart>().StopAllCoroutines();
                 // send a stop message to the current flowchart
-                currentFlowchart.SendFungusMessage("DalogExit");
+//                currentFlowchart.SendFungusMessage("DialogExit");
+                // check to see if there's an InteractionEnter event waiting for us
+                InteractionExit interactionExitEvent = currentFlowchart.GetComponent<InteractionExit>();
+                // did we find it?
+                if (interactionExitEvent != null)
+                {
+                    interactionExitEvent.ExecuteBlock();
+                }
             }
 
             // hide any possible menus of our own

@@ -467,9 +467,9 @@ namespace Fungus3D
             float speed = animator.GetFloat("Speed");
             while (speed > 0.05f)
             {
-                speed = Mathf.Lerp(speed, 0.0f, 0.5f);
-                animator.SetFloat("Speed", speed);
                 yield return new WaitForEndOfFrame();
+                speed = Mathf.Lerp(speed, 0.0f, 0.1f);
+                animator.SetFloat("Speed", speed);
             }
             animator.SetFloat("Speed", 0.0f);
             animator.SetFloat("Turn", 0.0f);

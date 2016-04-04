@@ -45,6 +45,7 @@ namespace Fungus3D
 
             // get the RootParent from the other object
             GameObject otherRootParent = trigger.gameObject.GetComponent<Collider_Interaction>().RootParent;
+            // maintain the interaction with it
             rootParent.GetComponent<Persona>().OnInteractionStay(otherRootParent);
         }
 
@@ -65,6 +66,7 @@ namespace Fungus3D
 
             // get the RootParent from the other object
             GameObject otherRootParent = trigger.gameObject.GetComponent<Collider_Interaction>().RootParent;
+            // end the interaction with it
             rootParent.GetComponent<Persona>().OnInteractionExit(otherRootParent);
         }
 

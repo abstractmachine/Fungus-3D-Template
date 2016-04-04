@@ -20,9 +20,9 @@ namespace Fungus3D
 
         #region Event Delegates
 
-        public delegate void GoToPositionDelegate(Vector3 position, GameObject actor);
+        public delegate void TouchedPositionDelegate(Vector3 position);
 
-        public static event GoToPositionDelegate GoToPositionListener;
+        public static event TouchedPositionDelegate TouchedPositionListener;
 
         #endregion
 
@@ -32,21 +32,17 @@ namespace Fungus3D
 
         void OnEnable()
         {
-            Persona.ReachedTargetListener += PlayerReachedTarget;
-            Persona.GoToPersonaListener += GoToPersona; 
+            Persona.ReachedTargetListener += RemovePreviousTouches;
+            Persona.ClickedPersonaListener += ClickedPersona;
+            Persona.UpdatedTargetListener += UpdatedTarget;
         }
 
 
         void OnDisable()
         {
-            Persona.ReachedTargetListener -= PlayerReachedTarget;
-            Persona.GoToPersonaListener -= GoToPersona;
-        }
-
-        void PlayerReachedTarget()
-        {
-
-            RemovePreviousTouches();
+            Persona.ReachedTargetListener -= RemovePreviousTouches;
+            Persona.ClickedPersonaListener -= ClickedPersona;
+            Persona.UpdatedTargetListener -= UpdatedTarget;
         }
 
         #endregion
@@ -124,10 +120,10 @@ namespace Fungus3D
             position.y = 0.01f;
 
             // if someone's listening
-            if (GoToPositionListener != null)
+            if (TouchedPositionListener != null)
             {
-                // tell the player to go somewhere (null == no defined actor == player)
-                GoToPositionListener(position, null);
+                // tell the player to go somewhere
+                TouchedPositionListener(position);
             }
 
             // if we were already showing a click exploder
@@ -143,11 +139,8 @@ namespace Fungus3D
         /// </summary>
         /// <param name="persona">The Persona GameObject.</param>
 
-        void GoToPersona(GameObject persona, GameObject actor)
+        void ClickedPersona(GameObject persona)
         {
-            // make sure the actor is null (or is the player)
-            if (actor != null && actor.tag != "Player") return;
-
             Vector3 position = persona.transform.position;
             position.y = 0.01f;
 
@@ -155,6 +148,21 @@ namespace Fungus3D
             RemovePreviousTouches();
             // show click
             ShowTouch(position);
+
+        }
+
+
+        /// <summary>
+        /// The target is moving, we need to update the target
+        /// </summary>
+        /// <param name="persona">Target Persona.</param>
+
+        void UpdatedTarget(GameObject persona)
+        {
+            Vector3 position = persona.transform.position;
+            position.y = 0.01f;
+            //
+            UpdateTouch(position);
 
         }
 
@@ -170,10 +178,8 @@ namespace Fungus3D
 
         void RemovePreviousTouches()
         {
-            
             RemoveRipples();
             RemoveTouchTarget();
-
         }
 
         /// <summary>
@@ -200,7 +206,6 @@ namespace Fungus3D
 
         public void RemoveTouchTarget()
         {
-
             GameObject[] otherClicks;
             // remove touch targets ("X")
             otherClicks = GameObject.FindGameObjectsWithTag("TouchTarget");
@@ -208,7 +213,6 @@ namespace Fungus3D
             {
                 Destroy(obj);
             }
-
         }
 
 
@@ -230,6 +234,17 @@ namespace Fungus3D
             touchRipple.transform.parent = GameObject.Find("Ground").transform;
             // blow up in a co-routine
             StartCoroutine(ExpandRipple(touchRipple));
+        }
+
+
+        void UpdateTouch(Vector3 position)
+        {
+            GameObject touchTarget = GameObject.FindGameObjectWithTag("TouchTarget");
+            // if there is one
+            if (touchTarget != null)
+            {
+                touchTarget.transform.position = position;
+            }
         }
 
 

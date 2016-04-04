@@ -5,21 +5,18 @@ using Fungus;
 namespace Fungus3D
 {
     // declare this command in Fungus
-    [CommandInfo("Action", "WalkTo", "Start walking to a position")]
+    [CommandInfo("Action", "WalkToPosition", "Start walking to a position")]
 
     /// <summary>
     /// The WalkTo Command for Fungus
     /// </summary>
 
-    public class Action_WalkTo : Command
+    public class Action_WalkToPosition : Command
     {
         // where the Persona walks to
         public GameObject targetObject;
 
-        Vector3 targetPosition;
-
         Persona personaScript;
-        GameObject personaObject;
 
         Animator animator;
         NavMeshAgent navMeshAgent;
@@ -35,8 +32,6 @@ namespace Fungus3D
                 Debug.LogError("Couldn't find parent object");
                 return;
             }
-            // get the game object
-            personaObject = personaScript.gameObject;
             // get the animator
             animator = GetComponentInParent<Animator>();
             if (animator == null)
@@ -64,8 +59,11 @@ namespace Fungus3D
                 Debug.LogError("Error: Target object undefined");
                 return;
             }
-
-            Debug.Log(personaObject.name + ".WalkTo(" + targetObject.name + ")");
+            // get the target position
+            Vector3 targetPosition = targetObject.transform.position;
+            targetPosition.y = 0.0f;
+            // tell this character to walk there
+            personaScript.WalkToPosition(targetPosition);
             // move on to next Fungus command
             Continue();
         }

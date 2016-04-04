@@ -24,31 +24,31 @@ namespace Fungus3D
         public NetworkLogLevel collisionLogLevel = NetworkLogLevel.Off;
 
         // are we alive?
-        protected bool alive = true;
+        private bool alive = true;
         // are we a/the player?
-        protected bool isPlayer = false;
+        private bool isPlayer = false;
 
         // a static pointer to the current Player
-        protected static GameObject currentPlayer = null;
+        private static GameObject currentPlayer = null;
 
         // has the ragdoll been configured?
-        bool containsRagdoll = false;
+        private bool containsRagdoll = false;
 
         // movement
-        protected Vector2 walkVelocity = Vector2.zero;
+        private Vector2 walkVelocity = Vector2.zero;
 
         // targetting
-        protected GameObject targetObject;
-        protected Vector3 targetGoal;
-        protected bool targetGoalIsSet = false;
+        private GameObject targetObject;
+        private Vector3 targetGoal;
+        private bool targetGoalIsSet = false;
 
         // the current persona we're talking to
-        protected GameObject currentInterlocutor = null;
-        protected Flowchart currentFlowchart = null;
+        private GameObject currentInterlocutor = null;
+        private Flowchart currentFlowchart = null;
 
         // access to (required) components
-        protected Animator animator;
-        protected NavMeshAgent navMeshAgent;
+        private Animator animator;
+        private NavMeshAgent navMeshAgent;
 
         #endregion
 
@@ -79,15 +79,21 @@ namespace Fungus3D
         /// <value><c>true</c> if alive; otherwise, <c>false</c>.</value>
         public bool Alive { get { return alive; } }
 
+        public bool DidReachTarget { get { return (transform.position - navMeshAgent.destination).magnitude < navMeshAgent.stoppingDistance; } }
+
         #endregion
 
 
 
         #region Event Delegates
 
-        public delegate void GoToPersonaDelegate(GameObject persona, GameObject actor);
+        public delegate void ClickedPersonaDelegate(GameObject persona);
 
-        public static event GoToPersonaDelegate GoToPersonaListener;
+        public static event ClickedPersonaDelegate ClickedPersonaListener;
+
+        public delegate void UpdatedTargetDelegate(GameObject target);
+
+        public static event UpdatedTargetDelegate UpdatedTargetListener;
 
         public delegate void PersonaDiedDelegate(GameObject actor);
 
@@ -119,8 +125,10 @@ namespace Fungus3D
         {
             Persona.StartedDialogueWithListener += PlayerStartedDialogueWith;
             Persona.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
-            Persona.GoToPersonaListener += GoToPersona;
-            Ground.GoToPositionListener += GoToPosition;
+            Persona.ClickedPersonaListener += ClickedPersona;
+
+            // only the player listens for touches
+            if (tag == "Player") Ground.TouchedPositionListener += TouchedPosition;
         }
 
 
@@ -128,8 +136,10 @@ namespace Fungus3D
         {
             Persona.StartedDialogueWithListener -= PlayerStartedDialogueWith;
             Persona.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
-            Persona.GoToPersonaListener -= GoToPersona;
-            Ground.GoToPositionListener -= GoToPosition;
+            Persona.ClickedPersonaListener -= ClickedPersona;
+
+            // only the player listens for touches
+            if (tag == "Player") Ground.TouchedPositionListener -= TouchedPosition;
         }
 
         #endregion
@@ -138,17 +148,19 @@ namespace Fungus3D
 
         #region Init
 
-        protected virtual void Start()
+        void Awake()
         {
             // get a reference to the NavMeshAgent component
             navMeshAgent = GetComponent<NavMeshAgent>();
+            // get a reference to the animator component
+            animator = GetComponent<Animator>();
+        }
 
+        void Start()
+        {
             // Don’t update position automatically
             navMeshAgent.updatePosition = false;
             navMeshAgent.updateRotation = false;
-
-            // get a reference to the animator component
-            animator = GetComponent<Animator>();
 
             // has the ragdoll been configured
             if (GetComponent<Ragdoll>() != null)
@@ -195,6 +207,33 @@ namespace Fungus3D
             {
                 Walk();
             }
+            // if we're following someone
+            if (targetObject != null)
+            {
+                UpdateTarget();
+            }
+            // if we're not the player, and we're walking
+            if (!this.IsPlayer && Walking && DidReachTarget)
+            {
+                StopWalking();
+            }
+        }
+
+
+        void UpdateTarget()
+        {
+            // check our distance
+            Vector3 deltaPosition = (targetObject.transform.position - targetGoal);
+            // if we've moved
+            if (deltaPosition.magnitude > 0.0f)
+            {   // re-target the Persona
+                TargetPersona(targetObject);
+                // if this is the player and there is a listener
+                if (this.IsPlayer && UpdatedTargetListener != null)
+                {   // tell the target to adjust to the new position
+                    UpdatedTargetListener(targetObject);
+                }
+            }
         }
 
         #endregion
@@ -208,7 +247,7 @@ namespace Fungus3D
         /// Note: This requires a physics Raycaster on a camera
         /// </summary>
 
-        public virtual void OnClick()
+        public void OnClick()
         {
             // if we're the Player
             if (this.IsPlayer)
@@ -279,9 +318,9 @@ namespace Fungus3D
             // ok we're not part of the current discussion
 
             // if there are any listeners
-            if (GoToPersonaListener != null)
+            if (ClickedPersonaListener != null)
             {   // tell the player to come here
-                GoToPersonaListener(this.gameObject, currentPlayer);
+                ClickedPersonaListener(this.gameObject);
             }
 
         }
@@ -391,7 +430,7 @@ namespace Fungus3D
         /// </summary>
         /// <param name="other">The other GameObject</param>
 
-        public virtual void OnProximityEnter(GameObject other)
+        public void OnProximityEnter(GameObject other)
         {
             // if the logging level is at least informational
             if (collisionLogLevel >= NetworkLogLevel.Informational)
@@ -429,7 +468,7 @@ namespace Fungus3D
         /// </summary>
         /// <param name="other">The other GameObject.</param>
 
-        public virtual void OnProximityStay(GameObject other)
+        public void OnProximityStay(GameObject other)
         {
             // if the logging level is full verbose
             if (collisionLogLevel == NetworkLogLevel.Full)
@@ -447,7 +486,7 @@ namespace Fungus3D
         /// </summary>
         /// <param name="other">The other GameObject.</param>
 
-        public virtual void OnProximityExit(GameObject other)
+        public void OnProximityExit(GameObject other)
         {
             // if the logging level is at least informational
             if (collisionLogLevel >= NetworkLogLevel.Informational)
@@ -486,7 +525,7 @@ namespace Fungus3D
         /// </summary>
         /// <param name="other">The other GameObject.</param>
 
-        public virtual void OnInteractionEnter(GameObject other)
+        public void OnInteractionEnter(GameObject other)
         {
             // if the logging level is at least informational
             if (collisionLogLevel >= NetworkLogLevel.Informational)
@@ -514,25 +553,23 @@ namespace Fungus3D
             currentInterlocutor = other;
         }
 
+
         void OnInteractionEnterPlayer(GameObject other)
         {
-            // if the logging level is at least informational
-            if (collisionLogLevel >= NetworkLogLevel.Informational)
-            {   // log activity
-                Debug.Log(this.gameObject.name + "<Player>().OnInteractionEnter(" + other.name + ")");
-            }
-
             // if we're dead, ingore the rest
             if (Dead) return;
 
+            // FIXME: we have de-activated here avoiding Personae that we aren't targetting
             // if we're the player interacting with a persona
-            if (IsPlayer && other.tag == "Persona" && other == targetObject)
+            if (IsPlayer && other.tag == "Persona") // && other == targetObject)
             {
                 // make sure we're not already talking with someone else
                 if (currentInterlocutor != null && currentInterlocutor != other) return;
 
                 // tell the Persona to turn towards us, the Player
                 other.GetComponent<Persona>().TurnTowards(this.gameObject);
+                // tell the Persona to stop walking
+                other.GetComponent<Persona>().StopWalking();
 
                 // start talking
                 StartFlowchart(other);
@@ -554,7 +591,6 @@ namespace Fungus3D
 
                 return;
             }
-
         }
 
 
@@ -563,7 +599,7 @@ namespace Fungus3D
         /// </summary>
         /// <param name="other">The other GameObject.</param>
 
-        public virtual void OnInteractionStay(GameObject other)
+        public void OnInteractionStay(GameObject other)
         {
             // if the logging level is full verbose
             if (collisionLogLevel == NetworkLogLevel.Full)
@@ -573,12 +609,6 @@ namespace Fungus3D
 
             if (IsPlayer)
             {
-                // if the logging level is full verbose
-                if (collisionLogLevel == NetworkLogLevel.Full)
-                {   // log activity
-                    print(this.gameObject.name + "<Player>().OnInteractionStay(" + other.name + ")");
-                }
-
                 // if we're dead, ingore the rest
                 if (Dead) return;
 
@@ -599,7 +629,7 @@ namespace Fungus3D
         /// </summary>
         /// <param name="other">The other GameObject.</param>
 
-        public virtual void OnInteractionExit(GameObject other)
+        public void OnInteractionExit(GameObject other)
         {
             // if the logging level is at least informational
             if (collisionLogLevel >= NetworkLogLevel.Informational)
@@ -611,7 +641,7 @@ namespace Fungus3D
             else if (!this.IsPlayer) OnInteractionExitPersona(other);
         }
 
-        void OnInteractionExitPersona(GameObject other) 
+        void OnInteractionExitPersona(GameObject other)
         {
             // make sure this is the actual person we were interacting with
             if (other == currentInterlocutor)
@@ -623,12 +653,6 @@ namespace Fungus3D
 
         void OnInteractionExitPlayer(GameObject other)
         {
-            // if the logging level is at least informational
-            if (collisionLogLevel >= NetworkLogLevel.Informational)
-            {   // log activity
-                print(this.gameObject.name + "<Player>().OnInteractionExit(" + other.name + ")");
-            }
-
             // if we're dead, ignore the rest
             if (Dead) return;
 
@@ -648,7 +672,6 @@ namespace Fungus3D
 
             currentInterlocutor = null;
             currentFlowchart = null;
-
         }
 
         #endregion
@@ -691,7 +714,7 @@ namespace Fungus3D
         /// <param name="impact">Collider gives info on the collision.</param>
         /// <param name="other">The other GameObject.</param>
 
-        public virtual void OnPhysicalEnter(Collision impact)
+        public void OnPhysicalEnter(Collision impact)
         {
             // if the logging level is at least informational
             if (collisionLogLevel >= NetworkLogLevel.Informational)
@@ -724,7 +747,7 @@ namespace Fungus3D
         /// <param name="impact">Collider gives info on the collision.</param>
         /// <param name="other">The other GameObject.</param>
 
-        public virtual void OnPhysicalStay(Collision impact)
+        public void OnPhysicalStay(Collision impact)
         {
             // if the logging level is full verbose
             if (collisionLogLevel == NetworkLogLevel.Full)
@@ -740,7 +763,7 @@ namespace Fungus3D
         /// <param name="impact">Collider gives info on the collision.</param>
         /// <param name="other">The other GameObject.</param>
 
-        public virtual void OnPhysicalExit(Collision impact)
+        public void OnPhysicalExit(Collision impact)
         {
             // if the logging level is at least informational
             if (collisionLogLevel >= NetworkLogLevel.Informational)
@@ -828,14 +851,24 @@ namespace Fungus3D
 
         #region Walk
 
-        public void GoToPosition(Vector3 position, GameObject actor)
+        void TouchedPosition(Vector3 position)
         {
             // dead people don't walk (in this game)
             if (Dead) return;
 
-            // if we're not concerned by this walk command
-            if (!IsPlayer && actor != this.gameObject) return;
+            WalkToPosition(position);
 
+        }
+
+
+        public void WalkToPosition(Vector3 position)
+        {
+            // dead people don't walk (in this game)
+            if (Dead) return;
+
+            // snap to ground
+            position.y = 0.01f;
+            // we're not targetting anyone (just a position)
             targetObject = null;
             targetGoal = position;
             targetGoalIsSet = true;
@@ -844,26 +877,31 @@ namespace Fungus3D
         }
 
 
-        public void GoToPersona(GameObject other, GameObject actor)
+        public void TargetPersona(GameObject other)
         {
-            // dead people don't walk (in this game)
-            if (Dead) return;
-
-            // if we're not concerned by this walk command
-            if (!IsPlayer && actor != this.gameObject) return;
-
+            // the Persona that we're going to follow
             targetObject = other;
-
-            Vector3 position = other.transform.position;
-            position.y = 0.01f;
-            targetGoal = position;
+            // their position
+            targetGoal = other.transform.position;
+            targetGoal.y = 0.01f;
             targetGoalIsSet = true;
             navMeshAgent.destination = targetGoal;
-
         }
 
 
-        protected void Walk()
+        void ClickedPersona(GameObject other)
+        {
+            // if we're not concerned by this walk command
+            if (!this.IsPlayer) return;
+
+            // dead people don't walk (in this game at least)
+            if (Dead) return;
+
+            TargetPersona(other);
+        }
+
+
+        void Walk()
         {
             // TODO: calculate walk speed using navMeshAgent values
             float maxWalkSpeed = 1.1f;
@@ -920,11 +958,11 @@ namespace Fungus3D
 
         }
 
-        protected void StopWalking()
+        public void StopWalking()
         {
             if (Dead) return;
 
-            // go to where we already are
+            // mark that we're not longer following anyone
             targetObject = null;
             // remember that this is the new target
             targetGoal = transform.position;
@@ -980,7 +1018,7 @@ namespace Fungus3D
         }
 
 
-        protected void BroadcastDistance(float distance)
+        void BroadcastDistance(float distance)
         {
 
             // if there are listeners
@@ -990,7 +1028,7 @@ namespace Fungus3D
             }
 
             // make sure there are listeners
-            if (distance == 0.0f && ReachedTargetListener != null)
+            if (this.IsPlayer && distance == 0.0f && ReachedTargetListener != null)
             {   // broadcast that we've reached the target
                 ReachedTargetListener();
             }
@@ -998,14 +1036,14 @@ namespace Fungus3D
         }
 
 
-        protected void ReachedTarget()
+        void ReachedTarget()
         {
             // stop current movement
             StopWalking();
 
             // better annul any inevitable touch targets
             // make sure there are listeners
-            if (ReachedTargetListener != null)
+            if (this.IsPlayer && ReachedTargetListener != null)
             {   // broadcast that we've reached the target
                 ReachedTargetListener();
             }
@@ -1042,7 +1080,7 @@ namespace Fungus3D
         }
 
 
-        protected void SnapAgentToPosition(float easing = 1.0f)
+        void SnapAgentToPosition(float easing = 1.0f)
         {
             Vector3 worldDeltaPosition = navMeshAgent.nextPosition - transform.position;
             // Pull agent towards character
@@ -1127,20 +1165,20 @@ namespace Fungus3D
 
         #region Flowchart
 
-        protected Flowchart GetFlowchart(GameObject gameObject)
+        Flowchart GetFlowchart(GameObject gameObject)
         {
             Flowchart flowchart = gameObject.GetComponentInChildren<Flowchart>();
             return flowchart;
         }
 
 
-        protected GameObject ExtractRootParentFrom(Flowchart flowchart)
+        GameObject ExtractRootParentFrom(Flowchart flowchart)
         {
             return ExtractRootParentFrom(flowchart.gameObject);
         }
 
 
-        protected GameObject ExtractRootParentFrom(GameObject theObject)
+        GameObject ExtractRootParentFrom(GameObject theObject)
         {
             // try to get the player GameObject from this flowchart
             Persona personaScript = theObject.GetComponentInParent<Persona>();
@@ -1155,7 +1193,7 @@ namespace Fungus3D
         }
 
 
-        protected void StartedDialogue(Flowchart flowchart)
+        void StartedDialogue(Flowchart flowchart)
         {
             // get a list of all the characters in this flowchart
             List<GameObject> personae = GetCharactersInFlowchart(flowchart);
@@ -1167,7 +1205,7 @@ namespace Fungus3D
         }
 
 
-        protected void StoppedDialogue(Flowchart flowchart)
+        void StoppedDialogue(Flowchart flowchart)
         {
 
             // get a list of all the characters in this flowchart
@@ -1185,7 +1223,7 @@ namespace Fungus3D
         /// </summary>
         /// <param name="other">The other GameObject we're dialoguing with.</param>
 
-        protected void StartFlowchart(GameObject other)
+        void StartFlowchart(GameObject other)
         {
             // find this flowchart in this character
             Flowchart flowchart = GetFlowchart(other.gameObject);
@@ -1217,7 +1255,7 @@ namespace Fungus3D
         /// Stops the current flowchart and informs all concerned characters.
         /// </summary>
 
-        protected void StopCurrentFlowchart()
+        void StopCurrentFlowchart()
         {
 
             if (currentFlowchart != null)
@@ -1262,7 +1300,7 @@ namespace Fungus3D
         /// </summary>
         /// <param name="playerMenu">The Player menu GameObject.</param>
 
-        protected void TurnOffPlayerMenu(GameObject playerMenu)
+        void TurnOffPlayerMenu(GameObject playerMenu)
         {
             // make sure we actually have a player menu to turn off
             if (playerMenu == null) return;
@@ -1350,7 +1388,7 @@ namespace Fungus3D
         /// <returns>A list of the GameObjects of characters in the flowchart.</returns>
         /// <param name="flowchart">The Flowchart.</param>
 
-        protected List<GameObject> GetCharactersInFlowchart(Flowchart flowchart)
+        List<GameObject> GetCharactersInFlowchart(Flowchart flowchart)
         {
 
             List<GameObject> possiblePersonaObjects = new List<GameObject>();
@@ -1427,7 +1465,7 @@ namespace Fungus3D
         /// <param name="objectA">The object that needs to turn.</param>
         /// <param name="objectB">The object it needs to turn toward.</param>
 
-        protected float CalculateAngleDelta(GameObject objectA, GameObject objectB)
+        float CalculateAngleDelta(GameObject objectA, GameObject objectB)
         {
             return CalculateAngleDelta(objectA, objectB.transform.position);
         }
@@ -1442,7 +1480,7 @@ namespace Fungus3D
         /// <param name="objectA">The object that needs to turn.</param>
         /// <param name="target">The target position.</param>
 
-        protected float CalculateAngleDelta(GameObject objectA, Vector3 target)
+        float CalculateAngleDelta(GameObject objectA, Vector3 target)
         {
             // get the delta of these two positions
             Vector3 deltaVector = (target - objectA.transform.position).normalized;
@@ -1470,7 +1508,7 @@ namespace Fungus3D
         /// <returns>The complete Transform path to this specific Transform.</returns>
         /// <param name="current">The Transform we want to know the path to.</param>
 
-        protected static string GetPath(Transform current)
+        static string GetPath(Transform current)
         {
             if (current.parent == null)
             {
@@ -1486,7 +1524,7 @@ namespace Fungus3D
         /// <returns>The complete Transform path to this specific GameObject.</returns>
         /// <param name="current">The GameObject we want to know the path to.</param>
         /// 
-        protected static string GetPath(GameObject obj)
+        static string GetPath(GameObject obj)
         {
             return GetPath(obj.transform);
         }

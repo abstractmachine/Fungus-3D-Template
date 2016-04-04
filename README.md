@@ -1,6 +1,6 @@
 Fungus 3D Template
 ==================
-This is a template for building Fungus narratives inside of an interactive 3D environment. This template proposes a point-and-click style interaction wherein a central Persona navigates to a point X via click/touch; when this central Persona approaches another Persona, a Fungus dialog is started, using the dialog UI specific to each Personae.
+This is a template for building Fungus narratives inside of an interactive 3D environment. This template proposes a point-and-click style interaction wherein a central Persona navigates to a point X via click/touch; when this central Persona approaches another Persona, a Fungus dialog is started, using the dialog UI specific to each of the Personae.
 
 Fungus
 ======

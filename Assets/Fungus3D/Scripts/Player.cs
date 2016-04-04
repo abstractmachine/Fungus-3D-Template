@@ -91,7 +91,7 @@ namespace Fungus3D
         }
 
 
-        void Walk()
+        protected void Walk()
         {
             // TODO: calculate walk speed using navMeshAgent values
             float maxWalkSpeed = 1.1f;

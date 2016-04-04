@@ -70,7 +70,7 @@ namespace Fungus3D
         /// <summary>
         /// Gets a value indicating whether this <see cref="Fungus3D.Persona"/> is dead.
         /// </summary>
-        /// <value><c>true</c> if dead; otherwise, <c>false</c>.</value>
+        /// <value><c>true</c> if dead (not alive); otherwise, <c>false</c>.</value>
         public bool Dead { get { return !alive; } }
 
         /// <summary>
@@ -79,6 +79,16 @@ namespace Fungus3D
         /// <value><c>true</c> if alive; otherwise, <c>false</c>.</value>
         public bool Alive { get { return alive; } }
 
+        /// <summary>
+        /// Gets the GameObject this Persona is currently targeting.
+        /// </summary>
+        /// <value>The target GameObject (can be null).</value>
+        public GameObject Target { get { return targetObject; } }
+
+        /// <summary>
+        /// Gets a value indicating whether this <see cref="Fungus3D.Persona"/> reached its target.
+        /// </summary>
+        /// <value><c>true</c> if did reach target; otherwise, <c>false</c>.</value>
         public bool DidReachTarget { get { return (transform.position - navMeshAgent.destination).magnitude < navMeshAgent.stoppingDistance; } }
 
         #endregion
@@ -208,7 +218,7 @@ namespace Fungus3D
                 Walk();
             }
             // if we're following someone
-            if (targetObject != null)
+            if (Walking && targetObject != null)
             {
                 UpdateTarget();
             }
@@ -533,6 +543,7 @@ namespace Fungus3D
                 Debug.Log(this.gameObject.name + "<Persona>().OnInteractionEnter(" + other.name + ")");
             }
 
+            // depending on whether we're the player or not
             if (this.IsPlayer) OnInteractionEnterPlayer(other);
             else if (!this.IsPlayer) OnInteractionEnterPersona(other);
         }
@@ -559,30 +570,49 @@ namespace Fungus3D
             // if we're dead, ingore the rest
             if (Dead) return;
 
-            // FIXME: we have de-activated here avoiding Personae that we aren't targetting
-            // if we're the player interacting with a persona
-            if (IsPlayer && other.tag == "Persona") // && other == targetObject)
+            // if we're the try to go to this Persona
+            if (other.tag == "Persona" && other == targetObject)
             {
                 // make sure we're not already talking with someone else
                 if (currentInterlocutor != null && currentInterlocutor != other) return;
 
+                // turn towards the other
+                TurnTowards(other);
                 // tell the Persona to turn towards us, the Player
                 other.GetComponent<Persona>().TurnTowards(this.gameObject);
                 // tell the Persona to stop walking
                 other.GetComponent<Persona>().StopWalking();
 
                 // start talking
-                StartFlowchart(other);
+                // StartFlowchart(other);
 
+                StopWalking();
                 // Broadcast that we're reached the target
-                ReachedTarget();
+                // ReachedTarget();
 
                 return;
 
             }
 
+            // if the other is targeting us
+            if (other.tag == "Persona" && other.GetComponent<Persona>().Target == this.gameObject)
+            { 
+                // stop walking
+                StopWalking();
+                // stop wherever we were going and target them too
+                //ClickedPersona(other);
+                // turn towards the other
+                TurnTowards(other);
+                // tell the Persona to turn towards us, the Player
+                other.GetComponent<Persona>().TurnTowards(this.gameObject);
+                // tell the Persona to stop walking
+                other.GetComponent<Persona>().StopWalking();
+                // ok to start targeting them
+                return;
+            }
+
             // if we're touching the TouchTarget && we're at the end
-            if (IsPlayer && other.tag == "TouchTarget")
+            if (other.tag == "TouchTarget")
             {
                 // get rid of the TouchTarget
                 Destroy(other);
@@ -612,13 +642,21 @@ namespace Fungus3D
                 // if we're dead, ingore the rest
                 if (Dead) return;
 
-                // if we're interacting with another character
-                if (IsPlayer && Walking && other.tag == "Persona" && other == targetObject)
+                // if we're targeting another Persona or this Persona is targeting us
+                if (other.tag == "Persona" && (other == targetObject || other.GetComponent<Persona>().Target == this.gameObject))
                 {
-                    // start talking
-                    StartFlowchart(other);
-                    // stop current movement
-                    ReachedTarget();
+                    // if everyone's stopped walking
+                    if (!Walking && !other.GetComponent<Persona>().Walking)
+                    {
+                        // make sure we're not already talking to this person
+                        if (currentInterlocutor == null && currentInterlocutor != other)
+                        {
+                            // start talking
+                            StartFlowchart(other);
+                            // stop current movement
+                            ReachedTarget();
+                        }
+                    }
                 }
             } // if (IsPlayer
         }
@@ -889,6 +927,12 @@ namespace Fungus3D
         }
 
 
+        public void ClearTarget()
+        {
+            targetObject = null;
+        }
+
+
         void ClickedPersona(GameObject other)
         {
             // if we're not concerned by this walk command
@@ -962,8 +1006,6 @@ namespace Fungus3D
         {
             if (Dead) return;
 
-            // mark that we're not longer following anyone
-            targetObject = null;
             // remember that this is the new target
             targetGoal = transform.position;
             // stop the animation controller
@@ -987,7 +1029,7 @@ namespace Fungus3D
             while (speed > 0.05f)
             {
                 yield return new WaitForEndOfFrame();
-                speed = Mathf.Lerp(speed, 0.0f, 0.1f);
+                speed = Mathf.Lerp(speed, 0.0f, 0.05f);
                 animator.SetFloat("Speed", speed);
             }
             animator.SetFloat("Speed", 0.0f);

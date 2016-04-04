@@ -733,11 +733,15 @@ Prefab:
     - target: {fileID: 11467702, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: commandList.Array.data[1]
       value: 
-      objectReference: {fileID: 1885501281}
+      objectReference: {fileID: 1885501282}
     - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: selectedCommands.Array.data[0]
       value: 
       objectReference: {fileID: 1885501319}
+    - target: {fileID: 11467564, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: collisionLogLevel
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11434046, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
@@ -15962,9 +15966,9 @@ Transform:
 GameObject:
   m_PrefabParentObject: {fileID: 156562, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
   m_PrefabInternal: {fileID: 160881005}
---- !u!114 &1885501281
+--- !u!114 &1885501282
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1885501280}

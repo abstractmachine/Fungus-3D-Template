@@ -5,8 +5,8 @@ using System.Collections;
 namespace Fungus3D
 {
 
-    public class ColliderClick : ColliderFungus3D, IPointerClickHandler
-    {   
+    public class Collider_Click : Collider_Fungus3D, IPointerClickHandler
+    {
 
         #region Init
 
@@ -27,18 +27,13 @@ namespace Fungus3D
         /// </summary>
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (rootParent.tag == "Player")
-            {
-                rootParent.GetComponent<Player>().OnClick();
-            }
-            else
-            {
-                rootParent.GetComponent<Persona>().OnClick();
-            }
+            rootParent.GetComponent<Persona>().OnClick();
         }
 
         #endregion
 
-    } // class Click
+    }
+    // class Click
 
-} // namespace Fungus3D
+}
+ // namespace Fungus3D

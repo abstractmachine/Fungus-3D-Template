@@ -10,7 +10,7 @@ namespace Fungus3D
 
     [EventHandlerInfo("Triggers", "InteractionEnter", "Start this block when the player enters this gameObject's 'Interaction' Trigger")]
 
-    public class InteractionEnter : EventHandler
+    public class Handler_InteractionEnter : EventHandler
     {
         /// <summary>
         /// Fire the ExecuteBlock method

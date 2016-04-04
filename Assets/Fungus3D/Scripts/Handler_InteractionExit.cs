@@ -10,7 +10,7 @@ namespace Fungus3D
 
     [EventHandlerInfo("Triggers", "InteractionExit", "Start this block when the player exits this gameObject's 'Interaction' Trigger")]
 
-    public class InteractionExit : EventHandler
+    public class Handler_InteractionExit : EventHandler
     {
         /// <summary>
         /// Fire the ExecuteBlock method

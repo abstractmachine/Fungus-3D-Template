@@ -48,18 +48,18 @@ namespace Fungus3D {
 
         void OnEnable()
         {
-            Player.MovedListener += PlayerMoved;
-            Player.StartedDialogueWithListener += PlayerStartedDialogueWith;
-            Player.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
+            Persona.MovedListener += PlayerMoved;
+            Persona.StartedDialogueWithListener += PlayerStartedDialogueWith;
+            Persona.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
            
         }
 
 
         void OnDisable()
         {
-            Player.MovedListener -= PlayerMoved;
-            Player.StartedDialogueWithListener -= PlayerStartedDialogueWith;
-            Player.StoppedDialogueWithListener -= PlayerStoppedDialogueWith;
+            Persona.MovedListener -= PlayerMoved;
+            Persona.StartedDialogueWithListener -= PlayerStartedDialogueWith;
+            Persona.StoppedDialogueWithListener -= PlayerStoppedDialogueWith;
         }
 
         #endregion

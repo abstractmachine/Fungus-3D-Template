@@ -4,17 +4,17 @@ using System.Collections;
 namespace Fungus3D
 {
     
-    public class ColliderInteraction : ColliderFungus3D
+    public class Collider_Interaction : Collider_Fungus3D
     {
 
         #region Collisions
 
         public void OnTriggerEnter(Collider trigger)
         {
-            // is thisthe TouchTarget?
+            // is this the TouchTarget?
             if (trigger.tag == "TouchTarget" && rootParent.tag == "Player")
             {
-                rootParent.GetComponent<Player>().OnInteractionEnter(trigger.gameObject);
+                rootParent.GetComponent<Persona>().OnInteractionEnter(trigger.gameObject);
                 return;
             }
 
@@ -24,16 +24,9 @@ namespace Fungus3D
             if (trigger.name != this.name) return;
 
             // get the RootParent from the other object
-            GameObject otherRootParent = trigger.gameObject.GetComponent<ColliderInteraction>().RootParent;
-
-            if (rootParent.tag == "Player")
-            {
-                rootParent.GetComponent<Player>().OnInteractionEnter(otherRootParent);
-            }
-            else
-            {
-                rootParent.GetComponent<Persona>().OnInteractionEnter(otherRootParent);
-            }
+            GameObject otherRootParent = trigger.gameObject.GetComponent<Collider_Interaction>().RootParent;
+            // start the interaction with it
+            rootParent.GetComponent<Persona>().OnInteractionEnter(otherRootParent);
         }
 
         public void OnTriggerStay(Collider trigger)
@@ -41,7 +34,7 @@ namespace Fungus3D
             // is thisthe TouchTarget?
             if (trigger.tag == "TouchTarget" && rootParent.tag == "Player")
             {
-                rootParent.GetComponent<Player>().OnInteractionStay(trigger.gameObject);
+                rootParent.GetComponent<Persona>().OnInteractionStay(trigger.gameObject);
                 return;
             }
 
@@ -51,16 +44,8 @@ namespace Fungus3D
             if (trigger.name != this.name) return;
 
             // get the RootParent from the other object
-            GameObject otherRootParent = trigger.gameObject.GetComponent<ColliderInteraction>().RootParent;
-
-            if (rootParent.tag == "Player")
-            {
-                rootParent.GetComponent<Player>().OnInteractionStay(otherRootParent);
-            }
-            else
-            {
-                rootParent.GetComponent<Persona>().OnInteractionStay(otherRootParent);
-            }
+            GameObject otherRootParent = trigger.gameObject.GetComponent<Collider_Interaction>().RootParent;
+            rootParent.GetComponent<Persona>().OnInteractionStay(otherRootParent);
         }
 
 
@@ -69,7 +54,7 @@ namespace Fungus3D
             // is thisthe TouchTarget?
             if (trigger.tag == "TouchTarget" && rootParent.tag == "Player")
             {
-                rootParent.GetComponent<Player>().OnInteractionExit(trigger.gameObject);
+                rootParent.GetComponent<Persona>().OnInteractionExit(trigger.gameObject);
                 return;
             }
 
@@ -79,20 +64,14 @@ namespace Fungus3D
             if (trigger.name != this.name) return;
 
             // get the RootParent from the other object
-            GameObject otherRootParent = trigger.gameObject.GetComponent<ColliderInteraction>().RootParent;
-
-            if (rootParent.tag == "Player")
-            {
-                rootParent.GetComponent<Player>().OnInteractionExit(otherRootParent);
-            }
-            else
-            {
-                rootParent.GetComponent<Persona>().OnInteractionExit(otherRootParent);
-            }
+            GameObject otherRootParent = trigger.gameObject.GetComponent<Collider_Interaction>().RootParent;
+            rootParent.GetComponent<Persona>().OnInteractionExit(otherRootParent);
         }
 
         #endregion
 
-    } // class Dialog
+    }
+    // class Dialog
 
-} // namespace Fungus3D
+}
+ // namespace Fungus3D

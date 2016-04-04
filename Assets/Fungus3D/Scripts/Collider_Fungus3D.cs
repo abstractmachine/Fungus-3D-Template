@@ -4,7 +4,7 @@ using System.Collections;
 namespace Fungus3D
 {
     // Note: this must be on an "Ignore Raycast" layer if the collider is larger than the click collider
-    public class ColliderFungus3D : MonoBehaviour
+    public class Collider_Fungus3D : MonoBehaviour
     {
         #region Members
 
@@ -39,18 +39,9 @@ namespace Fungus3D
                 rootParent = personaScript.gameObject;
             }
             else
-            {   // try to find the main gameObject as a Persona
-                Player playerScript = GetComponentInParent<Player>();
-                if (playerScript != null)
-                {
-                    rootParent = playerScript.gameObject;
-                }
-                else
-                {
-                    Debug.LogError("No root parent gameObject set for this collider " + this.gameObject);
-                }
+            {
+                Debug.LogError("No root parent gameObject set for this collider " + this.gameObject);
             }
-
         }
         // GetRootParentGameObject
 

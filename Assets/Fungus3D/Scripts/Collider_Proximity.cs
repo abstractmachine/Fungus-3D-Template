@@ -4,7 +4,7 @@ using System.Collections;
 namespace Fungus3D
 {
     // Note: this must be on an "Ignore Raycast" layer if the collider is larger than the click collider
-    public class ColliderProximity : ColliderFungus3D
+    public class Collider_Proximity : Collider_Fungus3D
     {
         
         #region Collisions
@@ -18,16 +18,8 @@ namespace Fungus3D
             if (trigger.name != this.name) return;
 
             // get the RootParent from the other object
-            GameObject otherRootParent = trigger.gameObject.GetComponent<ColliderProximity>().RootParent;
-
-            if (rootParent.tag == "Player")
-            {
-                rootParent.GetComponent<Player>().OnProximityEnter(otherRootParent);
-            }
-            else
-            {
-                rootParent.GetComponent<Persona>().OnProximityEnter(otherRootParent);
-            }
+            GameObject otherRootParent = trigger.gameObject.GetComponent<Collider_Proximity>().RootParent;
+            rootParent.GetComponent<Persona>().OnProximityEnter(otherRootParent);
         }
 
         public void OnTriggerStay(Collider trigger)
@@ -39,16 +31,8 @@ namespace Fungus3D
             if (trigger.name != this.name) return;
 
             // get the RootParent from the other object
-            GameObject otherRootParent = trigger.gameObject.GetComponent<ColliderProximity>().RootParent;
-
-            if (rootParent.tag == "Player")
-            {
-                rootParent.GetComponent<Player>().OnProximityStay(otherRootParent);
-            }
-            else
-            {
-                rootParent.GetComponent<Persona>().OnProximityStay(otherRootParent);
-            }
+            GameObject otherRootParent = trigger.gameObject.GetComponent<Collider_Proximity>().RootParent;
+            rootParent.GetComponent<Persona>().OnProximityStay(otherRootParent);
         }
 
 
@@ -61,16 +45,8 @@ namespace Fungus3D
             if (trigger.name != this.name) return;
 
             // get the RootParent from the other object
-            GameObject otherRootParent = trigger.gameObject.GetComponent<ColliderProximity>().RootParent;
-
-            if (rootParent.tag == "Player")
-            {
-                rootParent.GetComponent<Player>().OnProximityExit(otherRootParent);
-            }
-            else
-            {
-                rootParent.GetComponent<Persona>().OnProximityExit(otherRootParent);
-            }
+            GameObject otherRootParent = trigger.gameObject.GetComponent<Collider_Proximity>().RootParent;
+            rootParent.GetComponent<Persona>().OnProximityExit(otherRootParent);
         }
 
         #endregion
@@ -79,4 +55,4 @@ namespace Fungus3D
     // class Proximity
 
 }
- // namespace Fungus3D
+// namespace Fungus3D

@@ -10,7 +10,7 @@ namespace Fungus3D
 
     [EventHandlerInfo("Triggers", "ProximityExit", "Start this block when the player exits this gameObject's proximity Trigger")]
 
-    public class ProximityExit : EventHandler
+    public class Handler_ProximityExit : EventHandler
     {
         /// <summary>
         /// Fire the ExecuteBlock method

@@ -236,6 +236,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &138568
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 455482}
+  m_Layer: 0
+  m_Name: WalkieTalkie
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &139270
 GameObject:
   m_ObjectHideFlags: 1
@@ -430,13 +445,13 @@ GameObject:
   - 114: {fileID: 11490260}
   - 114: {fileID: 11406456}
   - 114: {fileID: 11465182}
-  - 114: {fileID: 11456248}
-  - 114: {fileID: 11420506}
   - 114: {fileID: 11450204}
-  - 114: {fileID: 11456230}
   - 114: {fileID: 11418186}
-  - 114: {fileID: 11426810}
   - 114: {fileID: 11412552}
+  - 114: {fileID: 11426128}
+  - 114: {fileID: 11403376}
+  - 114: {fileID: 11469280}
+  - 114: {fileID: 11411446}
   m_Layer: 2
   m_Name: Persona_Flowchart
   m_TagString: Persona
@@ -732,11 +747,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 103268}
-  m_LocalRotation: {x: 0.039636586, y: 0.059620112, z: 0.8306235, w: 0.55221283}
-  m_LocalPosition: {x: 0.0879, y: 0.1413, z: 0.0111}
-  m_LocalScale: {x: 0.005, y: -0.03, z: 0.005}
+  m_LocalRotation: {x: 0.039636523, y: 0.05962017, z: 0.8306235, w: 0.55221283}
+  m_LocalPosition: {x: 0.08790025, y: 0.14130013, z: 0.011099989}
+  m_LocalScale: {x: 0.0050000004, y: -0.030000003, z: 0.0050000004}
   m_Children: []
-  m_Father: {fileID: 459346}
+  m_Father: {fileID: 455482}
   m_RootOrder: 0
 --- !u!4 &434356
 Transform:
@@ -823,11 +838,11 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 172630}
-  m_LocalRotation: {x: -0.014130448, y: 0.07018508, z: 0.19686595, w: 0.977813}
-  m_LocalPosition: {x: 0.0142, y: 0.1103, z: 0.0226}
-  m_LocalScale: {x: 0.116840936, y: 0.05394836, z: 0.01}
+  m_LocalRotation: {x: -0.014130563, y: 0.07018505, z: 0.19686593, w: 0.977813}
+  m_LocalPosition: {x: 0.014200353, y: 0.110300034, z: 0.022599932}
+  m_LocalScale: {x: 0.11684094, y: 0.05394836, z: 0.010000002}
   m_Children: []
-  m_Father: {fileID: 459346}
+  m_Father: {fileID: 455482}
   m_RootOrder: 1
 --- !u!4 &453874
 Transform:
@@ -841,6 +856,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 471152}
   m_RootOrder: 0
+--- !u!4 &455482
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 138568}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 432676}
+  - {fileID: 453338}
+  m_Father: {fileID: 459346}
+  m_RootOrder: 0
 --- !u!4 &459346
 Transform:
   m_ObjectHideFlags: 1
@@ -851,8 +880,7 @@ Transform:
   m_LocalPosition: {x: -0.5894839, y: 1.4397198, z: -0.056374162}
   m_LocalScale: {x: 1, y: 1.0000001, z: 1.0000001}
   m_Children:
-  - {fileID: 432676}
-  - {fileID: 453338}
+  - {fileID: 455482}
   m_Father: {fileID: 428898}
   m_RootOrder: 6
 --- !u!4 &471152
@@ -1253,6 +1281,18 @@ MonoBehaviour:
   errorMessage: 
   indentLevel: 0
   duration: 1
+--- !u!114 &11403376
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b01311a990034fc1bf727290801949e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentBlock: {fileID: 11467702}
 --- !u!114 &11403788
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1354,14 +1394,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 255.91443
+    x: 256.91443
     y: 78.91684
     width: 189
     height: 40
   itemId: 226
   blockName: InteractionEnter
   description: 
-  eventHandler: {fileID: 11456248}
+  eventHandler: {fileID: 11411446}
   commandList:
   - {fileID: 11490260}
 --- !u!114 &11406510
@@ -1408,7 +1448,7 @@ MonoBehaviour:
     y: -353.08325
     width: 1615.9144
     height: 1099.0001
-  selectedBlock: {fileID: 11423546}
+  selectedBlock: {fileID: 11419464}
   selectedCommands: []
   variables:
   - {fileID: 11454504}
@@ -1453,6 +1493,18 @@ MonoBehaviour:
   storyText: {fileID: 11492964}
   characterImage: {fileID: 11495342}
   fitTextWithImage: 1
+--- !u!114 &11411446
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db0225acf02c44c2fbfe661694c24a26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentBlock: {fileID: 11406456}
 --- !u!114 &11412552
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1538,14 +1590,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 452.91443
-    y: 76.91684
+    x: 440.91443
+    y: 78.91684
     width: 181
     height: 40
   itemId: 217
   blockName: InteractionExit
   description: 
-  eventHandler: {fileID: 11456230}
+  eventHandler: {fileID: 11469280}
   commandList:
   - {fileID: 11480870}
   - {fileID: 11478092}
@@ -1681,18 +1733,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433005b83366a443786a3bfa47fcfb01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11420506
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentBlock: {fileID: 11467702}
 --- !u!114 &11422360
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1753,14 +1793,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 626.9144
-    y: 237.91684
+    x: 795.9144
+    y: 78.91684
     width: 174
     height: 40
   itemId: 195
   blockName: ProximityExit
   description: 
-  eventHandler: {fileID: 11426810}
+  eventHandler: {fileID: 11426128}
   commandList:
   - {fileID: 11412552}
   - {fileID: 11451736}
@@ -1825,6 +1865,18 @@ MonoBehaviour:
   m_PreferredHeight: 350
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
+--- !u!114 &11426128
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a1c16922cf9d41478d696cf7850003f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentBlock: {fileID: 11423546}
 --- !u!114 &11426460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1861,18 +1913,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9094e37221c914379baf8e658137b963, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &11426810
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentBlock: {fileID: 11423546}
 --- !u!114 &11427414
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2565,30 +2605,6 @@ MonoBehaviour:
   commandList:
   - {fileID: 11403788}
   - {fileID: 11439396}
---- !u!114 &11456230
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentBlock: {fileID: 11416360}
---- !u!114 &11456248
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  parentBlock: {fileID: 11406456}
 --- !u!114 &11457080
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2643,7 +2659,7 @@ MonoBehaviour:
   nodeRect:
     serializedVersion: 2
     x: 435.46182
-    y: 251.38269
+    y: 253.38269
     width: 120
     height: 40
   itemId: 80
@@ -2755,8 +2771,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 121.91443
-    y: 70.91684
+    x: 139.91443
+    y: 78.91684
     width: 120
     height: 40
   itemId: 228
@@ -2808,14 +2824,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeRect:
     serializedVersion: 2
-    x: 622.9144
-    y: 165.91684
+    x: 617.9144
+    y: 78.91684
     width: 182
     height: 40
   itemId: 215
   blockName: ProximityEnter
   description: 
-  eventHandler: {fileID: 11420506}
+  eventHandler: {fileID: 11403376}
   commandList:
   - {fileID: 11457080}
 --- !u!114 &11468998
@@ -2843,6 +2859,18 @@ MonoBehaviour:
   fadeWhenDone: 1
   waitForClick: 1
   setSayDialog: {fileID: 0}
+--- !u!114 &11469280
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 135f09da20a664c87918f4b23c66da4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentBlock: {fileID: 11416360}
 --- !u!114 &11472464
 MonoBehaviour:
   m_ObjectHideFlags: 1

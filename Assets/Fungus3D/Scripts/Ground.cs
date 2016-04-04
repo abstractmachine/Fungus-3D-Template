@@ -32,14 +32,14 @@ namespace Fungus3D
 
         void OnEnable()
         {
-            Player.ReachedTargetListener += PlayerReachedTarget;
+            Persona.ReachedTargetListener += PlayerReachedTarget;
             Persona.GoToPersonaListener += GoToPersona; 
         }
 
 
         void OnDisable()
         {
-            Player.ReachedTargetListener -= PlayerReachedTarget;
+            Persona.ReachedTargetListener -= PlayerReachedTarget;
             Persona.GoToPersonaListener -= GoToPersona;
         }
 

@@ -117,8 +117,8 @@ namespace Fungus3D
 
         void OnEnable()
         {
-            Player.StartedDialogueWithListener += PlayerStartedDialogueWith;
-            Player.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
+            Persona.StartedDialogueWithListener += PlayerStartedDialogueWith;
+            Persona.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
             Persona.GoToPersonaListener += GoToPersona;
             Ground.GoToPositionListener += GoToPosition;
         }
@@ -126,8 +126,8 @@ namespace Fungus3D
 
         void OnDisable()
         {
-            Player.StartedDialogueWithListener -= PlayerStartedDialogueWith;
-            Player.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
+            Persona.StartedDialogueWithListener -= PlayerStartedDialogueWith;
+            Persona.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
             Persona.GoToPersonaListener -= GoToPersona;
             Ground.GoToPositionListener -= GoToPosition;
         }
@@ -157,6 +157,14 @@ namespace Fungus3D
             }
             // make sure all dependencies are functional
             CheckForDependencies();
+
+            // are we the player?
+            if (tag == "Player")
+            {
+                isPlayer = true;
+                // set pointer to ourselves
+                currentPlayer = this.gameObject;
+            }
         }
 
         void CheckForDependencies()
@@ -196,17 +204,51 @@ namespace Fungus3D
         #region Interaction
 
         /// <summary>
-        /// Player clicked on this Persona
+        /// Someone clicked on this Persona
         /// Note: This requires a physics Raycaster on a camera
         /// </summary>
 
         public virtual void OnClick()
         {
-            // if we're not the player
+            // if we're the Player
+            if (this.IsPlayer)
+            {
+                OnClickPlayer(null);
+            }
+
+            // if we're a Persona
             if (!this.IsPlayer)
             {
                 OnClickPersona();
             }
+        }
+
+
+        /// <summary>
+        /// Handle the click on Player object
+        /// </summary>
+        /// <param name="clickedObject">Clicked object.</param>
+
+        public void OnClickPlayer(GameObject clickedObject)
+        {
+            // dead Players can't click
+            if (Dead) return;
+
+            // if we're not talking to anyone
+            if (currentFlowchart == null || currentInterlocutor == null)
+            {      
+                // are we walking?
+                if (Walking)
+                {
+                    StopWalking();            
+                }
+                // not talking to anyone, so no need to go on
+                return;
+            }
+
+            // ok, this is a dialog click
+            OnClickDialog(clickedObject);
+
         }
 
 
@@ -216,7 +258,8 @@ namespace Fungus3D
             // FIXME: Theoretically, the player shouldn't always have to be in the flowchart
             // Persona should be able to discuss amongst themselves (cf. The Sims)
 
-            Player playerScript = currentPlayer.GetComponent<Player>();
+            Persona playerScript = currentPlayer.GetComponent<Persona>();
+
             // check to see if we're in the current flowchart discussion with the player
             if (playerScript.PersonaIsInCurrentFlowchart(this.gameObject))
             {   // tell the player we've clicked on us
@@ -225,7 +268,7 @@ namespace Fungus3D
             }
 
             // if we're currently interacting with the player
-            if (currentInterlocutor != null)
+            if (!this.IsPlayer && currentInterlocutor != null)
             {
                 print(this.gameObject);
                 // force the dialog to pick up where it was (or to start over)
@@ -246,8 +289,72 @@ namespace Fungus3D
         #endregion
 
 
-
         #region Dialog
+
+        public void OnClickDialog(GameObject clickedObject)
+        {
+            // if we currently have a menuDialog active
+            if (transform.FindChild("Dialogues/MenuDialog").gameObject.activeSelf)
+            {   // players MUST make choice when menuDialog is active
+                print("menuDialog still active");
+                return;
+            }
+
+            // error catching
+            if (currentFlowchart == null)
+            {
+                Debug.LogError("currentFlowchart == null. IsPlayer=" + IsPlayer);
+                return;
+            }
+
+            // ok, we do NOT have a menuDialog active
+
+            // if there is no current dialogue
+            if (!currentFlowchart.HasExecutingBlocks())
+            {   
+                // if we're still in collision with a Persona
+                if (currentInterlocutor != null)
+                {
+                    // try to force restart that previous dialogue
+                    StartFlowchart(currentInterlocutor);
+                }
+                // whatever the case, leave this method
+                return;
+            }
+
+            List<GameObject> charactersInFlowchart = GetCharactersInFlowchart(currentFlowchart);
+
+            // if the clicked object isn't even in the current dialog
+            if (clickedObject != null && !charactersInFlowchart.Contains(clickedObject))
+            {
+                Debug.LogWarning("Character " + GetPath(clickedObject.transform) + " isn't in flowchart " + currentFlowchart.name);
+                return;
+            }
+
+            // go through each persona we're potentially talking to
+            foreach (GameObject characterObject in charactersInFlowchart)
+            {
+                // make sure that object isn't us
+                //          if (characterObject == this.gameObject) {
+                //              continue;
+                //          }
+                // get the path to their SayDialog
+                SayDialog personaSayDialog = characterObject.GetComponentInChildren<SayDialog>();
+                // if this dialog is actually something
+                if (personaSayDialog != null)
+                {
+                    // check to see if that dialog object is active
+                    if (personaSayDialog.gameObject.activeSelf)
+                    {
+                        // ok, push dat button!
+                        personaSayDialog.continueButton.onClick.Invoke();
+                        // all done
+                        return;
+                    }
+                } // if (personaSayDialog)
+            } // foreach
+        }
+
 
         void PlayerStartedDialogueWith(GameObject player, List<GameObject> personae)
         {
@@ -277,7 +384,7 @@ namespace Fungus3D
         #endregion
 
 
-        #region Collisions
+        #region Collisions Proximity
 
         /// <summary>
         /// Called whenever another GameObject enters the Proximity trigger of this Persona
@@ -305,7 +412,7 @@ namespace Fungus3D
             if (flowchart != null)
             {   
                 // check to see if there's a ProximityEnter event waiting for us
-                ProximityEnter proximityEnterEvent = flowchart.GetComponent<ProximityEnter>();
+                Handler_ProximityEnter proximityEnterEvent = flowchart.GetComponent<Handler_ProximityEnter>();
                 // did we find it?
                 if (proximityEnterEvent != null)
                 {
@@ -313,7 +420,8 @@ namespace Fungus3D
                 }
             } // if (flowchart)
 
-        } // OnProximityEnter
+        }
+        // OnProximityEnter
 
 
         /// <summary>
@@ -357,7 +465,7 @@ namespace Fungus3D
             if (flowchart != null)
             {   
                 // check to see if there's a ProximityEnter event waiting for us
-                ProximityExit proximityExitEvent = flowchart.GetComponent<ProximityExit>();
+                Handler_ProximityExit proximityExitEvent = flowchart.GetComponent<Handler_ProximityExit>();
                 // did we find it?
                 if (proximityExitEvent != null)
                 {
@@ -365,8 +473,13 @@ namespace Fungus3D
                 }
             } // if (flowchart
 
-        } // OnProximityExit
+        }
+        // OnProximityExit
 
+        #endregion
+
+
+        #region Collisions Interaction
 
         /// <summary>
         /// Called whenever another GameObject enters the Dialog trigger of this Persona
@@ -381,11 +494,12 @@ namespace Fungus3D
                 Debug.Log(this.gameObject.name + "<Persona>().OnInteractionEnter(" + other.name + ")");
             }
 
-            if (!IsPlayer) OnInteractionEnterPersona(other);
+            if (this.IsPlayer) OnInteractionEnterPlayer(other);
+            else if (!this.IsPlayer) OnInteractionEnterPersona(other);
         }
 
 
-        void OnInteractionEnterPersona(GameObject other) 
+        void OnInteractionEnterPersona(GameObject other)
         {
             // only register intersections with the player
             if (other.tag != "Player") return;
@@ -398,6 +512,49 @@ namespace Fungus3D
 
             // ok, register this as valid other
             currentInterlocutor = other;
+        }
+
+        void OnInteractionEnterPlayer(GameObject other)
+        {
+            // if the logging level is at least informational
+            if (collisionLogLevel >= NetworkLogLevel.Informational)
+            {   // log activity
+                Debug.Log(this.gameObject.name + "<Player>().OnInteractionEnter(" + other.name + ")");
+            }
+
+            // if we're dead, ingore the rest
+            if (Dead) return;
+
+            // if we're the player interacting with a persona
+            if (IsPlayer && other.tag == "Persona" && other == targetObject)
+            {
+                // make sure we're not already talking with someone else
+                if (currentInterlocutor != null && currentInterlocutor != other) return;
+
+                // tell the Persona to turn towards us, the Player
+                other.GetComponent<Persona>().TurnTowards(this.gameObject);
+
+                // start talking
+                StartFlowchart(other);
+
+                // Broadcast that we're reached the target
+                ReachedTarget();
+
+                return;
+
+            }
+
+            // if we're touching the TouchTarget && we're at the end
+            if (IsPlayer && other.tag == "TouchTarget")
+            {
+                // get rid of the TouchTarget
+                Destroy(other);
+                // Broadcast that we're reached the target
+                ReachedTarget();
+
+                return;
+            }
+
         }
 
 
@@ -414,7 +571,26 @@ namespace Fungus3D
                 print(this.gameObject.name + "<Persona>().OnInteractionStay(" + other.name + ")");
             }
 
-            // do nothing
+            if (IsPlayer)
+            {
+                // if the logging level is full verbose
+                if (collisionLogLevel == NetworkLogLevel.Full)
+                {   // log activity
+                    print(this.gameObject.name + "<Player>().OnInteractionStay(" + other.name + ")");
+                }
+
+                // if we're dead, ingore the rest
+                if (Dead) return;
+
+                // if we're interacting with another character
+                if (IsPlayer && Walking && other.tag == "Persona" && other == targetObject)
+                {
+                    // start talking
+                    StartFlowchart(other);
+                    // stop current movement
+                    ReachedTarget();
+                }
+            } // if (IsPlayer
         }
 
 
@@ -431,12 +607,54 @@ namespace Fungus3D
                 print(this.gameObject.name + "<Persona>().OnInteractionExit(" + other.name + ")");
             }
 
+            if (this.IsPlayer) OnInteractionExitPlayer(other);
+            else if (!this.IsPlayer) OnInteractionExitPersona(other);
+        }
+
+        void OnInteractionExitPersona(GameObject other) 
+        {
             // make sure this is the actual person we were interacting with
             if (other == currentInterlocutor)
             {   
                 currentInterlocutor = null;
             }
         }
+
+
+        void OnInteractionExitPlayer(GameObject other)
+        {
+            // if the logging level is at least informational
+            if (collisionLogLevel >= NetworkLogLevel.Informational)
+            {   // log activity
+                print(this.gameObject.name + "<Player>().OnInteractionExit(" + other.name + ")");
+            }
+
+            // if we're dead, ignore the rest
+            if (Dead) return;
+
+            // ignore anyone who is not a Persona
+            if (IsPlayer && other.tag != "Persona")
+            {
+                return;
+            }
+
+            // make sure this is the actual person we were interacting with
+            if (other != currentInterlocutor)
+            {
+                return;
+            }
+
+            StopCurrentFlowchart();
+
+            currentInterlocutor = null;
+            currentFlowchart = null;
+
+        }
+
+        #endregion
+
+
+        #region Collisions Physics
 
         // FIXME: Physicals collisions don't currently work right with discrete collider child objects (!?)
 
@@ -925,26 +1143,17 @@ namespace Fungus3D
         protected GameObject ExtractRootParentFrom(GameObject theObject)
         {
             // try to get the player GameObject from this flowchart
-            Player playerScript = theObject.GetComponentInParent<Player>();
+            Persona personaScript = theObject.GetComponentInParent<Persona>();
             // if the playerScript is there
-            if (playerScript != null)
+            if (personaScript != null)
             {   // add the player to our list
-                return playerScript.gameObject;
-            }
-            else
-            {
-                // get the Persona GameObject
-                Persona personaScript = theObject.GetComponentInParent<Persona>();
-                // if the Persona script is there
-                if (personaScript != null)
-                {
-                    return personaScript.gameObject;
-                }
+                return personaScript.gameObject;
             }
             // couldn't find it (this is an error
             Debug.LogError("Couldn't find root parent object");
             return null;
         }
+
 
         protected void StartedDialogue(Flowchart flowchart)
         {
@@ -956,6 +1165,7 @@ namespace Fungus3D
                 StartedDialogueWithListener(this.gameObject, personae);
             }
         }
+
 
         protected void StoppedDialogue(Flowchart flowchart)
         {
@@ -990,7 +1200,7 @@ namespace Fungus3D
                 //                // start this specific flowchart
                 //                flowchart.SendFungusMessage("DialogEnter");
                 // check to see if there's an InteractionEnter event waiting for us
-                InteractionEnter interactionEnterEvent = currentFlowchart.GetComponent<InteractionEnter>();
+                Handler_InteractionEnter interactionEnterEvent = currentFlowchart.GetComponent<Handler_InteractionEnter>();
                 // did we find it?
                 if (interactionEnterEvent != null)
                 {
@@ -1020,7 +1230,7 @@ namespace Fungus3D
                 // send a stop message to the current flowchart
                 //                currentFlowchart.SendFungusMessage("DialogExit");
                 // check to see if there's an InteractionEnter event waiting for us
-                InteractionExit interactionExitEvent = currentFlowchart.GetComponent<InteractionExit>();
+                Handler_InteractionExit interactionExitEvent = currentFlowchart.GetComponent<Handler_InteractionExit>();
                 // did we find it?
                 if (interactionExitEvent != null)
                 {
@@ -1178,7 +1388,7 @@ namespace Fungus3D
                             Debug.LogError("sayCommand == null");
                             continue;
                         }
-                        //                        GameObject persona = sayCommand.character.gameObject.transform.parent.gameObject;
+                        // GameObject persona = sayCommand.character.gameObject.transform.parent.gameObject;
                         GameObject persona = ExtractRootParentFrom(sayCommand.character.gameObject);
 
                         // if this one isn't already in the list

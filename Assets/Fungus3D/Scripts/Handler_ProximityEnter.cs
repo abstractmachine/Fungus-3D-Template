@@ -10,7 +10,7 @@ namespace Fungus3D
 
     [EventHandlerInfo("Triggers", "ProximityEnter", "Start this block when the player enters this gameObject's proximity Trigger")]
 
-    public class ProximityEnter : EventHandler
+    public class Handler_ProximityEnter : EventHandler
     {
         /// <summary>
         /// Fire the ExecuteBlock method

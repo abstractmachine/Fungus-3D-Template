@@ -20,7 +20,7 @@ namespace Fungus3D
 
         #region Event Delegates
 
-        public delegate void GoToPositionDelegate(Vector3 position);
+        public delegate void GoToPositionDelegate(Vector3 position, GameObject actor);
 
         public static event GoToPositionDelegate GoToPositionListener;
 
@@ -126,7 +126,8 @@ namespace Fungus3D
             // if someone's listening
             if (GoToPositionListener != null)
             {
-                GoToPositionListener(position);
+                // tell the player to go somewhere (null == no defined actor == player)
+                GoToPositionListener(position, null);
             }
 
             // if we were already showing a click exploder
@@ -142,8 +143,10 @@ namespace Fungus3D
         /// </summary>
         /// <param name="persona">The Persona GameObject.</param>
 
-        void GoToPersona(GameObject persona)
+        void GoToPersona(GameObject persona, GameObject actor)
         {
+            // make sure the actor is null (or is the player)
+            if (actor != null && actor.tag != "Player") return;
 
             Vector3 position = persona.transform.position;
             position.y = 0.01f;

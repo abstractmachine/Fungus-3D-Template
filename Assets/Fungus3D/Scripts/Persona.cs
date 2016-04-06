@@ -706,6 +706,8 @@ namespace Fungus3D
                 return;
             }
 
+            // FIXME: When slowing down to a stop, Personae disrupt the dialog they have just initiated
+
             StopCurrentFlowchart();
 
             currentInterlocutor = null;

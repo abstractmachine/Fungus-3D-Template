@@ -5,13 +5,13 @@ using Fungus;
 namespace Fungus3D
 {
     // declare this command in Fungus
-    [CommandInfo("Action", "WalkToPosition", "Start walking to a position")]
+    [CommandInfo("Action", "WalkTowards", "Start following someone/somthing")]
 
     /// <summary>
     /// The WalkTo Command for Fungus
     /// </summary>
 
-    public class Action_WalkToPosition : Command
+    public class Action_WalkTowards : Command
     {
         // where the Persona walks to
         public GameObject targetObject;
@@ -59,11 +59,9 @@ namespace Fungus3D
                 Debug.LogError("Error: Target object undefined");
                 return;
             }
-            // get the target position
-            Vector3 targetPosition = targetObject.transform.position;
-            targetPosition.y = 0.0f;
-            // tell this character to walk there
-            personaScript.WalkToPosition(targetPosition);
+            // tell this character to walk towards this object/persona
+            personaScript.TargetPersona(targetObject);
+//            Debug.Log(personaObject.name + ".WalkTo(" + targetObject.name + ")");
             // move on to next Fungus command
             Continue();
         }
@@ -91,7 +89,7 @@ namespace Fungus3D
 
         public override Color GetButtonColor()
         {
-            return new Color(1, 0.75f, 1.0f, 1.0f);
+            return Action.buttonColor;
         }
 
 

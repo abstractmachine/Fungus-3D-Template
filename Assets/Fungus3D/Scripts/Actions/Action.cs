@@ -6,6 +6,8 @@ namespace Fungus3D
     
     public class Action : MonoBehaviour
     {
+        // create the button color
+        public static Color buttonColor = new Color(0.75f, 0.75f, 1.0f, 1.0f);
 
         #region Aim
 
@@ -34,6 +36,8 @@ namespace Fungus3D
             StartCoroutine(Turn(target));
         }
 
+
+        // FIXME: This should use the Persona rotation
 
         IEnumerator Turn(Vector3 target)
         {

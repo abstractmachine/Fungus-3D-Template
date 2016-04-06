@@ -5,16 +5,18 @@ using Fungus;
 namespace Fungus3D
 {
     // declare this command in Fungus
-    [CommandInfo("Action", "WalkTowards", "Start following someone/somthing")]
+    [CommandInfo("Action", "WalkToPosition", "Start walking to a position")]
 
     /// <summary>
     /// The WalkTo Command for Fungus
     /// </summary>
 
-    public class Action_WalkTowards : Command
+    public class Action_WalkToPosition : Command
     {
         // where the Persona walks to
         public GameObject targetObject;
+        // who should be sitting
+        public GameObject actor;
 
         Persona personaScript;
 
@@ -24,8 +26,13 @@ namespace Fungus3D
 
         void Start()
         {
+            if (actor == null)
+            {
+                actor = this.gameObject;
+            }
+
             // first, get the Persona script
-            personaScript = GetComponentInParent<Persona>();
+            personaScript = actor.GetComponentInParent<Persona>();
             // make sure we found a Persona
             if (personaScript == null)
             {
@@ -33,13 +40,13 @@ namespace Fungus3D
                 return;
             }
             // get the animator
-            animator = GetComponentInParent<Animator>();
+            animator = actor.GetComponentInParent<Animator>();
             if (animator == null)
             {
                 Debug.LogError("Couldn't find Animator in parent");
             }
             // get the navMeshAgent
-            navMeshAgent = GetComponentInParent<NavMeshAgent>();
+            navMeshAgent = actor.GetComponentInParent<NavMeshAgent>();
             if (navMeshAgent == null)
             {
                 Debug.LogError("Couldn't find NavMeshAgent in parent");
@@ -59,9 +66,11 @@ namespace Fungus3D
                 Debug.LogError("Error: Target object undefined");
                 return;
             }
-            // tell this character to walk towards this object/persona
-            personaScript.TargetPersona(targetObject);
-//            Debug.Log(personaObject.name + ".WalkTo(" + targetObject.name + ")");
+            // get the target position
+            Vector3 targetPosition = targetObject.transform.position;
+            targetPosition.y = 0.0f;
+            // tell this character to walk there
+            personaScript.WalkToPosition(targetPosition);
             // move on to next Fungus command
             Continue();
         }
@@ -78,6 +87,12 @@ namespace Fungus3D
             {
                 return "Error: Target undefined";
             }
+
+            if (actor != null)
+            {
+                return actor.name + " Walk to " + targetObject.name;
+            }
+
             // display the name of the target
             return "Walk to " + targetObject.name;
         }
@@ -89,9 +104,8 @@ namespace Fungus3D
 
         public override Color GetButtonColor()
         {
-            return new Color(1, 0.75f, 1.0f, 1.0f);
+            return Action.buttonColor;
         }
-
 
     }
 

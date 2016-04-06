@@ -8,6 +8,7 @@ namespace Fungus3D
     /// This handler fires when interacting with the Persona's Interaction Trigger
     /// </summary>
 
+    //TODO: Triggers3D ??
     [EventHandlerInfo("Triggers", "InteractionEnter", "Start this block when the player enters this gameObject's 'Interaction' Trigger")]
 
     public class Handler_InteractionEnter : EventHandler

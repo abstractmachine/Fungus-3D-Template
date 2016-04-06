@@ -29,7 +29,7 @@ namespace Fungus3D
         {
             if (actor == null)
             {
-                actor = this.gameObject;
+                actor = this.GetComponentInParent<Persona>().gameObject;
             }
 
             // get the animator

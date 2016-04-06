@@ -16,7 +16,7 @@ namespace Fungus3D
         // whether we should be sitting or not
         public bool calling = false;
         // who should be sitting
-        public GameObject targetObject;
+        public GameObject actor;
 
         Animator animator;
         NavMeshAgent navMeshAgent;
@@ -24,13 +24,13 @@ namespace Fungus3D
 
         void Start()
         {
-            if (targetObject == null)
+            if (actor == null)
             {
-                targetObject = this.gameObject;
+                actor = this.GetComponentInParent<Persona>().gameObject;
             }
 
             // get the animator
-            animator = targetObject.GetComponentInParent<Animator>();
+            animator = actor.GetComponentInParent<Animator>();
             if (animator == null)
             {
                 Debug.LogError("Couldn't find Animator in parent");
@@ -59,9 +59,9 @@ namespace Fungus3D
         {
             string name = gameObject.GetComponentInParent<Animator>().gameObject.name;
 
-            if (targetObject != null)
+            if (actor != null)
             {
-                name = targetObject.name;
+                name = actor.name;
             }
 
             // if we haven't configured the target yet

@@ -14,11 +14,17 @@ namespace Fungus3D
     public class Action_Wave : Command
     {
         Animator animator;
+        // who goes there
+        public GameObject actor;
 
         void Start()
         {
+            if (actor == null)
+            {
+                actor = this.GetComponentInParent<Persona>().gameObject;
+            }
             // get the animator
-            animator = GetComponentInParent<Animator>();
+            animator = actor.GetComponentInParent<Animator>();
             if (animator == null)
             {
                 Debug.LogError("Couldn't find Animator in parent");
@@ -45,8 +51,12 @@ namespace Fungus3D
 
         public override string GetSummary()
         {
+            if (actor != null)
+            {
+                return actor.name + " Waves arm.";
+            }
             // display the name of the target
-            return "Wave at the Player";
+            return "Wave arm";
         }
 
 

@@ -28,7 +28,7 @@ namespace Fungus3D
         {
             if (actor == null)
             {
-                actor = this.gameObject;
+                actor = this.GetComponentInParent<Persona>().gameObject;
             }
 
             // first, get the Persona script

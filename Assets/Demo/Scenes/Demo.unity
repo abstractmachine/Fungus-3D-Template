@@ -5293,7 +5293,7 @@ Prefab:
     - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: selectedBlock
       value: 
-      objectReference: {fileID: 1306458841}
+      objectReference: {fileID: 1306458770}
     - target: {fileID: 11423314, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: targetObject
       value: 
@@ -6672,9 +6672,9 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1293430781}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1306458841 stripped
+--- !u!114 &1306458770 stripped
 MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11461158, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
+  m_PrefabParentObject: {fileID: 11465182, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
     type: 2}
   m_PrefabInternal: {fileID: 1084867974}
   m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
@@ -7820,7 +7820,7 @@ MonoBehaviour:
   errorMessage: 
   indentLevel: 0
   sitOrStand: 0
-  targetObject: {fileID: 0}
+  actor: {fileID: 0}
 --- !u!114 &1515492946
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -7836,7 +7836,7 @@ MonoBehaviour:
   errorMessage: 
   indentLevel: 0
   sitOrStand: 0
-  targetObject: {fileID: 0}
+  actor: {fileID: 0}
 --- !u!114 &1515492947
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -7852,7 +7852,7 @@ MonoBehaviour:
   errorMessage: 
   indentLevel: 0
   sitOrStand: 1
-  targetObject: {fileID: 0}
+  actor: {fileID: 0}
 --- !u!114 &1515492948
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7949,6 +7949,7 @@ MonoBehaviour:
   itemId: 235
   errorMessage: 
   indentLevel: 1
+  actor: {fileID: 0}
 --- !u!114 &1515492953
 MonoBehaviour:
   m_ObjectHideFlags: 2

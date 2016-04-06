@@ -15,6 +15,8 @@ namespace Fungus3D
     {
         // where the Persona walks to
         public GameObject targetObject;
+        // who goes there
+        public GameObject actor;
 
         Persona personaScript;
 
@@ -24,8 +26,13 @@ namespace Fungus3D
 
         void Start()
         {
+            if (actor == null)
+            {
+                actor = this.GetComponentInParent<Persona>().gameObject;
+            }
+
             // first, get the Persona script
-            personaScript = GetComponentInParent<Persona>();
+            personaScript = actor.GetComponentInParent<Persona>();
             // make sure we found a Persona
             if (personaScript == null)
             {
@@ -33,13 +40,13 @@ namespace Fungus3D
                 return;
             }
             // get the animator
-            animator = GetComponentInParent<Animator>();
+            animator = actor.GetComponentInParent<Animator>();
             if (animator == null)
             {
                 Debug.LogError("Couldn't find Animator in parent");
             }
             // get the navMeshAgent
-            navMeshAgent = GetComponentInParent<NavMeshAgent>();
+            navMeshAgent = actor.GetComponentInParent<NavMeshAgent>();
             if (navMeshAgent == null)
             {
                 Debug.LogError("Couldn't find NavMeshAgent in parent");
@@ -78,6 +85,12 @@ namespace Fungus3D
             {
                 return "Error: Target undefined";
             }
+
+            if (actor != null)
+            {
+                return actor.name + " Walk to " + targetObject.name;
+            }
+
             // display the name of the target
             return "Walk to " + targetObject.name;
         }

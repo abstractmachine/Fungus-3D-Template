@@ -69,10 +69,10 @@ namespace Fungus3D
             characterColor = EditorGUILayout.ColorField("Character color", characterColor);
 
             GUILayout.Label("Position", EditorStyles.boldLabel);
-            GUILayout.BeginHorizontal();
+//            GUILayout.BeginHorizontal();
             xPosition = EditorGUILayout.FloatField("X", xPosition);
             zPosition = EditorGUILayout.FloatField("Z", zPosition);
-            GUILayout.EndHorizontal();
+//            GUILayout.EndHorizontal();
 
             GUILayout.Label("Model", EditorStyles.boldLabel);
 
@@ -128,7 +128,39 @@ namespace Fungus3D
             characterScript.nameText = characterName;
             characterScript.nameColor = characterColor;
 
-//            Debug.Log("Created Persona " + persona.name);
+            // if we have defined a model
+            if (modelPrefab != null)
+            {
+                // find the current model
+                Transform modelTransform = persona.transform.FindChild("Model");
+                if (modelTransform == null)
+                {
+                    Debug.Log("Couldn't find Persona/Model");
+                    return;
+                }
+                GameObject modelParent = modelTransform.gameObject;
+                // get a reference to the first child
+                GameObject currentModel = modelParent.transform.GetChild(0).gameObject;
+                // add our model to it
+                GameObject newModel = CreateObject(modelPrefab, modelParent, modelPrefab.name);
+
+                // get the current animator
+                Animator personaAnimator = persona.GetComponent<Animator>();
+                // get the current avatar
+                Avatar currentPersonaAvatar = personaAnimator.avatar;
+
+                // get the new animator
+                Animator newAnimator = newModel.GetComponent<Animator>();
+                // extract the new avatar from the new model
+                Avatar newPersonaAvatar = newAnimator.avatar;
+
+                // appy new avatar to persona
+                personaAnimator.avatar = newPersonaAvatar;
+                // delete old model
+                DestroyImmediate(currentModel);
+                // delete the new Animator
+                DestroyImmediate(newAnimator);
+            }
 
         }
 
@@ -144,6 +176,11 @@ namespace Fungus3D
 
         GameObject CreateObject(UnityEngine.Object prefab, Transform parent, string objectTitle)
         {
+            // use the name of the prefab if it isn't defined
+            if (objectTitle == null || objectTitle == "")
+            {
+                objectTitle = prefab.name;
+            }
             // ok, create the gameObject
             GameObject summaryObject = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
             // construct this object

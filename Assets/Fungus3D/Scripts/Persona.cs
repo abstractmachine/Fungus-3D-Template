@@ -452,7 +452,7 @@ namespace Fungus3D
             if (this.tag != "Player") return;
 
             // tell the Persona to turn towards us, the Player
-            other.GetComponent<Persona>().TurnTowards(this.gameObject);
+            //other.GetComponent<Persona>().TurnTowards(this.gameObject);
 
             // find the flowchart in this character
             Flowchart flowchart = GetFlowchart(other); 
@@ -577,9 +577,9 @@ namespace Fungus3D
                 if (currentInterlocutor != null && currentInterlocutor != other) return;
 
                 // turn towards the other
-                TurnTowards(other);
+                //TurnTowards(other);
                 // tell the Persona to turn towards us, the Player
-                other.GetComponent<Persona>().TurnTowards(this.gameObject);
+                //other.GetComponent<Persona>().TurnTowards(this.gameObject);
                 // tell the Persona to stop walking
                 other.GetComponent<Persona>().StopWalking();
 
@@ -602,9 +602,9 @@ namespace Fungus3D
                 // stop wherever we were going and target them too
                 //ClickedPersona(other);
                 // turn towards the other
-                TurnTowards(other);
+                //TurnTowards(other);
                 // tell the Persona to turn towards us, the Player
-                other.GetComponent<Persona>().TurnTowards(this.gameObject);
+                //other.GetComponent<Persona>().TurnTowards(this.gameObject);
                 // tell the Persona to stop walking
                 other.GetComponent<Persona>().StopWalking();
                 // ok to start targeting them

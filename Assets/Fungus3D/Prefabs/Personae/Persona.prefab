@@ -382,6 +382,9 @@ GameObject:
   - 114: {fileID: 11435344}
   - 114: {fileID: 11479560}
   - 114: {fileID: 11446256}
+  - 114: {fileID: 11488694}
+  - 114: {fileID: 11444186}
+  - 114: {fileID: 11474476}
   m_Layer: 2
   m_Name: Persona_Flowchart
   m_TagString: Persona
@@ -414,7 +417,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 411600}
   m_Layer: 0
-  m_Name: WomanModel
+  m_Name: PersonaModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1348,6 +1351,8 @@ MonoBehaviour:
   description: 
   eventHandler: {fileID: 11403170}
   commandList:
+  - {fileID: 11444186}
+  - {fileID: 11488694}
   - {fileID: 11490260}
 --- !u!114 &11406510
 MonoBehaviour:
@@ -1405,7 +1410,7 @@ MonoBehaviour:
     y: -321.08316
     width: 1631
     height: 1067
-  selectedBlock: {fileID: 11479560}
+  selectedBlock: {fileID: 11406456}
   selectedCommands: []
   variables:
   - {fileID: 11485164}
@@ -1634,6 +1639,22 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c53b7c20372e444c6bd7f2ac0729bbe2, type: 3}
   soundEffect: {fileID: 0}
   inputSound: {fileID: 8300000, guid: 14a396b1562834718b2d52b9c4639264, type: 3}
+--- !u!114 &11444186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e4cb1b8e6f5f48cdaef46e81fd8f9c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 255
+  errorMessage: 
+  indentLevel: 0
+  actor: {fileID: 0}
+  targetObject: {fileID: 0}
 --- !u!114 &11444316
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1807,7 +1828,24 @@ MonoBehaviour:
   blockName: ProximityEnter
   description: 
   eventHandler: {fileID: 11406790}
-  commandList: []
+  commandList:
+  - {fileID: 11474476}
+--- !u!114 &11474476
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e4cb1b8e6f5f48cdaef46e81fd8f9c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 254
+  errorMessage: 
+  indentLevel: 0
+  actor: {fileID: 0}
+  targetObject: {fileID: 0}
 --- !u!114 &11475720
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1975,6 +2013,22 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11488694
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 156562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e4cb1b8e6f5f48cdaef46e81fd8f9c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 256
+  errorMessage: 
+  indentLevel: 0
+  actor: {fileID: 0}
+  targetObject: {fileID: 0}
 --- !u!114 &11490260
 MonoBehaviour:
   m_ObjectHideFlags: 1

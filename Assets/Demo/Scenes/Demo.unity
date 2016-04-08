@@ -715,12 +715,6 @@ Transform:
 Transform:
   m_PrefabParentObject: {fileID: 449232, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
   m_PrefabInternal: {fileID: 1617537917}
---- !u!114 &178580168 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
-    type: 2}
-  m_PrefabInternal: {fileID: 1617537917}
-  m_Script: {fileID: 11500000, guid: 7a334fe2ffb574b3583ff3b18b4792d3, type: 3}
 --- !u!1 &186105049
 GameObject:
   m_ObjectHideFlags: 0
@@ -7187,70 +7181,12 @@ Prefab:
 Transform:
   m_PrefabParentObject: {fileID: 404190, guid: a4becdc9484e243acb04d7029f7e92a9, type: 2}
   m_PrefabInternal: {fileID: 1242232148}
---- !u!1 &1250148247 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 156562, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-  m_PrefabInternal: {fileID: 1617537917}
---- !u!114 &1250148249
+--- !u!114 &1250148262 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1250148247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e4cb1b8e6f5f48cdaef46e81fd8f9c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 256
-  errorMessage: 
-  indentLevel: 0
-  actor: {fileID: 1929742711}
-  targetObject: {fileID: 0}
---- !u!114 &1250148250
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1250148247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e4cb1b8e6f5f48cdaef46e81fd8f9c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 255
-  errorMessage: 
-  indentLevel: 0
-  actor: {fileID: 0}
-  targetObject: {fileID: 0}
---- !u!114 &1250148259 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11406456, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
+  m_PrefabParentObject: {fileID: 11467702, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
     type: 2}
   m_PrefabInternal: {fileID: 1617537917}
   m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
---- !u!114 &1250148260 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11490260, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
-    type: 2}
-  m_PrefabInternal: {fileID: 1617537917}
-  m_Script: {fileID: 11500000, guid: 050fb9e6e72f442b3b883da8a965bdeb, type: 3}
---- !u!114 &1250148267
-MonoBehaviour:
-  m_ObjectHideFlags: 2
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1250148247}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e4cb1b8e6f5f48cdaef46e81fd8f9c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemId: 254
-  errorMessage: 
-  indentLevel: 0
-  actor: {fileID: 0}
-  targetObject: {fileID: 0}
 --- !u!1 &1260735416
 GameObject:
   m_ObjectHideFlags: 0
@@ -9149,6 +9085,7 @@ GameObject:
   - 114: {fileID: 1515492952}
   - 114: {fileID: 1515492950}
   - 114: {fileID: 1515492948}
+  - 114: {fileID: 1515492954}
   m_Layer: 2
   m_Name: Rawiya_Flowchart
   m_TagString: Persona
@@ -9218,7 +9155,7 @@ MonoBehaviour:
   actor: {fileID: 0}
 --- !u!114 &1515492948
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1515492943}
@@ -9257,7 +9194,7 @@ MonoBehaviour:
   setSayDialog: {fileID: 0}
 --- !u!114 &1515492950
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1515492943}
@@ -9300,7 +9237,7 @@ MonoBehaviour:
   value: 0
 --- !u!114 &1515492952
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 2
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1515492943}
@@ -9326,6 +9263,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentBlock: {fileID: 1515492971}
+--- !u!114 &1515492954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1515492943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e4cb1b8e6f5f48cdaef46e81fd8f9c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemId: 238
+  errorMessage: 
+  indentLevel: 0
+  actor: {fileID: 0}
+  targetObject: {fileID: 0}
 --- !u!114 &1515492963
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -9491,6 +9444,7 @@ MonoBehaviour:
   eventHandler: {fileID: 1515492965}
   commandList:
   - {fileID: 1515492947}
+  - {fileID: 1515492954}
 --- !u!114 &1515492981
 MonoBehaviour:
   m_ObjectHideFlags: 2
@@ -9637,9 +9591,9 @@ MonoBehaviour:
     y: -321.08316
     width: 1631
     height: 1067
-  selectedBlock: {fileID: 1515493045}
+  selectedBlock: {fileID: 1515492980}
   selectedCommands:
-  - {fileID: 1515492950}
+  - {fileID: 1515492954}
   variables:
   - {fileID: 1515492951}
   description: 
@@ -13043,18 +12997,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1381749149}
     m_Modifications:
-    - target: {fileID: 11406456, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: commandList.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 11467702, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: commandList.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: selectedCommands.Array.size
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 449232, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: m_LocalPosition.x
       value: 10
@@ -13085,40 +13027,16 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 449232, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 161324, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: m_Name
-      value: PersonaModel
-      objectReference: {fileID: 0}
+    - target: {fileID: 11488694, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: actor
+      value: 
+      objectReference: {fileID: 1929742711}
     - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: selectedBlock
       value: 
-      objectReference: {fileID: 1250148259}
-    - target: {fileID: 11406456, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: commandList.Array.data[1]
-      value: 
-      objectReference: {fileID: 1250148249}
-    - target: {fileID: 11406456, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: commandList.Array.data[2]
-      value: 
-      objectReference: {fileID: 1250148260}
-    - target: {fileID: 11406456, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: nodeRect.y
-      value: 78.91684
-      objectReference: {fileID: 0}
-    - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: selectedCommands.Array.data[0]
-      value: 
-      objectReference: {fileID: 1250148260}
-    - target: {fileID: 11406456, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: commandList.Array.data[0]
-      value: 
-      objectReference: {fileID: 1250148250}
-    - target: {fileID: 11467702, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: commandList.Array.data[0]
-      value: 
-      objectReference: {fileID: 1250148267}
+      objectReference: {fileID: 1250148262}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
   m_IsPrefabParent: 0
@@ -13268,7 +13186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 178580168}
+  selectedFlowchart: {fileID: 1515493046}
 --- !u!4 &1645723203
 Transform:
   m_ObjectHideFlags: 1

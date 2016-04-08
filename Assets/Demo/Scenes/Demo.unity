@@ -4246,7 +4246,7 @@ Transform:
   - {fileID: 553797885}
   - {fileID: 1943916131}
   m_Father: {fileID: 1381749149}
-  m_RootOrder: 1
+  m_RootOrder: 0
 --- !u!95 &913233191
 Animator:
   serializedVersion: 3
@@ -5252,57 +5252,9 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 449232, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 11434620, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: targetObject
-      value: 
-      objectReference: {fileID: 872033608}
-    - target: {fileID: 11496742, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: targetObject
-      value: 
-      objectReference: {fileID: 468504105}
-    - target: {fileID: 11402734, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: character
-      value: 
-      objectReference: {fileID: 721938448}
-    - target: {fileID: 11403788, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: character
-      value: 
-      objectReference: {fileID: 721938448}
-    - target: {fileID: 11496240, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: character
-      value: 
-      objectReference: {fileID: 721938448}
-    - target: {fileID: 11427414, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: character
-      value: 
-      objectReference: {fileID: 721938448}
-    - target: {fileID: 11498502, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: animator
-      value: 
-      objectReference: {fileID: 459545643}
-    - target: {fileID: 11422360, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: variable
-      value: 
-      objectReference: {fileID: 981028904}
-    - target: {fileID: 11452958, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: variable
-      value: 
-      objectReference: {fileID: 981028904}
-    - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: selectedBlock
-      value: 
-      objectReference: {fileID: 1306458770}
-    - target: {fileID: 11423314, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: targetObject
-      value: 
-      objectReference: {fileID: 1929742711}
-    - target: {fileID: 11423314, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: actor
-      value: 
-      objectReference: {fileID: 1929742711}
-    - target: {fileID: 11479930, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+    - target: {fileID: 11476494, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: actor
       value: 
       objectReference: {fileID: 1929742711}
@@ -5310,18 +5262,54 @@ Prefab:
       propertyPath: actor
       value: 
       objectReference: {fileID: 1929742711}
-    - target: {fileID: 11476494, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+    - target: {fileID: 11479930, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
       propertyPath: actor
       value: 
       objectReference: {fileID: 1929742711}
-    - target: {fileID: 11461158, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: nodeRect.x
-      value: 435.46185
-      objectReference: {fileID: 0}
-    - target: {fileID: 11461158, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
-      propertyPath: nodeRect.y
-      value: 197.85638
-      objectReference: {fileID: 0}
+    - target: {fileID: 11423314, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: actor
+      value: 
+      objectReference: {fileID: 1929742711}
+    - target: {fileID: 11452958, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: variable
+      value: 
+      objectReference: {fileID: 981028904}
+    - target: {fileID: 11422360, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: variable
+      value: 
+      objectReference: {fileID: 981028904}
+    - target: {fileID: 11498502, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 459545643}
+    - target: {fileID: 11427414, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 721938448}
+    - target: {fileID: 11496240, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 721938448}
+    - target: {fileID: 11403788, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 721938448}
+    - target: {fileID: 11402734, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: character
+      value: 
+      objectReference: {fileID: 721938448}
+    - target: {fileID: 11496742, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: targetObject
+      value: 
+      objectReference: {fileID: 468504105}
+    - target: {fileID: 11434620, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: targetObject
+      value: 
+      objectReference: {fileID: 872033608}
+    - target: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
+      propertyPath: selectedBlock
+      value: 
+      objectReference: {fileID: 1306458770}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ed1c90dcb09f94cfc9b95122cbf5d834, type: 2}
   m_IsPrefabParent: 0
@@ -6678,12 +6666,6 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1084867974}
   m_Script: {fileID: 11500000, guid: 3d3d73aef2cfc4f51abf34ac00241f60, type: 3}
---- !u!114 &1306458848 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 11407004, guid: ed1c90dcb09f94cfc9b95122cbf5d834,
-    type: 2}
-  m_PrefabInternal: {fileID: 1084867974}
-  m_Script: {fileID: 11500000, guid: 7a334fe2ffb574b3583ff3b18b4792d3, type: 3}
 --- !u!1 &1326446782
 GameObject:
   m_ObjectHideFlags: 0
@@ -6938,8 +6920,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 290243428}
   - {fileID: 913233190}
+  - {fileID: 290243428}
   m_Father: {fileID: 0}
   m_RootOrder: 5
 --- !u!1 &1384359456
@@ -9234,7 +9216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61dddfdc5e0e44ca298d8f46f7f5a915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedFlowchart: {fileID: 1306458848}
+  selectedFlowchart: {fileID: 0}
 --- !u!4 &1645723203
 Transform:
   m_ObjectHideFlags: 1

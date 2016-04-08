@@ -24,7 +24,7 @@ namespace Fungus3D
         NavMeshAgent navMeshAgent;
 
 
-        void Start()
+        void Awake()
         {
             if (actor == null)
             {

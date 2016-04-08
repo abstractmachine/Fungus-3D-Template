@@ -577,9 +577,9 @@ namespace Fungus3D
                 if (currentInterlocutor != null && currentInterlocutor != other) return;
 
                 // turn towards the other
-                //TurnTowards(other);
+                TurnTowards(other);
                 // tell the Persona to turn towards us, the Player
-                //other.GetComponent<Persona>().TurnTowards(this.gameObject);
+                other.GetComponent<Persona>().TurnTowards(this.gameObject);
                 // tell the Persona to stop walking
                 other.GetComponent<Persona>().StopWalking();
 

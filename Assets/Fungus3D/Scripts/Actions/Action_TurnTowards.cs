@@ -28,7 +28,6 @@ namespace Fungus3D
             // call base Awake() method
             base.Awake();
 
-
             // if there is no defined target, turn towards player
             if (actor.tag == "Player" && targetObject == null)
             {

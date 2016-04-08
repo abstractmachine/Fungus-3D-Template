@@ -11,26 +11,9 @@ namespace Fungus3D
     /// The Wave Command for Fungus
     /// </summary>
 
-    public class Action_Wave : Command
+    public class Action_Wave : Action_Command
     {
-        Animator animator;
-        // who goes there
-        public GameObject actor;
-
-        void Start()
-        {
-            if (actor == null)
-            {
-                actor = this.GetComponentInParent<Persona>().gameObject;
-            }
-            // get the animator
-            animator = actor.GetComponentInParent<Animator>();
-            if (animator == null)
-            {
-                Debug.LogError("Couldn't find Animator in parent");
-            }
-        }
-
+        #region Action
 
         /// <summary>
         /// This code is executed when the command fires.
@@ -44,6 +27,10 @@ namespace Fungus3D
             Continue();
         }
 
+        #endregion
+
+
+        #region Summary
 
         /// <summary>
         /// This is the summary that appears in the list of Fungus block commands
@@ -59,16 +46,7 @@ namespace Fungus3D
             return "Wave arm";
         }
 
-
-        /// <summary>
-        /// Defines the color of this command in the list of Fungus block commands
-        /// </summary>
-
-        public override Color GetButtonColor()
-        {
-            return Action.buttonColor;
-        }
-
+        #endregion
 
     }
 

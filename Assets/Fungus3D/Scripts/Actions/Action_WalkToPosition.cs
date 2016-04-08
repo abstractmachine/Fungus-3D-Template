@@ -11,48 +11,17 @@ namespace Fungus3D
     /// The WalkTo Command for Fungus
     /// </summary>
 
-    public class Action_WalkToPosition : Command
+    public class Action_WalkToPosition : Action_Command
     {
+        #region Members
+
         // where the Persona walks to
         public GameObject targetObject;
-        // who should be sitting
-        public GameObject actor;
 
-        Persona personaScript;
-
-        Animator animator;
-        NavMeshAgent navMeshAgent;
+        #endregion
 
 
-        void Awake()
-        {
-            if (actor == null)
-            {
-                actor = this.GetComponentInParent<Persona>().gameObject;
-            }
-
-            // first, get the Persona script
-            personaScript = actor.GetComponentInParent<Persona>();
-            // make sure we found a Persona
-            if (personaScript == null)
-            {
-                Debug.LogError("Couldn't find parent object");
-                return;
-            }
-            // get the animator
-            animator = actor.GetComponentInParent<Animator>();
-            if (animator == null)
-            {
-                Debug.LogError("Couldn't find Animator in parent");
-            }
-            // get the navMeshAgent
-            navMeshAgent = actor.GetComponentInParent<NavMeshAgent>();
-            if (navMeshAgent == null)
-            {
-                Debug.LogError("Couldn't find NavMeshAgent in parent");
-            }
-        }
-
+        #region Action
 
         /// <summary>
         /// This code is executed when the command fires.
@@ -75,6 +44,10 @@ namespace Fungus3D
             Continue();
         }
 
+        #endregion
+
+
+        #region Summary
 
         /// <summary>
         /// This is the summary that appears in the list of Fungus block commands
@@ -97,15 +70,7 @@ namespace Fungus3D
             return "Walk to " + targetObject.name;
         }
 
-
-        /// <summary>
-        /// Defines the color of this command in the list of Fungus block commands
-        /// </summary>
-
-        public override Color GetButtonColor()
-        {
-            return Action.buttonColor;
-        }
+        #endregion
 
     }
 

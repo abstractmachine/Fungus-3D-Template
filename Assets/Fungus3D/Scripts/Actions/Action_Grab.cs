@@ -11,35 +11,21 @@ namespace Fungus3D
     /// The WalkTo Command for Fungus
     /// </summary>
 
-    public class Action_Grab : Command
+    public class Action_Grab : Action_Command
     {
+        #region Members
+
         public enum WhichArm { undefined, leftArm, rightArm }
         public enum GrabState { undefined, grab, release }
 
         // whether we should be sitting or not
         public WhichArm whichArm = WhichArm.undefined;
         public GrabState grabbing = GrabState.undefined;
-        // who should be sitting
-        public GameObject actor;
 
-        Animator animator;
+        #endregion
 
 
-        void Start()
-        {
-            if (actor == null)
-            {
-                actor = this.GetComponentInParent<Persona>().gameObject;
-            }
-
-            // get the animator
-            animator = actor.GetComponentInParent<Animator>();
-            if (animator == null)
-            {
-                Debug.LogError("Couldn't find Animator in parent");
-            }
-        }
-
+        #region Action
 
         /// <summary>
         /// This code is executed when the command fires.
@@ -67,6 +53,10 @@ namespace Fungus3D
             Continue();
         }
 
+        #endregion
+
+
+        #region Summary
 
         /// <summary>
         /// This is the summary that appears in the list of Fungus block commands
@@ -101,16 +91,7 @@ namespace Fungus3D
             return name + " Arm Undefined";
         }
 
-
-        /// <summary>
-        /// Defines the color of this command in the list of Fungus block commands
-        /// </summary>
-
-        public override Color GetButtonColor()
-        {
-            return Action.buttonColor;
-        }
-
+        #endregion
 
     }
 

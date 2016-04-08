@@ -3,12 +3,8 @@ using System.Collections;
 
 namespace Fungus3D
 {
-    
     public class Action : MonoBehaviour
     {
-        // create the button color
-        public static Color buttonColor = new Color(1.0f, 0.75f, 1.0f, 1.0f);
-
         #region Aim
 
         public void AimAt(string targetName)

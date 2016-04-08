@@ -4,9 +4,10 @@ using Fungus;
 
 namespace Fungus3D
 {
-
     public class Action_Command : Command
     {
+        #region Members
+
         // who should be doing the action
         public GameObject actor;
 
@@ -14,6 +15,10 @@ namespace Fungus3D
         protected Animator animator;
         protected NavMeshAgent navMeshAgent;
 
+        #endregion
+
+
+        #region Init
 
         protected virtual void Awake()
         {
@@ -44,6 +49,10 @@ namespace Fungus3D
             }
         }
 
+        #endregion
+
+
+        #region UI
 
         /// <summary>
         /// Defines the color of this command in the list of Fungus block commands
@@ -53,6 +62,8 @@ namespace Fungus3D
         {
             return new Color(1.0f, 0.75f, 1.0f, 1.0f);
         }
+
+        #endregion
 
     }
 

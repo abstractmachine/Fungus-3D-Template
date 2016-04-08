@@ -11,36 +11,26 @@ namespace Fungus3D
     /// The WalkTo Command for Fungus
     /// </summary>
 
-    public class Action_Sitting : Command
+    public class Action_Sitting : Action_Command
     {
+        #region Struct
+
         public enum SitType {
             sit, stand
         }
 
+        #endregion
+
+
+        #region Members
+
         // whether we should be sitting or not
         public SitType sitOrStand = SitType.sit;
-        // who should be sitting
-        public GameObject actor;
 
-        Animator animator;
-        NavMeshAgent navMeshAgent;
+        #endregion
 
 
-        void Start()
-        {
-            if (actor == null)
-            {
-                actor = this.GetComponentInParent<Persona>().gameObject;
-            }
-
-            // get the animator
-            animator = actor.GetComponentInParent<Animator>();
-            if (animator == null)
-            {
-                Debug.LogError("Couldn't find Animator in parent");
-            }
-        }
-
+        #region Action
 
         /// <summary>
         /// This code is executed when the command fires.
@@ -54,6 +44,10 @@ namespace Fungus3D
             Continue();
         }
 
+        #endregion
+
+
+        #region Summary
 
         /// <summary>
         /// This is the summary that appears in the list of Fungus block commands
@@ -79,16 +73,7 @@ namespace Fungus3D
             }
         }
 
-
-        /// <summary>
-        /// Defines the color of this command in the list of Fungus block commands
-        /// </summary>
-
-        public override Color GetButtonColor()
-        {
-            return Action.buttonColor;
-        }
-
+        #endregion
 
     }
 

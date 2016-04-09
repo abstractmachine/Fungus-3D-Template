@@ -13,7 +13,7 @@ namespace Fungus3D
         bool visible = false;
         Text storyText;
 
-        float scaleFactor = 0.0004f;
+        float scaleFactor = 0.006f;
 
         // TODO: this is value is arbitrary and should be calculated dynamically
         float lineHeight = 59.0f;
@@ -110,6 +110,7 @@ namespace Fungus3D
             panelAnchorMax = panelRectTransform.anchorMax;
             panelPivot = panelRectTransform.pivot;
 
+            SetSize();
         }
 
     	
@@ -131,13 +132,15 @@ namespace Fungus3D
         void SetSize() 
         {
             // set the scale in relation to the camera distance
-            float targetScale = Camera.main.orthographicSize * scaleFactor;
+            float targetScale = scaleFactor;
+            transform.localScale = new Vector3(targetScale, targetScale, targetScale);
+
             // get current scale
-            float currentScale = transform.localScale.x;
-            // lerp to final scale
-            float finalScale = Mathf.Lerp(currentScale, targetScale, 0.25f);
-            // set that as the scale
-            transform.localScale = new Vector3(finalScale, finalScale, finalScale);
+//            float currentScale = transform.localScale.x;
+//            // lerp to final scale
+//            float finalScale = Mathf.Lerp(currentScale, targetScale, 0.25f);
+//            // set that as the scale
+//            transform.localScale = new Vector3(finalScale, finalScale, finalScale);
         }
 
 

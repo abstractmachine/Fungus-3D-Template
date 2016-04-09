@@ -1151,9 +1151,22 @@ namespace Fungus3D
                 PersonaDiedListener(this.gameObject);
             }
             // tell the player they're dead
-            this.gameObject.GetComponentInChildren<Flowchart>().SendFungusMessage("Die");
-            // announce our death
-            Invoke("DeathAnnouncement", 5.0f);
+            Flowchart thisFlowchart = GetComponent<Flowchart>();
+            if (thisFlowchart == null)
+            {
+                thisFlowchart = GetComponentInChildren<Flowchart>();
+            }
+            // make sure we found it
+            if (thisFlowchart != null)
+            {
+                thisFlowchart.SendFungusMessage("Die");
+                // announce our death
+                Invoke("DeathAnnouncement", 5.0f);
+            }
+            else
+            {
+                Debug.LogError("Flowchart not found during death sequence");
+            }
         }
 
 
@@ -1211,7 +1224,14 @@ namespace Fungus3D
 
         Flowchart GetFlowchart(GameObject gameObject)
         {
-            Flowchart flowchart = gameObject.GetComponentInChildren<Flowchart>();
+            // first try to find the flowchart in this GameObject
+            Flowchart flowchart = gameObject.GetComponent<Flowchart>();
+            // if it's not there
+            if (flowchart == null)
+            {
+                // check in a child object
+                flowchart = gameObject.GetComponentInChildren<Flowchart>();
+            }
             return flowchart;
         }
 
@@ -1224,11 +1244,17 @@ namespace Fungus3D
 
         GameObject ExtractRootParentFrom(GameObject theObject)
         {
-            // try to get the player GameObject from this flowchart
-            Persona personaScript = theObject.GetComponentInParent<Persona>();
-            // if the playerScript is there
+            // try to get the player GameObject from this Flowchart's GameObject
+            Persona personaScript = theObject.GetComponent<Persona>();
+            // if it wasn't there
+            if (personaScript == null)
+            {
+                // try to get the Persona from this flowchart's parents
+                personaScript = theObject.GetComponentInParent<Persona>();
+            }
+            // if we found the Persona component
             if (personaScript != null)
-            {   // add the player to our list
+            {   // return it's GameObject
                 return personaScript.gameObject;
             }
             // couldn't find it (this is an error
@@ -1307,10 +1333,8 @@ namespace Fungus3D
                 // Stopped a dialog with a Persona
                 StoppedDialogue(currentFlowchart);
                 // turn off Flowchart
-                currentFlowchart.GetComponent<Flowchart>().StopAllBlocks();
-                currentFlowchart.GetComponent<Flowchart>().StopAllCoroutines();
-                // send a stop message to the current flowchart
-                //                currentFlowchart.SendFungusMessage("DialogExit");
+                currentFlowchart.StopAllBlocks();
+                currentFlowchart.StopAllCoroutines();
                 // check to see if there's an InteractionEnter event waiting for us
                 Handler_InteractionExit interactionExitEvent = currentFlowchart.GetComponent<Handler_InteractionExit>();
                 // did we find it?

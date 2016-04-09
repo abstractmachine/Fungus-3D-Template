@@ -24,10 +24,15 @@ namespace Fungus3D
         public Color characterColor = Color.gray;
 
         [SerializeField]
+        public bool lockToSceneView = false;
+
+        [SerializeField]
         public float xPosition = 0.0f;
 
         [SerializeField]
         public float zPosition = 0.0f;
+
+        private Vector3 cameraPosition = Vector3.zero;
 
         #endregion
 
@@ -59,6 +64,39 @@ namespace Fungus3D
         #endregion
 
 
+        #region Updates
+
+//        void OnSelectionChange() {
+//            Debug.Log("OnSelectionChange");
+//        }
+
+        void OnInspectorUpdate() {
+
+            // if we're not locked, don't update X & Z
+            if (!lockToSceneView) return;
+
+            // make sure we have access to a scene view camera
+            if (SceneView.lastActiveSceneView != null && SceneView.lastActiveSceneView.camera != null)
+            {
+                // check to see if the position has changed
+                if (cameraPosition != SceneView.lastActiveSceneView.camera.transform.position)
+                {   // remember new position
+                    cameraPosition = SceneView.lastActiveSceneView.camera.transform.position;
+                    // extract the ground position from viewport center
+                    Vector3 positionOnGround = GetWorldPositionFromViewportCenter();
+                    // apply these values to ground position
+                    xPosition = positionOnGround.x;
+                    zPosition = positionOnGround.z;
+                    // redraw inspector
+                    Repaint();
+                } // if (cameraPosition)
+            } // if (SceneView)
+
+        } // OnInspectorUpdate
+
+        #endregion
+
+
         #region GUI
 
         void OnGUI()
@@ -70,6 +108,7 @@ namespace Fungus3D
 
             GUILayout.Label("Position", EditorStyles.boldLabel);
 //            GUILayout.BeginHorizontal();
+            lockToSceneView = EditorGUILayout.Toggle("Lock To Scene Center", lockToSceneView);
             xPosition = EditorGUILayout.FloatField("X", xPosition);
             zPosition = EditorGUILayout.FloatField("Z", zPosition);
 //            GUILayout.EndHorizontal();
@@ -122,9 +161,7 @@ namespace Fungus3D
             flowchartGameObject.name = characterName + "_Flowchart";
 
             // set the character name
-            Character characterScript = persona.GetComponentInChildren<Character>();
-            GameObject characterGameObject = characterScript.gameObject;
-            characterGameObject.name = characterName + "_Character";
+            Character characterScript = persona.GetComponent<Character>();
             characterScript.nameText = characterName;
             characterScript.nameColor = characterColor;
 
@@ -146,22 +183,47 @@ namespace Fungus3D
 
                 // get the current animator
                 Animator personaAnimator = persona.GetComponent<Animator>();
-                // get the current avatar
-                Avatar currentPersonaAvatar = personaAnimator.avatar;
-
                 // get the new animator
                 Animator newAnimator = newModel.GetComponent<Animator>();
-                // extract the new avatar from the new model
+                // extract the new avatar from the avatar attached to the model
                 Avatar newPersonaAvatar = newAnimator.avatar;
+
+                // make sure it has an avatar and it's human
+                if (newPersonaAvatar == null || !newPersonaAvatar.isHuman)
+                {
+                    Debug.LogError("No humanoid Avatar found on this model");
+                    DestroyImmediate(persona);
+                    return;
+                }
 
                 // appy new avatar to persona
                 personaAnimator.avatar = newPersonaAvatar;
                 // delete old model
                 DestroyImmediate(currentModel);
-                // delete the new Animator
+                // delete the Animator attached to the model
                 DestroyImmediate(newAnimator);
             }
 
+        }
+
+        #endregion
+
+
+        #region Camera
+
+        Vector3 GetWorldPositionFromViewportCenter()
+        {
+            // use current Scene view to construct a ray from center of viewport
+            Ray worldRayFromViewportCenter = SceneView.lastActiveSceneView.camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 1.0f));
+            // the ground plane we are trying to detect (y == 0)
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+            // first we measure the distance to this plane
+            float distanceToGround;
+            groundPlane.Raycast(worldRayFromViewportCenter, out distanceToGround);
+            // now extract the position of that ray's intersection with our place
+            Vector3 worldPosition = worldRayFromViewportCenter.GetPoint(distanceToGround);
+            // return that position
+            return worldPosition;
         }
 
         #endregion

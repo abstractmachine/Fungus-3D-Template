@@ -41,6 +41,7 @@ namespace Fungus3D
         private GameObject targetObject;
         private Vector3 targetGoal;
         private bool targetGoalIsSet = false;
+        private bool reachedTarget = false;
 
         // the current persona we're talking to
         private GameObject currentInterlocutor = null;
@@ -84,12 +85,6 @@ namespace Fungus3D
         /// </summary>
         /// <value>The target GameObject (can be null).</value>
         public GameObject Target { get { return targetObject; } }
-
-        /// <summary>
-        /// Gets a value indicating whether this <see cref="Fungus3D.Persona"/> reached its target.
-        /// </summary>
-        /// <value><c>true</c> if did reach target; otherwise, <c>false</c>.</value>
-        public bool DidReachTarget { get { return (transform.position - navMeshAgent.destination).magnitude < navMeshAgent.stoppingDistance; } }
 
         #endregion
 
@@ -217,13 +212,18 @@ namespace Fungus3D
             {
                 Walk();
             }
+
+            if (!IsPlayer && targetObject != null)
+            {
+                Debug.Log("targetObject = " + targetObject.name);
+            }
             // if we're following someone
             if (Walking && targetObject != null)
             {
                 UpdateTarget();
             }
             // if we're not the player, and we're walking
-            if (!this.IsPlayer && Walking && DidReachTarget)
+            if (!this.IsPlayer && Walking && reachedTarget)
             {
                 StopWalking();
             }
@@ -232,6 +232,10 @@ namespace Fungus3D
 
         void UpdateTarget()
         {
+            if (!IsPlayer)
+            {
+                Debug.Log("targeting " + targetObject.name);
+            }
             // check our distance
             Vector3 deltaPosition = (targetObject.transform.position - targetGoal);
             // if we've moved
@@ -910,6 +914,7 @@ namespace Fungus3D
             position.y = 0.01f;
             // we're not targetting anyone (just a position)
             targetObject = null;
+            reachedTarget = false;
             targetGoal = position;
             targetGoalIsSet = true;
             navMeshAgent.destination = targetGoal;
@@ -919,8 +924,10 @@ namespace Fungus3D
 
         public void TargetPersona(GameObject other)
         {
+            Debug.Log(name + " TargetPersona " + other.name);
             // the Persona that we're going to follow
             targetObject = other;
+            reachedTarget = false;
             // their position
             targetGoal = other.transform.position;
             targetGoal.y = 0.01f;
@@ -1008,6 +1015,7 @@ namespace Fungus3D
         {
             if (Dead) return;
 
+            reachedTarget = true;
             // remember that this is the new target
             targetGoal = transform.position;
             // stop the animation controller

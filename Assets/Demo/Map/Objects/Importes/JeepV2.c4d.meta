@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: b2f0a164237ab44129eba8d0c2dfc1ad
 ModelImporter:
-  serializedVersion: 15
+  serializedVersion: 19
   fileIDToRecycleName:
     100000: Cabin
     100002: group_0
@@ -686,17 +686,23 @@ ModelImporter:
     9500000: //RootNode
     11100000: //RootNode
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
+    resampleRotations: 1
     optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
     animationCompression: 1
-    animationRotationError: .5
-    animationPositionError: .5
-    animationScaleError: .5
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
     animationWrapMode: 0
     extraExposedTransformPaths: []
     clipAnimations:
@@ -710,6 +716,7 @@ ModelImporter:
       level: 0
       cycleOffset: 0
       loop: 0
+      hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
@@ -723,13 +730,420 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events: []
-      transformMask: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cabin
+        weight: 1
+      - path: Cabin/Group_3
+        weight: 1
+      - path: Cabin/Group_3/group_2
+        weight: 1
+      - path: Cabin/Group_3/group_3
+        weight: 1
+      - path: Cabin/Group_3/group_4
+        weight: 1
+      - path: Cabin/Group_3/group_4/ID317
+        weight: 1
+      - path: Cabin/Group_3/group_4/ID323
+        weight: 1
+      - path: Cabin/Group_3/group_4/ID329
+        weight: 1
+      - path: Cabin/Group_3/group_4/ID335
+        weight: 1
+      - path: Cabin/Group_3/group_4/ID341
+        weight: 1
+      - path: Cabin/Group_3/group_5
+        weight: 1
+      - path: Cabin/Group_3/group_5/ID348
+        weight: 1
+      - path: Cabin/Group_3/group_5/ID354
+        weight: 1
+      - path: Cabin/Group_3/group_5/ID360
+        weight: 1
+      - path: Cabin/Group_3/group_5/ID366
+        weight: 1
+      - path: Cabin/Group_3/group_5/ID372
+        weight: 1
+      - path: Cabin/Group_3/ID378
+        weight: 1
+      - path: Cabin/Group_3/ID384
+        weight: 1
+      - path: Cabin/Group_3/ID390
+        weight: 1
+      - path: Cabin/Group_3/ID396
+        weight: 1
+      - path: Cabin/Group_3/ID402
+        weight: 1
+      - path: Cabin/Group_3/ID408
+        weight: 1
+      - path: Cabin/Group_3/ID414
+        weight: 1
+      - path: Cabin/Group_3/ID420
+        weight: 1
+      - path: Cabin/Group_3/ID426
+        weight: 1
+      - path: Cabin/Group_3/ID432
+        weight: 1
+      - path: Cabin/Group_3/ID438
+        weight: 1
+      - path: Cabin/Group_3/ID444
+        weight: 1
+      - path: Cabin/Group_3/ID450
+        weight: 1
+      - path: Cabin/Group_3/ID456
+        weight: 1
+      - path: Cabin/Group_3/ID462
+        weight: 1
+      - path: Cabin/Group_3/ID468
+        weight: 1
+      - path: Cabin/Group_3/ID474
+        weight: 1
+      - path: Cabin/Group_3/ID480
+        weight: 1
+      - path: Cabin/Group_3/ID486
+        weight: 1
+      - path: Cabin/Group_3/ID492
+        weight: 1
+      - path: Cabin/Group_3/ID498
+        weight: 1
+      - path: Cabin/Group_3/ID504
+        weight: 1
+      - path: Cabin/Group_3/ID510
+        weight: 1
+      - path: Cabin/Group_3/ID516
+        weight: 1
+      - path: Cabin/Group_3/ID522
+        weight: 1
+      - path: Cabin/Group_3/ID528
+        weight: 1
+      - path: Cabin/Group_3/ID534
+        weight: 1
+      - path: Cabin/Group_3/ID540
+        weight: 1
+      - path: Cabin/Group_3/ID546
+        weight: 1
+      - path: Cabin/Group_3/ID552
+        weight: 1
+      - path: Cabin/Group_3/ID558
+        weight: 1
+      - path: Cabin/Group_3/ID564
+        weight: 1
+      - path: Cabin/Group_3/ID570
+        weight: 1
+      - path: Cabin/Group_3/ID576
+        weight: 1
+      - path: Cabin/Group_3/ID582
+        weight: 1
+      - path: Cabin/Group_3/ID588
+        weight: 1
+      - path: Cabin/Group_3/ID594
+        weight: 1
+      - path: Cabin/Group_3/ID600
+        weight: 1
+      - path: Cabin/Group_3/ID606
+        weight: 1
+      - path: Cabin/Group_3/ID612
+        weight: 1
+      - path: Cabin/Group_3/ID618
+        weight: 1
+      - path: Cabin/Group_3/ID624
+        weight: 1
+      - path: Cabin/Group_3/ID630
+        weight: 1
+      - path: Cabin/Group_3/ID636
+        weight: 1
+      - path: Cabin/Group_3/ID642
+        weight: 1
+      - path: Cabin/Group_3/ID648
+        weight: 1
+      - path: Cabin/Group_3/ID654
+        weight: 1
+      - path: Cabin/Group_3/ID660
+        weight: 1
+      - path: Cabin/Group_3/ID664
+        weight: 1
+      - path: wheels
+        weight: 1
+      - path: wheels/Groupe_1
+        weight: 1
+      - path: wheels/Groupe_1/group_0
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID5
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID13
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID19
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID25
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID31
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID37
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID43
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID49
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID55
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID59
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID63
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID67
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID71
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID75
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID79
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID83
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID87
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID91
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID95
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID99
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID103
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID107
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID111
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID115
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID119
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID123
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID127
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID131
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID135
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID139
+        weight: 1
+      - path: wheels/Groupe_1/group_0/ID143
+        weight: 1
+      - path: wheels/Groupe_1/ID147
+        weight: 1
+      - path: wheels/Groupe_3
+        weight: 1
+      - path: wheels/Groupe_3/group_7
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID818
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID824
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID830
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID836
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID842
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID848
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID854
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID860
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID864
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID868
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID872
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID876
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID880
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID884
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID888
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID892
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID896
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID900
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID904
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID908
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID912
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID916
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID920
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID924
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID928
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID932
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID936
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID940
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID944
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID948
+        weight: 1
+      - path: wheels/Groupe_3/group_7/ID952
+        weight: 1
+      - path: wheels/Groupe_3/ID956
+        weight: 1
+      - path: wheels/Groupe_4
+        weight: 1
+      - path: wheels/Groupe_4/group_1
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID156
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID162
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID168
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID174
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID180
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID186
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID192
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID198
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID202
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID206
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID210
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID214
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID218
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID222
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID226
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID230
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID234
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID238
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID242
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID246
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID250
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID254
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID258
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID262
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID266
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID270
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID274
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID278
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID282
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID286
+        weight: 1
+      - path: wheels/Groupe_4/group_1/ID290
+        weight: 1
+      - path: wheels/Groupe_4/ID294
+        weight: 1
+      - path: wheels/Groupe_5
+        weight: 1
+      - path: wheels/Groupe_5/group_6
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID671
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID677
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID683
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID689
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID695
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID701
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID707
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID713
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID717
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID721
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID725
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID729
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID733
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID737
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID741
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID745
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID749
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID753
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID757
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID761
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID765
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID769
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID773
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID777
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID781
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID785
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID789
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID793
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID797
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID801
+        weight: 1
+      - path: wheels/Groupe_5/group_6/ID805
+        weight: 1
+      - path: wheels/Groupe_5/ID809
+        weight: 1
       maskType: 0
       maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: .00999999978
+    globalScale: 0.01
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
@@ -737,29 +1151,35 @@ ModelImporter:
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
+    keepQuads: 0
     weldVertices: 1
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
+    useFileScale: 0
   tangentSpace:
     normalSmoothAngle: 60
-    splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 1
+    tangentImportMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
     human: []
     skeleton: []
-    armTwist: .5
-    foreArmTwist: .5
-    upperLegTwist: .5
-    legTwist: .5
-    armStretch: .0500000007
-    legStretch: .0500000007
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
   userData: 
+  assetBundleName: 
+  assetBundleVariant: 

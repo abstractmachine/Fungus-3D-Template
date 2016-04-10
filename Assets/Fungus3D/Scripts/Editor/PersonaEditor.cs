@@ -155,11 +155,6 @@ namespace Fungus3D
             // position the Persona
             persona.transform.position = position;
 
-            // set the Flowchart name
-            Flowchart flowchartScript = persona.GetComponentInChildren<Flowchart>();
-            GameObject flowchartGameObject = flowchartScript.gameObject;
-            flowchartGameObject.name = characterName + "_Flowchart";
-
             // set the character name
             Character characterScript = persona.GetComponent<Character>();
             characterScript.nameText = characterName;

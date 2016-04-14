@@ -18,14 +18,14 @@ namespace Fungus3D {
         float smoothTime = 0.3f;
         private Vector3 velocity = Vector3.zero;
 
-        float zoomLevel = 7.4f;
-        float zoomInSpeed = 0.5f;
+        float zoomLevel = 9.4f;
+        float zoomInSpeed = 0.6f;
         float zoomOutSpeed = 0.25f;
-        float zoomDialogSpeed = 0.75f;
+        float zoomDialogSpeed = 0.8f;
 
-        float zoomMax = 15.0f;
-        float zoomMin = 7.0f;
-        float zoomDialog = 4.0f;
+        float zoomMax = 20.0f;
+        float zoomMin = 9.0f;
+        float zoomDialog = 5.5f;
 
         float cameraDistance = 30;  // this x/y/z distance of the camera to our persona
 
@@ -71,6 +71,11 @@ namespace Fungus3D {
         {   
             // set game speed to 60
             Application.targetFrameRate = targetFrameRate;
+            // make sure there's a target
+            if (target == null)
+            {
+                target = GameObject.FindGameObjectWithTag("Player");
+            }
         }
 
         #endregion
@@ -142,11 +147,24 @@ namespace Fungus3D {
         void PlayerMoved(float distance) {
 
             //float zoomScale = (Screen.height / 1536.0f) * 0.5f;
-            float zoomScale = 0.01f;
-            float zoomDistance = Mathf.Pow(distance,1.5f) * zoomScale;
+            float zoomScale = 0.02f;
+            float zoomDistance = Mathf.Pow(distance,2.5f) * zoomScale;
             SetZoom(zoomDistance);
 
         }
+
+
+        void PlayerStartedProximityWith(GameObject player, GameObject persona)
+        {
+            Debug.Log("Started Proximity With");
+        }
+
+
+        void PlayerStoppedProximityWith(GameObject player, GameObject persona)
+        {
+            Debug.Log("Stopped Proximity With");
+        }
+
 
         void PlayerStartedDialogueWith(GameObject player, List<GameObject> personae) {
 
@@ -155,6 +173,7 @@ namespace Fungus3D {
             ResetZoom();
 
         }
+
 
         void PlayerStoppedDialogueWith(GameObject player, List<GameObject> personae) {
 
@@ -178,7 +197,9 @@ namespace Fungus3D {
 
         void SetZoom(float newZoom) {
 
-            zoomLevel = Mathf.Min(zoomMax,Mathf.Max((dialogOn) ? zoomDialog : zoomMin, newZoom));
+            zoomLevel = newZoom;
+            zoomLevel = Mathf.Max(zoomLevel, (dialogOn) ? zoomDialog : zoomMin);
+            zoomLevel = Mathf.Min(zoomLevel, zoomMax);
             //zoomLevel += (newZoom - zoomLevel) * 0.025f;
             //zoomLevel = distance;
         }

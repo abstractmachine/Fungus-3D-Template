@@ -35,7 +35,6 @@ namespace Fungus3D
                 Debug.LogError("Error: Target object undefined");
                 return;
             }
-            Debug.Log(name + " Walk Towards " + targetObject.name);
             // tell this character to walk towards this object/persona
             personaScript.TargetPersona(targetObject);
 //            Debug.Log(personaObject.name + ".WalkTo(" + targetObject.name + ")");

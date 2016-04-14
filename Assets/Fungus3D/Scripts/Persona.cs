@@ -112,6 +112,14 @@ namespace Fungus3D
 
         public static event ReachedTargetDelegate ReachedTargetListener;
 
+        public delegate void StartedProximityWithDelegate(GameObject player, GameObject personae);
+
+        public static event StartedProximityWithDelegate StartedProximityWithListener;
+
+        public delegate void StoppedProximityWithDelegate(GameObject player, GameObject personae);
+
+        public static event StoppedProximityWithDelegate StoppedProximityWithListener;
+
         public delegate void StartedDialogueWithDelegate(GameObject player, List<GameObject> personae);
 
         public static event StartedDialogueWithDelegate StartedDialogueWithListener;
@@ -212,13 +220,8 @@ namespace Fungus3D
             {
                 Walk();
             }
-
-            if (!IsPlayer && targetObject != null)
-            {
-                Debug.Log("targetObject = " + targetObject.name);
-            }
             // if we're following someone
-            if (Walking && targetObject != null)
+            if (Walking && targetObject != null && !reachedTarget)
             {
                 UpdateTarget();
             }
@@ -232,10 +235,6 @@ namespace Fungus3D
 
         void UpdateTarget()
         {
-            if (!IsPlayer)
-            {
-                Debug.Log("targeting " + targetObject.name);
-            }
             // check our distance
             Vector3 deltaPosition = (targetObject.transform.position - targetGoal);
             // if we've moved
@@ -471,6 +470,9 @@ namespace Fungus3D
                 {
                     proximityEnterEvent.ExecuteBlock();
                 }
+                // announce that we've entered into the proximity zone of this Persona
+                StartedProximity(this.gameObject, other);
+
             } // if (flowchart)
 
         }
@@ -524,6 +526,9 @@ namespace Fungus3D
                 {
                     proximityExitEvent.ExecuteBlock();
                 }
+                // announce that we've left the proximity zone of this Persona
+                StoppedProximity(this.gameObject, other);
+
             } // if (flowchart
 
         }
@@ -606,9 +611,9 @@ namespace Fungus3D
                 // stop wherever we were going and target them too
                 //ClickedPersona(other);
                 // turn towards the other
-                //TurnTowards(other);
+                TurnTowards(other);
                 // tell the Persona to turn towards us, the Player
-                //other.GetComponent<Persona>().TurnTowards(this.gameObject);
+                other.GetComponent<Persona>().TurnTowards(this.gameObject);
                 // tell the Persona to stop walking
                 other.GetComponent<Persona>().StopWalking();
                 // ok to start targeting them
@@ -924,7 +929,6 @@ namespace Fungus3D
 
         public void TargetPersona(GameObject other)
         {
-            Debug.Log(name + " TargetPersona " + other.name);
             // the Persona that we're going to follow
             targetObject = other;
             reachedTarget = false;
@@ -1147,7 +1151,7 @@ namespace Fungus3D
 
         #region Die
 
-        void Die()
+        public void Die()
         {   
             // if we don't contain a Ragdoll, we can't die
             if (!containsRagdoll) return;
@@ -1271,6 +1275,26 @@ namespace Fungus3D
         }
 
 
+        void StartedProximity(GameObject player, GameObject persona)
+        {
+            // if there are any listeners
+            if (StartedProximityWithListener != null)
+            {   // tell them all the objects we've started talking to
+                StartedProximityWithListener(player, persona);
+            }
+        }
+
+
+        void StoppedProximity(GameObject player, GameObject persona)
+        {
+            // if there are any listeners
+            if (StoppedProximityWithListener != null)
+            {   // tell them all the objects we've started talking to
+                StoppedProximityWithListener(player, persona);
+            }
+        }
+
+
         void StartedDialogue(Flowchart flowchart)
         {
             // get a list of all the characters in this flowchart
@@ -1313,8 +1337,6 @@ namespace Fungus3D
                 currentInterlocutor = other;
                 // remember which flowchart we're interacting with
                 currentFlowchart = flowchart;
-                //                // start this specific flowchart
-                //                flowchart.SendFungusMessage("DialogEnter");
                 // check to see if there's an InteractionEnter event waiting for us
                 Handler_InteractionEnter interactionEnterEvent = currentFlowchart.GetComponent<Handler_InteractionEnter>();
                 // did we find it?
@@ -1335,7 +1357,6 @@ namespace Fungus3D
 
         void StopCurrentFlowchart()
         {
-
             if (currentFlowchart != null)
             {
                 // Stopped a dialog with a Persona

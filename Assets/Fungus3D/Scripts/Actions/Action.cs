@@ -39,6 +39,8 @@ namespace Fungus3D
         {
             float rotationSpeed = 15.0f;
 
+            target.y = 0.0f;
+
             yield return new WaitForEndOfFrame();
             //transform.LookAt(target);
 
@@ -96,7 +98,7 @@ namespace Fungus3D
             // turn towards our target
             bullet.transform.LookAt(target);
             // move the bullet out a bit
-            bullet.transform.Translate(Vector3.forward*1.0f, Space.Self);
+            bullet.transform.Translate(Vector3.forward*1.5f, Space.Self);
             // how hard to shoot
             float force = 1000.0f;
             // add force to the bullet

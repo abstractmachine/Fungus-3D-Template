@@ -306,7 +306,6 @@ namespace Fungus3D
 
         void OnClickPersona()
         {
-
             // FIXME: Theoretically, the player shouldn't always have to be in the flowchart
             // Persona should be able to discuss amongst themselves (cf. The Sims)
 
@@ -322,7 +321,6 @@ namespace Fungus3D
             // if we're currently interacting with the player
             if (!this.IsPlayer && currentInterlocutor != null)
             {
-                print(this.gameObject);
                 // force the dialog to pick up where it was (or to start over)
                 playerScript.OnClickDialog(this.gameObject);
                 return;
@@ -355,6 +353,8 @@ namespace Fungus3D
             // error catching
             if (currentFlowchart == null)
             {
+                // TODO: Note that this usually happens when we're trying to interact with a Persona
+                // underneath the Persona click zone
                 Debug.LogError("currentFlowchart == null. IsPlayer=" + IsPlayer);
                 return;
             }

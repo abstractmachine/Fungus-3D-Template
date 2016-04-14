@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Fungus3D {
-
-    public class CameraFollow : MonoBehaviour {
-
-
-
+namespace Fungus3D
+{
+    public class CameraFollow : MonoBehaviour
+    {
+        
         #region Variables
 
         [SerializeField]
@@ -23,25 +22,27 @@ namespace Fungus3D {
         float zoomOutSpeed = 0.25f;
         float zoomDialogSpeed = 0.8f;
 
-        float zoomMax = 20.0f;
-        float zoomMin = 9.0f;
-        float zoomDialog = 5.5f;
+        float zoomMax = 25.0f;
+        float zoomMin = 10.0f;
+        float zoomDialog = 8.5f;
 
-        float cameraDistance = 30;  // this x/y/z distance of the camera to our persona
+        float cameraDistance = 30;
+        // this x/y/z distance of the camera to our persona
 
         bool dialogOn = false;
 
-        #endregion
+        List<GameObject> proximities = new List<GameObject>();
 
+        #endregion
 
 
         #region Event Delegates
 
         public delegate void CameraMovedDelegate();
+
         public static event CameraMovedDelegate CameraMoved;
 
         #endregion
-
 
 
         #region Event Listeners
@@ -49,15 +50,18 @@ namespace Fungus3D {
         void OnEnable()
         {
             Persona.MovedListener += PlayerMoved;
+            Persona.StartedProximityWithListener += PlayerStartedProximityWith;
+            Persona.StoppedProximityWithListener += PlayerStoppedProximityWith;
             Persona.StartedDialogueWithListener += PlayerStartedDialogueWith;
             Persona.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
-           
         }
 
 
         void OnDisable()
         {
             Persona.MovedListener -= PlayerMoved;
+            Persona.StartedProximityWithListener -= PlayerStartedProximityWith;
+            Persona.StoppedProximityWithListener -= PlayerStoppedProximityWith;
             Persona.StartedDialogueWithListener -= PlayerStartedDialogueWith;
             Persona.StoppedDialogueWithListener -= PlayerStoppedDialogueWith;
         }
@@ -83,15 +87,15 @@ namespace Fungus3D {
 
         #region Loop
 
-        void Update() {
-
+        void Update()
+        {
             FollowTarget();
             UpdateZoom();
         }
 
 
-        void FollowTarget() {
-
+        void FollowTarget()
+        {
             // the camera constantly follows the persona
 //            float smoothTime = 0.5f * Time.deltaTime;
 
@@ -109,15 +113,14 @@ namespace Fungus3D {
             {   // tell them that the camera moved
                 CameraMoved();
             }
-
         }
 
-        void UpdateZoom() {
-
+        void UpdateZoom()
+        {
             float thisZoomSpeed = zoomInSpeed;
 
             // if we're talking, or we're talking and are still zoomed in
-            if (dialogOn || zoomLevel < zoomMin)
+            if (dialogOn || proximities.Count > 0 || zoomLevel < zoomMin)
             {
                 thisZoomSpeed = zoomDialogSpeed;
             }
@@ -133,73 +136,90 @@ namespace Fungus3D {
             {   // to zoom to this level
                 camera.orthographicSize = orthographicSize;
             }
-
-
         }
-
 
         #endregion
 
 
-
         #region Zoom
 
-        void PlayerMoved(float distance) {
-
+        void PlayerMoved(float distance)
+        {
             //float zoomScale = (Screen.height / 1536.0f) * 0.5f;
             float zoomScale = 0.02f;
-            float zoomDistance = Mathf.Pow(distance,2.5f) * zoomScale;
+            float zoomDistance = Mathf.Pow(distance, 2.5f) * zoomScale;
             SetZoom(zoomDistance);
-
         }
 
 
         void PlayerStartedProximityWith(GameObject player, GameObject persona)
         {
-            Debug.Log("Started Proximity With");
+            // if we haven't already added this Persona to the list
+            if (!proximities.Contains(persona))
+            {
+                proximities.Add(persona);
+            }
+
+//            Debug.Log(proximities.Count);
         }
 
 
         void PlayerStoppedProximityWith(GameObject player, GameObject persona)
         {
-            Debug.Log("Stopped Proximity With");
+            // if we have this Persona is in the list
+            if (proximities.Contains(persona))
+            {
+                proximities.Remove(persona);
+            }
+
+//            Debug.Log(proximities.Count);
         }
 
 
-        void PlayerStartedDialogueWith(GameObject player, List<GameObject> personae) {
-
+        void PlayerStartedDialogueWith(GameObject player, List<GameObject> personae)
+        {
             dialogOn = true;
 
             ResetZoom();
-
         }
 
 
-        void PlayerStoppedDialogueWith(GameObject player, List<GameObject> personae) {
-
+        void PlayerStoppedDialogueWith(GameObject player, List<GameObject> personae)
+        {
             dialogOn = false;
 
             ResetZoom();
-
         }
 
 
-        void ResetZoom() {
-
+        void ResetZoom()
+        {
             SetZoom(zoomLevel);
-
         }
 
-        void ZoomOut() {
 
+        void ZoomOut()
+        {
             SetZoom(zoomMax);
         }
 
-        void SetZoom(float newZoom) {
+
+        void SetZoom(float newZoom)
+        {
+            if (dialogOn || proximities.Count > 0)
+            {
+                zoomLevel = zoomDialog;
+                return;
+            }
+
+            newZoom *= 0.01f;
 
             zoomLevel = newZoom;
-            zoomLevel = Mathf.Max(zoomLevel, (dialogOn) ? zoomDialog : zoomMin);
+            zoomLevel = Mathf.Max(zoomLevel, zoomMin);
             zoomLevel = Mathf.Min(zoomLevel, zoomMax);
+
+//            Debug.Log("SetZoom = " + zoomLevel + "\t" + dialogOn + "\t" + proximities.Count + "\t" + newZoom);
+
             //zoomLevel += (newZoom - zoomLevel) * 0.025f;
             //zoomLevel = distance;
         }

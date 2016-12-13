@@ -14,6 +14,8 @@ TagManager:
   - Model
   - Mortal
   - Collider
+  - ClickTouch
+  - Mountain
   layers:
   - Default
   - TransparentFX
@@ -29,7 +31,7 @@ TagManager:
   - Objects
   - Persona
   - Player
-  - 
+  - Obstacles
   - 
   - 
   - 

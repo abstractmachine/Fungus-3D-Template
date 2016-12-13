@@ -410,27 +410,11 @@ namespace Fungus3D
 
         void PlayerStartedDialogueWith(GameObject player, List<GameObject> personae)
         {
-            // go through list of personae in this flowchart
-            foreach (GameObject persona in personae)
-            {   // if we're in this flowchart
-                if (persona == this.gameObject)
-                {   // do something
-                    break;
-                }
-            }
         }
 
 
         void PlayerStoppedDialogueWith(GameObject player, List<GameObject> personae)
         {
-            // go through list of personae in this flowchart
-            foreach (GameObject persona in personae)
-            {   // if we're in this flowchart
-                if (persona == this.gameObject)
-                {   // do something
-                    break;
-                }
-            }
         }
 
         #endregion

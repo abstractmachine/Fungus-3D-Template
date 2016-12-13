@@ -33,6 +33,11 @@ namespace Fungus3D
 
         List<GameObject> proximities = new List<GameObject>();
 
+        // previously hidden items
+        private Dictionary<MeshRenderer, Material> hiddenMaterials;
+        //This is the material with the Transparent/Diffuse With Shadow shader
+        public Material HiderMaterial;
+
         #endregion
 
 
@@ -50,8 +55,13 @@ namespace Fungus3D
         void OnEnable()
         {
             Persona.MovedListener += PlayerMoved;
+
             Persona.StartedProximityWithListener += PlayerStartedProximityWith;
             Persona.StoppedProximityWithListener += PlayerStoppedProximityWith;
+
+            Collider_Proximity.StartedProximityWithListener += PlayerStartedProximityWith;
+            Collider_Proximity.StoppedProximityWithListener += PlayerStoppedProximityWith;
+
             Persona.StartedDialogueWithListener += PlayerStartedDialogueWith;
             Persona.StoppedDialogueWithListener += PlayerStoppedDialogueWith;
         }
@@ -60,8 +70,13 @@ namespace Fungus3D
         void OnDisable()
         {
             Persona.MovedListener -= PlayerMoved;
+
             Persona.StartedProximityWithListener -= PlayerStartedProximityWith;
             Persona.StoppedProximityWithListener -= PlayerStoppedProximityWith;
+
+            Collider_Proximity.StartedProximityWithListener -= PlayerStartedProximityWith;
+            Collider_Proximity.StoppedProximityWithListener -= PlayerStoppedProximityWith;
+
             Persona.StartedDialogueWithListener -= PlayerStartedDialogueWith;
             Persona.StoppedDialogueWithListener -= PlayerStoppedDialogueWith;
         }
@@ -80,6 +95,9 @@ namespace Fungus3D
             {
                 target = GameObject.FindGameObjectWithTag("Player");
             }
+
+            // set empty dictionary <object,material>
+            hiddenMaterials = new Dictionary<MeshRenderer, Material>();
         }
 
         #endregion
@@ -91,6 +109,12 @@ namespace Fungus3D
         {
             FollowTarget();
             UpdateZoom();
+        }
+
+        void FixedUpdate() 
+        {
+//            resetHiddenMaterials();
+//            checkForOcclusion();
         }
 
 
@@ -114,6 +138,7 @@ namespace Fungus3D
                 CameraMoved();
             }
         }
+
 
         void UpdateZoom()
         {
@@ -222,6 +247,75 @@ namespace Fungus3D
 
             //zoomLevel += (newZoom - zoomLevel) * 0.025f;
             //zoomLevel = distance;
+        }
+
+        #endregion
+
+
+        #region Hider
+
+        void checkForOcclusion()
+        {
+            if (HiderMaterial == null) return;
+
+            //Cast a ray from this object's transform the the watch target's transform
+
+//            RaycastHit[] hits = Physics.RaycastAll(
+//                                    Camera.main.transform.position,
+//                                    target.transform.position - Camera.main.transform.position,
+//                                    Vector3.Distance(target.transform.position, Camera.main.transform.position)
+//                                );
+            RaycastHit[] hits = Physics.RaycastAll(
+                Camera.main.transform.position,
+                target.transform.position - Camera.main.transform.position,
+                Vector3.Distance(target.transform.position, Camera.main.transform.position),
+                LayerMask.GetMask("Obstacles")
+            );
+
+            //Loop through all overlapping objects and disable their mesh renderer
+            if (hits.Length == 0) return;
+
+            foreach (RaycastHit hit in hits)
+            {
+                // only obstacles are transparent
+//                if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Obstacles")) continue;
+
+                Debug.Log(hit.collider.gameObject.name);
+
+                // make sure we're not trying to hide the wrong object
+                //if (hit.collider.name == "Persona" || hit.collider.name == "Player" || hit.collider.name == "Ground" || hit.collider.name == "Clicker") continue;
+
+                // get pointers to all the child objects
+                MeshRenderer[] meshRenderers = hit.collider.gameObject.GetComponentsInChildren<MeshRenderer>();
+                foreach (MeshRenderer meshRenderer in meshRenderers)
+                {
+                    // if already in dictionary, forget it
+                    if (hiddenMaterials.ContainsKey(meshRenderer)) continue;
+                    // remember this material (to turn it back on)
+                    hiddenMaterials.Add(meshRenderer, meshRenderer.material);
+                    meshRenderer.material = HiderMaterial;
+                } // foreach MeshRenderer
+            } // foreach
+
+        }
+
+
+        void resetHiddenMaterials()
+        {
+            if (HiderMaterial == null) return;
+
+            //reset and clear all the previous objects
+            if (hiddenMaterials.Count > 0)
+            {
+                foreach (MeshRenderer meshRenderer in hiddenMaterials.Keys)
+                {
+                    if (meshRenderer == null) continue;
+                    // extract material from dictionary
+                    meshRenderer.material = hiddenMaterials[meshRenderer];
+                }
+                hiddenMaterials.Clear();
+            }
+
         }
 
         #endregion

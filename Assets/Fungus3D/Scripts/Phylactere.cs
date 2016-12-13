@@ -77,20 +77,12 @@ namespace Fungus3D
 
         #region Interfaces
 
-        /// <summary>
-        /// Called when a user input event (e.g. a click) has been handled by the Writer
-        /// </summary>
-
-        public void OnInput()
-        {
-        }
-
 
         void Awake()
         {
-
             // get the script that controls the storyText
-            storyText = GetComponent<SayDialog>().storyText.GetComponent<Text>();
+            storyText = GetComponent<SayDialog>().StoryText.GetComponent<Text>(); // FIXME: Fungus Update Bug
+
 
             // get the default text width
             storyRectTransform = storyText.gameObject.GetComponent<RectTransform>();
@@ -113,7 +105,7 @@ namespace Fungus3D
             SetSize();
         }
 
-    	
+
         /// <summary>
         /// Called when the Writer starts writing new text
         /// </summary>
@@ -126,6 +118,24 @@ namespace Fungus3D
 
             visible = true;
             CalculateLineHeight();
+        }
+
+        /// <summary>
+        /// Called when a user input event (e.g. a click) has been handled by the Writer
+        /// </summary>
+
+        public void OnInput()
+        {
+        }
+
+
+        public void OnEnd(bool stopAudio)
+        {
+        }
+
+
+        public void OnVoiceover(AudioClip voiceOverClip)
+        {
         }
 
 

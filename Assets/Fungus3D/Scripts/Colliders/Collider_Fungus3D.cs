@@ -40,7 +40,7 @@ namespace Fungus3D
             }
             else
             {
-                Debug.LogError("No root parent gameObject set for this collider " + this.gameObject);
+                Debug.LogError("No root parent gameObject set for this collider " + this.gameObject.name);
             }
         }
         // GetRootParentGameObject

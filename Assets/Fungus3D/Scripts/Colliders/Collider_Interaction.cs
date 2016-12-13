@@ -29,6 +29,7 @@ namespace Fungus3D
             rootParent.GetComponent<Persona>().OnInteractionEnter(otherRootParent);
         }
 
+
         public void OnTriggerStay(Collider trigger)
         {
             // is thisthe TouchTarget?

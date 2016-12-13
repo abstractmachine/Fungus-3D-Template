@@ -53,6 +53,8 @@ namespace Fungus3D
 
         public override string GetSummary()
         {
+            string name = gameObject.GetComponentInParent<Animator>().gameObject.name;
+
             // if we haven't configured the target yet
             if (targetObject == null)
             {
@@ -61,11 +63,11 @@ namespace Fungus3D
 
             if (actor != null)
             {
-                return actor.name + " Walk to " + targetObject.name;
-            }
+                return actor.name + " walks to " + targetObject.name;
+            } 
 
             // display the name of the target
-            return "Walk to " + targetObject.name;
+            return name + " walks to " + targetObject.name;
         }
 
         #endregion

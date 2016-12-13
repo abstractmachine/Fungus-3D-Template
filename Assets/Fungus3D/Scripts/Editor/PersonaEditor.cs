@@ -162,8 +162,10 @@ namespace Fungus3D
 
             // set the character name
             Character characterScript = persona.GetComponent<Character>();
-            characterScript.nameText = characterName;
-            characterScript.nameColor = characterColor;
+            characterScript.NameText = characterName;
+//            characterScript.nameText = characterName;
+            characterScript.NameColor = characterColor;
+//            characterScript.nameColor = characterColor;
 
             // if we have defined a model
             if (modelPrefab != null)

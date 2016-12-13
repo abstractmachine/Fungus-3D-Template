@@ -396,7 +396,9 @@ namespace Fungus3D
                     if (personaSayDialog.gameObject.activeSelf)
                     {
                         // ok, push dat button!
-                        personaSayDialog.continueButton.onClick.Invoke();
+                        Button continueButton = personaSayDialog.GetComponentInChildren<Button>();
+                        continueButton.onClick.Invoke();
+//                        personaSayDialog.continueButton.onClick.Invoke(); // FIXME Fungus Update Bug
                         // all done
                         return;
                     }
@@ -1475,11 +1477,14 @@ namespace Fungus3D
             GameObject flowChartRootParent = ExtractRootParentFrom(flowchart);
             if (flowChartRootParent) possiblePersonaObjects.Add(flowChartRootParent);
 
+            // FIXME: Fungus Update bug
+
             // go through each executing block
             foreach (Block block in blocks)
             {
                 // get the command list
-                List<Command> commands = block.commandList;
+//                List<Command> commands = block.commandList;
+                List<Command> commands = block.CommandList;
                 // go through the command list
                 foreach (Command command in commands)
                 {
@@ -1495,7 +1500,8 @@ namespace Fungus3D
                             continue;
                         }
                         // GameObject persona = sayCommand.character.gameObject.transform.parent.gameObject;
-                        GameObject persona = ExtractRootParentFrom(sayCommand.character.gameObject);
+//                        GameObject persona = ExtractRootParentFrom(sayCommand.character.gameObject);
+                        GameObject persona = ExtractRootParentFrom(sayCommand._Character.gameObject);
 
                         // if this one isn't already in the list
                         if (!possiblePersonaObjects.Contains(persona))
